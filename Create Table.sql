@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `album` (
 CREATE TABLE IF NOT EXISTS `album_artist_has` (
   `album_id` varchar(12) NOT NULL,
   `artist_id` varchar(12) NOT NULL,
+  `release` date NOT NULL,
   KEY `album_id_has` (`album_id`),
   KEY `artist_id_has` (`artist_id`),
   CONSTRAINT `album_id_has` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
