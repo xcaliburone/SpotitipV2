@@ -1,0 +1,10 @@
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/user.txt" INTO TABLE user LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/artist.txt" INTO TABLE artist LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/song.txt" INTO TABLE song LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/playlist.txt" INTO TABLE playlist LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/user_artist_follow.txt" INTO TABLE user_artist_follow LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/song_artist_sing.txt" INTO TABLE song_artist_sing LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/album_artist_has.txt" INTO TABLE album_artist_has LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/single.txt" INTO TABLE single LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/album.txt" INTO TABLE album LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/playlist_song_contains.txt" INTO TABLE playlist_song_contains LINES TERMINATED BY '\r\n';
