@@ -1,13 +1,31 @@
 CREATE DATABASE IF NOT EXISTS `spotitip v2`;
 USE `spotitip v2`;
 
+CREATE TABLE IF NOT EXISTS `artist` (
+  `id` varchar(12) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `followers` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `song` (
+  `id` varchar(12) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `genre` varchar(50) NOT NULL,
+  `duration` int(11) NOT NULL DEFAULT 0,
+  `listeners` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
 CREATE TABLE IF NOT EXISTS `album` (
   `id` varchar(12) NOT NULL,
   `title` varchar(50) NOT NULL,
   `release` date NOT NULL,
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ;
+);
 
 CREATE TABLE IF NOT EXISTS `album_artist_has` (
   `album_id` varchar(12) NOT NULL,
@@ -16,15 +34,6 @@ CREATE TABLE IF NOT EXISTS `album_artist_has` (
   KEY `artist_id_has` (`artist_id`),
   CONSTRAINT `album_id_has` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `artist_id_has` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS `artist` (
-  `id` varchar(12) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `followers` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `playlist` (
@@ -42,15 +51,6 @@ CREATE TABLE IF NOT EXISTS `playlist_song_contains` (
   KEY `song_id_contains` (`song_id`),
   CONSTRAINT `playlist_id_contains` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `song_id_contains` FOREIGN KEY (`song_id`) REFERENCES `song` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS `song` (
-  `id` varchar(12) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `genre` varchar(50) NOT NULL,
-  `duration` int(11) NOT NULL DEFAULT 0,
-  `listeners` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `song_album_contains` (
