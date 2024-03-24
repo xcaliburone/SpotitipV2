@@ -14,9 +14,6 @@ LOAD DATA INFILE "D:/adhim/SEMESTER 4/Manajemen Basis Data/Spotitip V2/csv/album
 LOAD DATA INFILE "D:/adhim/SEMESTER 4/Manajemen Basis Data/Spotitip V2/csv/playlist_song_contains.csv" INTO TABLE playlist_song_contains FIELDS TERMINATED BY ',' IGNORE 1 LINES;
 
 
-<<<<<<< HEAD
--- load data raihan
-=======
 -- load data raihan
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/album_artist_has.csv" INTO TABLE album_artist_has FIELDS TERMINATED BY ',' IGNORE 1 LINES;
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/album.csv" INTO TABLE album FIELDS TERMINATED BY ',' IGNORE 1 LINES;
@@ -33,4 +30,3 @@ LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spot
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/user.csv" INTO TABLE user FIELDS TERMINATED BY ',' IGNORE 1 LINES;
 
 
->>>>>>> 9586f2e23927089436124ce3e1f56953544689f3
