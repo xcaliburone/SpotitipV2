@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `artist` (
   `followers` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
 );
-//acumalaka
+
 CREATE TABLE IF NOT EXISTS `song` (
   `id` varchar(12) NOT NULL,
   `title` varchar(50) NOT NULL,

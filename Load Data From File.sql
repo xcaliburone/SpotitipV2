@@ -1,4 +1,4 @@
-LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/user.txt" INTO TABLE user LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE "csv/user.csv" INTO TABLE user LINES TERMINATED BY '\r\n';
 LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/artist.txt" INTO TABLE artist LINES TERMINATED BY '\r\n';
 LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/song.txt" INTO TABLE song LINES TERMINATED BY '\r\n';
 LOAD DATA LOCAL INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/playlist.txt" INTO TABLE playlist LINES TERMINATED BY '\r\n';
