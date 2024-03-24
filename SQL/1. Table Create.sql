@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `song` (
   `id` varchar(12) NOT NULL,
   `title` varchar(50) NOT NULL,
   `genre` varchar(50) NOT NULL,
-  `duration` int(11) NOT NULL DEFAULT 0,
+  `duration` TIME NOT NULL,
   `listeners` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
 );
@@ -23,15 +23,14 @@ CREATE TABLE IF NOT EXISTS `album` (
   `id` varchar(12) NOT NULL,
   `title` varchar(50) NOT NULL,
   `release` date NOT NULL,
-  `duration` int(11) NOT NULL,
   `num_song` int(11) NOT NULL,
+  `duration` TIME NOT NULL,
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `album_artist_has` (
   `album_id` varchar(12) NOT NULL,
   `artist_id` varchar(12) NOT NULL,
-  `release` date NOT NULL,
   KEY `album_id_has` (`album_id`),
   KEY `artist_id_has` (`artist_id`),
   CONSTRAINT `album_id_has` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -42,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `playlist` (
   `id` varchar(12) NOT NULL,
   `name` varchar(50) NOT NULL,
   `num_song` int(11) DEFAULT NULL,
-  `duration` int(11) DEFAULT NULL,
+  `duration` TIME DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -93,7 +92,9 @@ CREATE TABLE IF NOT EXISTS `user_artist_follow` (
 );
 
 CREATE TABLE IF NOT EXISTS `user_playlist_create` (
-  `user_id` varchar(12) NOT NULL,`playlist_id` varchar(12) NOT NULL, `date_created` date NOT NULL,
+  `user_id` varchar(12) NOT NULL
+  `playlist_id` varchar(12) NOT NULL,
+  `date_created` date NOT NULL,
   KEY `user_id_create` (`user_id`), KEY `playlist_id_create` (`playlist_id`),
   CONSTRAINT `playlist_id_create` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_id_create` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
