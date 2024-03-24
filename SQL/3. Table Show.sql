@@ -1,4 +1,4 @@
--- SHOW TABLES;
+SHOW TABLES;
 
 -- entitas
 select * from user;
