@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `user_artist_follow` (
 );
 
 CREATE TABLE IF NOT EXISTS `user_playlist_create` (
-  `user_id` varchar(12) NOT NULL
+  `user_id` varchar(12) NOT NULL,
   `playlist_id` varchar(12) NOT NULL,
   `date_created` date NOT NULL,
   KEY `user_id_create` (`user_id`), KEY `playlist_id_create` (`playlist_id`),

@@ -1,3 +1,5 @@
+-- SHOW TABLES;
+
 -- entitas
 select * from user;
 select * from artist;

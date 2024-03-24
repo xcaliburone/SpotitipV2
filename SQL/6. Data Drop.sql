@@ -1,17 +1,17 @@
 -- drop data
--- DELETE FROM `user`;
--- DELETE FROM `artist`;
--- DELETE FROM `song`;
--- DELETE FROM `album`;
--- DELETE FROM `playlist`;
--- DELETE FROM `user_artist_follow`;
--- DELETE FROM `user_playlist_create`;
--- DELETE FROM `user_playlist_follow`;
--- DELETE FROM `user_song_liked`;
--- DELETE FROM `song_artist_sing`;
--- DELETE FROM `song_album_contains`;
--- DELETE FROM `album_artist_has`;
--- DELETE FROM `playlist_song_contains`;
+DELETE FROM `user`;
+DELETE FROM `artist`;
+DELETE FROM `song`;
+DELETE FROM `album`;
+DELETE FROM `playlist`;
+DELETE FROM `user_artist_follow`;
+DELETE FROM `user_playlist_create`;
+DELETE FROM `user_playlist_follow`;
+DELETE FROM `user_song_liked`;
+DELETE FROM `song_artist_sing`;
+DELETE FROM `song_album_contains`;
+DELETE FROM `album_artist_has`;
+DELETE FROM `playlist_song_contains`;
 
 -- drop table
 DROP TABLE IF EXISTS `user_artist_follow`;
