@@ -16,3 +16,8 @@ select * from song_album_contains;
 select * from song_artist_sing;
 select * from album_artist_has;
 select * from playlist_song_contains;
+
+SELECT * FROM user;
+SELECT name, email, password FROM user;
+
+SELECT title, genre, listeners FROM song WHERE listeners < 100000 LIMIT 20;
