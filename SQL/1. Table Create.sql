@@ -88,10 +88,8 @@ CREATE TABLE IF NOT EXISTS `user_artist_follow` (
   `artist_id` varchar(12) NOT NULL,
   KEY `user_id_follow_ar` (`user_id`),
   KEY `artist_id_follow` (`artist_id`),
-  -- CONSTRAINT `artist_id_follow` 
-  FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  -- CONSTRAINT `user_id_follow_ar` 
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `artist_id_follow` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id_follow_ar` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `user_playlist_create` (
