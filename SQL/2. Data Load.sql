@@ -11,6 +11,3 @@ LOAD DATA INFILE "D:/adhim/SEMESTER 4/Manajemen Basis Data/Spotitip V2/Spotitip-
 LOAD DATA INFILE "D:/adhim/SEMESTER 4/Manajemen Basis Data/Spotitip V2/Spotitip-V2/playlist_song_contains.csv" INTO TABLE user FIELDS TERMINATED BY ',' IGNORE 1 LINES;
 
 -- load data raihan
-
-
-
