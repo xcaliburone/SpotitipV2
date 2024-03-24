@@ -1,4 +1,7 @@
--- ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+-- drop data
+DELETE FROM user;
+
+-- drop table
 DROP TABLE IF EXISTS `album`;
 DROP TABLE IF EXISTS `album_artist_has`;
 DROP TABLE IF EXISTS `artist`;
