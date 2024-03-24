@@ -12,3 +12,7 @@ DROP TABLE IF EXISTS `user_artist_follow`;
 DROP TABLE IF EXISTS `user_playlist_create`;
 DROP TABLE IF EXISTS `user_playlist_follow`;
 DROP TABLE IF EXISTS `user_song_liked`;
+
+DELETE FROM user;
+
+SHOW VARIABLES LIKE "secure_file_priv";
