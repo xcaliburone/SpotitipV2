@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `album` (
   `title` varchar(50) NOT NULL,
   `release` date NOT NULL,
   `duration` int(11) NOT NULL,
+  `num_song` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
