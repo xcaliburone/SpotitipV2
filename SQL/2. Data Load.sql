@@ -28,5 +28,3 @@ LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spot
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/user_playlist_follow.csv" INTO TABLE user_playlist_follow FIELDS TERMINATED BY ',' IGNORE 1 LINES;
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/user_song_liked.csv" INTO TABLE user_song_liked FIELDS TERMINATED BY ',' IGNORE 1 LINES;
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/user.csv" INTO TABLE user FIELDS TERMINATED BY ',' IGNORE 1 LINES;
-
-

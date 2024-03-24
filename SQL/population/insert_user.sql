@@ -1,7 +1,8 @@
-INSERT IGNORE INTO `user` (`id`, `name`, `email`, `password`, `followers`, `following`) VALUES
+
+INSERT INTO `user` (`id`, `name`, `email`, `password`, `followers`, `following`) VALUES
 	('US1', 'Makenzie Pfeffer', 'harvey.hanna@hotmail.com', 'c035a5bfb14e0483fe7c957f9a743a6a8e77ad4a', 778, 892),
 	('US10', 'Ashly Kerluke', 'larkin.tad@hotmail.com', 'ac1080eb68e6324a21e8ef9de5079bdc10327703', 35, 196),
-	('US100', 'Lazaro Emmerich II', 'mckenzie.blaze@yahoo.com', '3ad33fa12319db06f5b50622634bc4cb2735395d', 95, 233),
+	('US100', 'Lazaro Emmerich II', 'mckenzie.blaze@yahoo.com', '3ad33fa12319db06f5b50622634bc4cb2735395d', 95, 233)
 	('US101', 'Lonzo Upton DVM', 'tristin.beahan@gmail.com', '434bca73e66c65788db0295ace8fba30e64e22c1', 514, 56),
 	('US102', 'Maritza Runte', 'wboyle@hotmail.com', 'fef1b74011d596d6492d412d9ff80c4bdb877a69', 293, 123),
 	('US103', 'Christa Ortiz', 'destiney33@hotmail.com', 'edd9c96c75624819413ef47ffa251b8b9a3ecb8a', 852, 858),
