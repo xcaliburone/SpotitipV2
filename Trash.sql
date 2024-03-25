@@ -35,5 +35,4 @@ SHOW INDEX FROM pemesanan;
 
 EXPLAIN SELECT * FROM pengguna;
 
-
 CREATE INDEX user_idx ON pengguna (nama_akun);

@@ -1,5 +1,7 @@
 ﻿# Spotitip-V2
- 
+
+![alt text](IMG/SPOTITIP.png)
+
 Aplikasi Spotitip adalah sebuah platform layanan streaming musik yang bersifat online, terdapat hubungan timbal balik secara tidak langsung antara pendengar atau dengan kata lain sebagai pengguna aplikasi atau layanan tersebut dengan artis yang bersangkutan. Aplikasi Spotitip menawarkan pengalaman mendengarkan musik yang interaktif dan memungkinkan pengguna untuk terhubung dengan artis, album, playlist, dan lagu-lagu favorit mereka.
 
 Mengakses aplikasi ini cukup mudah dimana pengguna hanya  perlu melakukan instalasi. Setelah mendownload aplikasi Spotitip, pengguna diminta untuk login jika sudah memiliki akun sebelumnya dan membuat akun jika belum memiliki akun. Setelah memiliki akun, pengguna dapat mengakses berbagai fitur dan fungsi yang ditawarkan oleh aplikasi Spotitip. Dimana pengguna dapat mengakses dan memutar lagu di seluruh dunia kapanpun dan dimanapun. Pengguna juga dapat menyukai lagu-lagu yang disukai.
