@@ -10,8 +10,8 @@ LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/user_playlist_foll
 LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/user_song_liked.csv" INTO TABLE user_song_liked FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/song_album_contains.csv" INTO TABLE song_album_contains FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/song_artist_sing.csv" INTO TABLE song_artist_sing FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/song_playlist_contains.csv" INTO TABLE song_playlist_contains FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/album_artist_has.csv" INTO TABLE album_artist_has FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
--- LOAD DATA LOW_PRIORITY INFILE "D:/adhim/S4/MBD/SpotitipV2/csv/playlist_song_contains.csv" INTO TABLE song_playlist_contains FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 -- load data raihan
 LOAD DATA INFILE "E:/Admin's Files/College Tasks/Semester 4/MBD/Spotitip V2/Spotitip-V2/csv/album_artist_has.csv" INTO TABLE album_artist_has FIELDS TERMINATED BY ',' IGNORE 1 LINES;
