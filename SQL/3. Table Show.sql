@@ -1,18 +1,33 @@
 SHOW TABLES;
 
+-- describe
+DESC user;
+DESC artist;
+DESC song;
+DESC album;
+DESC playlist;
+DESC user_artist_follow;
+DESC user_playlist_create;
+DESC user_playlist_follow;
+DESC user_song_liked;
+DESC song_album_contains;
+DESC song_playlist_contains;
+DESC song_artist_sing;
+DESC album_artist_has;
+
 -- entitas
-select * from user;
-select * from artist;
-select * from song;
-select * from album;
-select * from playlist;
+SELECT * FROM user;
+SELECT * FROM artist;
+SELECT * FROM song;
+SELECT * FROM album;
+SELECT * FROM playlist;
 
 -- relasi
-select * from user_artist_follow;
-select * from user_playlist_create;
-select * from user_playlist_follow;
-select * from user_song_liked;
-select * from song_album_contains;
-select * from song_artist_sing;
-select * from album_artist_has;
-select * from playlist_song_contains;
+SELECT * FROM user_artist_follow;
+SELECT * FROM user_playlist_create;
+SELECT * FROM user_playlist_follow;
+SELECT * FROM user_song_liked;
+SELECT * FROM song_album_contains;
+SELECT * FROM song_artist_sing;
+SELECT * FROM album_artist_has;
+SELECT * FROM playlist_song_contains;
