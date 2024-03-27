@@ -29,5 +29,5 @@ SELECT * FROM user_playlist_follow;
 SELECT * FROM user_song_liked;
 SELECT * FROM song_album_contains;
 SELECT * FROM song_artist_sing;
+SELECT * FROM song_playlist_contains;
 SELECT * FROM album_artist_has;
-SELECT * FROM playlist_song_contains;
