@@ -1,3 +1,7 @@
-alter TABLE add/remove
+INSERT INTO
 
-select * from user join user_artist_follow
+INSERT IGNORE INTO
+
+ALTER TABLE `user` ADD INDEX user_name_idx (`name`);
+
+ALTER TABLE `user` DROP INDEX user_name_idx;
