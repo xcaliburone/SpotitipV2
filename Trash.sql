@@ -75,4 +75,4 @@ CREATE TABLE IF NOT EXISTS `user_artist_follow` (
   CONSTRAINT `user_id_follow_ar` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-test trash
+test trashs
