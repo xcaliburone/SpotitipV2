@@ -11,3 +11,7 @@
 body::-webkit-scrollbar {
     display: none;
 }
+
+.list-items:hover {
+    cursor: pointer;
+}

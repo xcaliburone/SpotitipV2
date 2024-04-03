@@ -14,7 +14,10 @@ function handleSignUp(event) {
     const password = document.getElementById('password').value;
 
     if (username && email && password) {
-        window.location.href = './index.html';
+        // Kirim formulir ke signUp.php untuk diproses
+        document.querySelector('form').submit();
+        // window.location.href = './index.html';
+
     } else {
         alert('Please fill in all fields.');
     }

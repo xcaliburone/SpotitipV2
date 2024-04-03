@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./output.css">
+    <link rel="stylesheet" href="./input.css">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
     <link rel="shortcut icon" href="/spotitip/images/logo.png" type="image/x-icon">
     <title>Spotitip</title>
 </head>
@@ -12,14 +14,14 @@
         
         <aside class="w-[300px] m-3 flex flex-col gap-y-3 fixed h-[97%]">
             <div class="side-top bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-fit flex flex-col gap-y-7">
-                <div class="home flex items-center gap-x-3">
+                <div class="home flex items-center gap-x-3 hover:cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256">
                         <g fill="rgb(212, 212, 212)" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M23.95117,4c-0.31984,0.01092 -0.62781,0.12384 -0.87891,0.32227l-14.21289,11.19727c-1.8039,1.42163 -2.85937,3.59398 -2.85937,5.89063v19.08984c0,1.36359 1.13641,2.5 2.5,2.5h10c1.36359,0 2.5,-1.13641 2.5,-2.5v-10c0,-0.29504 0.20496,-0.5 0.5,-0.5h5c0.29504,0 0.5,0.20496 0.5,0.5v10c0,1.36359 1.13641,2.5 2.5,2.5h10c1.36359,0 2.5,-1.13641 2.5,-2.5v-19.08984c0,-2.29665 -1.05548,-4.46899 -2.85937,-5.89062l-14.21289,-11.19727c-0.27738,-0.21912 -0.62324,-0.33326 -0.97656,-0.32227zM24,7.41016l13.28516,10.4668c1.0841,0.85437 1.71484,2.15385 1.71484,3.5332v18.58984h-9v-9.5c0,-1.91495 -1.58505,-3.5 -3.5,-3.5h-5c-1.91495,0 -3.5,1.58505 -3.5,3.5v9.5h-9v-18.58984c0,-1.37935 0.63074,-2.67883 1.71484,-3.5332z"></path></g></g>
                     </svg>
                     <p class="font-medium text-neutral-300">Home</p>
                 </div>
 
-                <div class="search flex items-center gap-x-3">
+                <div class="search flex items-center gap-x-3 hover:cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256">
                         <g fill="rgb(212, 212, 212)" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M21,3c-9.37891,0 -17,7.62109 -17,17c0,9.37891 7.62109,17 17,17c3.71094,0 7.14063,-1.19531 9.9375,-3.21875l13.15625,13.125l2.8125,-2.8125l-13,-13.03125c2.55469,-2.97656 4.09375,-6.83984 4.09375,-11.0625c0,-9.37891 -7.62109,-17 -17,-17zM21,5c8.29688,0 15,6.70313 15,15c0,8.29688 -6.70312,15 -15,15c-8.29687,0 -15,-6.70312 -15,-15c0,-8.29687 6.70313,-15 15,-15z"></path></g></g>
                     </svg>
@@ -27,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="side-bottom bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-full flex flex-col gap-y-7">
+            <div class="side-bottom bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-full flex flex-col gap-y-7 hover:cursor-pointer">
                 <div class="library flex items-center gap-x-3">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" zoomAndPan="magnify"
                         viewBox="0 0 30 30.000001" height="30" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="f9eef7dc14"><path d="M 0.484375 0 L 4 0 L 4 29 L 0.484375 29 Z M 0.484375 0 " clip-rule="nonzero"/></clipPath><clipPath id="c120c29052"><path d="M 14 0 L 27.339844 0 L 27.339844 29.03125 L 14 29.03125 Z M 14 0 " clip-rule="nonzero"/></clipPath></defs><g clip-path="url(#f9eef7dc14)"><path fill="#d4d4d4" d="M 2.535156 29 L 1.558594 29 C 0.964844 29 0.484375 28.519531 0.484375 27.925781 L 0.484375 1.070312 C 0.484375 0.476562 0.964844 -0.00390625 1.558594 -0.00390625 L 2.535156 -0.00390625 C 3.128906 -0.00390625 3.609375 0.476562 3.609375 1.070312 L 3.609375 27.925781 C 3.609375 28.519531 3.128906 29 2.535156 29 Z M 2.535156 29 " fill-opacity="1" fill-rule="nonzero"/></g><path fill="#d4d4d4" d="M 9.777344 29 L 8.800781 29 C 8.207031 29 7.726562 28.519531 7.726562 27.925781 L 7.726562 1.070312 C 7.726562 0.476562 8.207031 -0.00390625 8.800781 -0.00390625 L 9.777344 -0.00390625 C 10.371094 -0.00390625 10.851562 0.476562 10.851562 1.070312 L 10.851562 27.925781 C 10.851562 28.519531 10.371094 29 9.777344 29 Z M 9.777344 29 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#c120c29052)"><path fill="#d4d4d4" d="M 14.835938 27.929688 L 14.835938 1.613281 C 14.835938 0.84375 15.617188 0.324219 16.328125 0.621094 L 26.5625 4.925781 C 26.960938 5.09375 27.21875 5.484375 27.21875 5.917969 L 27.21875 27.949219 C 27.21875 28.542969 26.734375 29.023438 26.140625 29.023438 L 15.910156 29.003906 C 15.316406 29.003906 14.835938 28.519531 14.835938 27.929688 Z M 14.835938 27.929688 " fill-opacity="1" fill-rule="nonzero"/></g>
@@ -76,7 +78,7 @@
                         </div>
     
                         <div class="button-right md:flex gap-x-2 items-center">
-                            <button disabled class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex justify-center items-center hover:cursor-not-allowed">
+                            <button disabled class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[100px] flex justify-center items-center hover:cursor-pointer">
                                 <p>Profile</p>
                             </button>
                         </div>                    
@@ -117,22 +119,22 @@
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-lg text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-lg text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-lg text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                         </div>
@@ -147,22 +149,22 @@
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                         </div>
@@ -177,22 +179,22 @@
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
                                 <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-neutral-300">Flos adonis.</h1>
-                                    <p>Flora Shafiqa Riyadi</p>
+                                    <h1 class="font-medium text-white">Flos adonis.</h1>
+                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
                                 </div>
                             </div>
                         </div>
@@ -203,6 +205,7 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script> -->
+    <script src="./index.js"></script>
 </body>
 </html>
