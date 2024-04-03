@@ -1,6 +1,6 @@
 ﻿# Spotitip-V2
 
-![alt text](spotitip/db/image/SPOTITIP.png)
+![alt text](backup/db/image/SPOTITIP.png)
 
 Aplikasi Spotitip adalah sebuah platform layanan streaming musik yang bersifat online, terdapat hubungan timbal balik secara tidak langsung antara pendengar atau dengan kata lain sebagai pengguna aplikasi atau layanan tersebut dengan artis yang bersangkutan. Aplikasi Spotitip menawarkan pengalaman mendengarkan musik yang interaktif dan memungkinkan pengguna untuk terhubung dengan artis, album, playlist, dan lagu-lagu favorit mereka.
 
