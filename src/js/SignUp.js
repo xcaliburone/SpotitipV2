@@ -3,7 +3,7 @@ const signUpButton = document.querySelector('.signup button');
 
 function showSignInForm(event) {
     event.preventDefault();
-    window.location.href = './SignIn.html';
+    window.location.href = '/SignIn.html';
 }
 haveAccountLink.addEventListener('click', showSignInForm);
 

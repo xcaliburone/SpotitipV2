@@ -4,7 +4,7 @@ const loginButton = document.getElementById('signInButton');
 
 function showSignUpForm(event) {
     event.preventDefault();
-    window.location.href = './src/js/SignUp.html';
+    window.location.href = '/src/html/SignUp.html';
 }
 createAccountLink.addEventListener('click', showSignUpForm);
 
