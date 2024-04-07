@@ -9,11 +9,10 @@ function showSignUpForm(event) {
 createAccountLink.addEventListener('click', showSignUpForm);
 
 function handleLogin(event) {
-    event.preventDefault(); // Mencegah pengiriman formulir
+    event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     if (email && password) {
-        // Kirim formulir ke signIn.php untuk diproses
         document.getElementById('loginForm').submit();
         // window.location.href = './index.html';
     } else {

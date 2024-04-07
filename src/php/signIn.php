@@ -1,6 +1,6 @@
 <?php
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Ambil data yang dikirim dari form
         $email = $_POST['email'];
@@ -33,5 +33,5 @@
         }
 
         $con->close();
-    }
+    // }
 ?>
