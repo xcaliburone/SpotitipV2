@@ -1,6 +1,8 @@
-const {
-    createPool
-} = require('mysql');
+import { createPool } from 'mysql';
+
+// const {
+//     createPool
+// } = require('mysql');
 
 const pool = createPool({
     host: "localhost",
