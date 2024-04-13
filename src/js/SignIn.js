@@ -1,5 +1,4 @@
 const createAccountLink = document.getElementById('create-account-link');
-// const loginButton = document.querySelector('.signin button');
 const loginButton = document.getElementById('signInButton');
 
 function showSignUpForm(event) {

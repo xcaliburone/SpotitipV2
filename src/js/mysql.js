@@ -1,20 +1,17 @@
-import { createPool } from 'mysql';
-
-// const {
-//     createPool
-// } = require('mysql');
-
-const pool = createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "spotitip",
-    connectionLimit: 10
+const mysql = require('mysql')
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'spotitip'
 })
 
-pool.query(`select * from user`, (err, result, fields) => {
-    if(err) {
-        return console.log(err);
-    }
-    return console.log(result);
+connection.connect()
+
+connection.query('SELECT 1 + 1 AS solution', (err, rows, fields) => {
+    if (err) throw err
+
+    console.log('The solution is: ', rows[0].solution)
 })
+
+connection.end()
