@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/output.css">
+    <link rel="stylesheet" href="../css/input.css">
     <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="./signUp.php"> -->
     <title>Spotitip</title>
 </head>
 
@@ -16,7 +16,6 @@
             <img src="../images/SPOTITIP.png" alt="hero" class="">
             <h1 class="text-2xl font-bold text-center mb-4 dark:text-neutral-200">Create Account</h1>
 
-            <!-- <form action="../php/signUp.php" method="post"> -->
             <form id="signupForm" action="./Main.html" onsubmit="return loginUser()">
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-grey-700 dark:text-neutral-300 mb-2">User Name</label>
@@ -33,15 +32,24 @@
                     <input type="password" id="password" class="shadow-sm rounded-md w-full px-3 py-2 border-2 border-neutral-300 focus:outline-none focus:ring-spotitip focus:border-spotitip mb-2" placeholder="Enter your password" required name="password">
                 </div>
 
-                <div class="flex items-center justify-between mb-5">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="remember" class="h-4 w-4 rounded border-neutral-300 text-spotitip focus:ring-spotitip focus:outline-none accent-spotitip" checked>
-                        <label for="remember" class="ml-2 block text-sm text-neutral-700 dark:text-neutral-300">Remember me</label>
-                    </div>
-
-                    <a href="#" id="have-account-link" class="text-xs text-neutral-500 hover:text-spotitip focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-spotitip">Already have an Account</a>
+                <div class="mb-2">
+                    <label for="language" class="text-neutral-300">Register as : </label>
+                    <select name="registerAs" id="registerAs" class="registerAs shadow-sm rounded-md w-full px-3 py-2 focus:outline-none mb-2">
+                        <option value="asUser" selected class="optUser">User</option>
+                        <option value="asArtist" class="optArtist">Artist</option>
+                    </select>
                 </div>
 
+                <div class="flex items-center justify-between mb-5">
+                    <div class="flex flex-col">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" class="h-4 w-4 rounded border-neutral-300 text-spotitip focus:ring-spotitip focus:outline-none accent-spotitip" checked>
+                            <label for="remember" class="ml-2 block text-sm text-neutral-700 dark:text-neutral-300">Remember me</label>
+                        </div>
+                    </div>
+                    <a href="#" id="have-account-link" class="text-xs text-neutral-500 hover:text-spotitip focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-spotitip">Already have an Account</a>
+                </div>
+                
                 <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-spotitip hover:text-black">Sign Up</button>
             </form>
         </div>
