@@ -6,12 +6,100 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    /* cursor: default; */
 }
 
 body::-webkit-scrollbar {
     display: none;
 }
 
-.list-items:hover {
-    cursor: pointer;
+.cont {
+    width: 100%;
+    height: 100%;
 }
+
+main {
+    width: 100%;
+    height: 767px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+main::-webkit-scrollbar {
+    display: none;
+}
+
+.content {
+    width: 100%;
+}
+
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.main > section {
+    display: none;
+}
+
+.main > section.active {
+    display: block;
+}
+
+section {
+    display: flex !important;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.items {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    row-gap: 20px;
+    column-gap: 45px;
+}
+
+.list-items > img:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.list-items > .desc h1:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.list-items > .desc p:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.active {
+    background-color: #4CAF50; /* Warna latar belakang untuk tombol yang aktif */
+    color: white; /* Warna teks untuk tombol yang aktif */
+}
+
+.input {
+    padding: 21px;
+    width: 250px;
+    height: 38px;
+    background: rgb(38, 38, 38);
+    border-radius: 50px;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: #00FF5B;
+    outline: none;
+    transition: .5s;
+}
+/* .box:hover input{
+    width: 250px;
+    background: rgb(38, 38, 38);
+    border-radius: 10px;
+    border: 1px solid #00FF5B;
+} */
