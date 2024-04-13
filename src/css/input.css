@@ -103,3 +103,36 @@ section {
     border-radius: 10px;
     border: 1px solid #00FF5B;
 } */
+
+.registerAs {
+    background-color: rgb(5, 150, 105);
+    width: 100px;
+    border: none;
+    color: white;
+    font-weight: 500;
+}
+
+.registerAs:hover {
+    background-color: #00FF5B;
+    cursor: pointer;
+    color: black;
+}
+
+option {
+    background-color: rgb(5, 150, 105);
+}
+
+option:hover {
+    background-color: rgb(5, 150, 105);
+    color: white;
+}
+
+option:focus {
+    background-color: rgb(5, 150, 105);
+    color: white;
+}
+
+option:active {
+    background-color: rgb(5, 150, 105);
+    color: white;
+}
