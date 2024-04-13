@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/src/css/output.css">
     <link rel="stylesheet" href="/src/css/input.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
     <link rel="shortcut icon" href="/src/images/logo.png" type="image/x-icon">
     <title>Spotitip</title>
@@ -37,38 +38,53 @@
                     <p>Your Library</p>
                 </div>
                 
-                <div class="lists flex gap-x-4">
-                    <button class="bg-neutral-800 hover:opacity-60 transition rounded-xl h-[35px] w-[90px] text-neutral-300">
+                <div class="lists flex gap-x-4 relative">
+                    <button id="aside-playlists-button" class="bg-neutral-800 hover:opacity-60 transition rounded-xl h-[35px] w-[90px] text-neutral-300">
                         Playlists
                     </button>
-                    <button class="bg-neutral-800 hover:opacity-60 transition rounded-xl h-[34px] w-[90px] text-neutral-300">
+                    <button id="aside-albums-button" class="bg-neutral-800 hover:opacity-60 transition rounded-xl h-[34px] w-[90px] text-neutral-300">
                         Albums
                     </button>
                 </div>
 
                 <div class="list-items flex flex-col gap-y-4">
-                    <div class="items bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
-                        <img src="/src/images/liked.png" alt="liked songs" class="w-[55px]">
-                        <p class="text-neutral-300 ml-3 font-medium">Liked songs</p>
-                    </div>
-                    <div class="items bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
-                        <img src="/src/images/liked.png" alt="liked songs" class="w-[55px]">
-                        <p class="text-neutral-300 ml-3 font-medium">Playlist Name</p>
-                    </div>
-                    <div class="items bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
+
+                    <div class="item-album bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
                         <img src="/src/images/liked.png" alt="liked songs" class="w-[55px]">
                         <p class="text-neutral-300 ml-3 font-medium">Album Name</p>
                     </div>
+                    <div class="item-album bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
+                        <img src="/src/images/liked.png" alt="liked songs" class="w-[55px]">
+                        <p class="text-neutral-300 ml-3 font-medium">Album Name</p>
+                    </div>
+
+                    <div class="item-playlist bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
+                        <img src="/src/images/liked.png" alt="liked songs" class="w-[55px]">
+                        <p class="text-neutral-300 ml-3 font-medium">Playlist Name</p>
+                    </div>
+                    <div class="item-playlist bg-neutral-800 w-full h-[55px] list-none rounded-md overflow-hidden flex items-center hover:opacity-60 transition hover:cursor-pointer">
+                        <img src="/src/images/liked.png" alt="liked songs" class="w-[55px]">
+                        <p class="text-neutral-300 ml-3 font-medium">Playlist Name</p>
+                    </div>
+
+                </div>
+
+                <div id="createButtonContainer" class="hidden">
+                    <button id="createButton" class="bg-neutral-800 hover:opacity-60 transition rounded-xl h-[34px] w-[90px] text-neutral-300">
+                        Create
+                    </button>
                 </div>
 
             </div>
         </aside>
 
-        <main class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md w-full h-full ml-[330px]">
-            <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md">
-                <header class="flex flex-col gap-y-8 mb-1">
+        <main class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
+
+            <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full">
+
+                <header class="flex flex-col gap-y-8 mb-1 w-full">
                     <div class="button-container flex justify-between">
-                        <div class="button-left md:flex gap-x-2 items-center">
+                        <div class="button-up md:flex gap-x-2 items-center">
                             <button disabled class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex items-center justify-center hover:cursor-not-allowed">
                                 &lt;
                             </button>
@@ -85,120 +101,88 @@
                     </div>
                     <h1 class="font-bold text-4xl text-white">Welcome back!</h1>
                 </header>
+
             </div>
-            <div class="content p-5 flex flex-col gap-y-6">
+
+            <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+
                 <div class="header flex justify-between">
                     <div class="button-left flex gap-x-3">
-                        <button disabled class="rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                        <button id="button-all" data-target="main" class="button-all rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
                             All
                         </button>
-                        <button disabled class="rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                        <button id="button-artists" data-target="artist-popular" class="button-artists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
                             Artist
                         </button>
-                        <button disabled class="rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer"">
+                        <button id="button-albums" data-target="album-popular" class="button-albums rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer"">
                             Albums
                         </button>
-                        <button disabled class="rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                        <button id="button-songs" data-target="newest-song" class="button-songs rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
                             Songs
                         </button>
                     </div>
-                    <div class="button-right">
-                        <button disabled class="rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[200px] flex items-center justify-center hover:cursor-pointer">
+                    <!-- <div class="button-right">
+                        <button id="button-search" class="button-search rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[200px] flex items-center justify-center hover:cursor-pointer">
                             Search
                         </button>
+                    </div> -->
+                    <div class="box relative">
+                        <form name="search">
+                            <input type="text" class="input font-semibold" name="key" 
+                            placeholder="Search..." autocomplete="off">
+                            <!-- onmouseout="this.value = ''; this.blur();"  -->
+                        </form>
                     </div>
+                    
                 </div>
 
-                <div class="main flex flex-col gap-y-9">
-                    <section class="newest-song flex-col">
+                <div class="main gap-y-9">
+
+                    <div class="newest-song flex flex-col">
                         <div class="title mb-2">
                             <p class="text-lg font-bold text-neutral-300">Newest Songs</p>
                         </div>
-
-                        <div class="items flex gap-4">
+                        <div class="items">
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <img src="/src/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-lg text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
-                                </div>
-                            </div>
-                            <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="font-medium text-lg text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
-                                </div>
-                            </div>
-                            <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="font-medium text-lg text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
+                                    <h1 class="title-song font-medium text-lg text-white">title-song</h1>
+                                    <p class="desc-song text-neutral-300">desc-song</p>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="artist-popular flex-col">
+                    <div class="artist-popular flex flex-col">
                         <div class="title mb-2">
                             <p class="text-lg font-bold text-neutral-300">Popural Artist</p>
                         </div>
-
                         <div class="items flex gap-4">
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <img src="/src/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
-                                </div>
-                            </div>
-                            <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="font-medium text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
-                                </div>
-                            </div>
-                            <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="font-medium text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
+                                    <h1 class="title-artist font-medium text-white">title-artist</h1>
+                                    <p class="desc-artist text-neutral-300">desc-artist</p>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="album-popular flex-col">
+                    <div class="album-popular flex flex-col">
                         <div class="title mb-2">
                             <p class="text-lg font-bold text-neutral-300">Popular Albums</p>
                         </div>
 
                         <div class="items flex gap-4">
                             <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <img src="/src/images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                 <div class="desc">
-                                    <h1 class="font-medium text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
-                                </div>
-                            </div>
-                            <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="font-medium text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
-                                </div>
-                            </div>
-                            <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                                <img src="/spotitip/images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="font-medium text-white">Flos adonis.</h1>
-                                    <p class="text-neutral-300">Flora Shafiqa Riyadi</p>
+                                    <h1 class="title-album font-medium text-white">title-album</h1>
+                                    <p class="desc-album text-neutral-300">desc-album</p>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
                 </div>
             </div>
@@ -206,6 +190,8 @@
     </div>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script> -->
-    <script src="/src/js/index.js"></script>
+    <script src="/src/js/sideBottom.js"></script>
+    <script src="/src/js/mainContent.js"></script>
+    <script src="/src/js/searchButton.js"></script>
 </body>
 </html>
