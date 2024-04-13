@@ -3,6 +3,7 @@
     "tailwindcss": "^3.4.3"
   },
   "dependencies": {
+    "gulp": "^5.0.0",
     "mysql": "^2.18.1"
   }
 }
