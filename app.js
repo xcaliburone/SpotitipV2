@@ -69,37 +69,78 @@ function generateNewID(table, type) {
 app.post('/signup', async (req, res) => {
     const { name, email, password, registerAs } = req.body;
 
-    if (registerAs === "user" || registerAs === "artist") {
-        try {
-            const tableName = registerAs === "user" ? "user" : "artist";
-            const newId = await generateNewID(tableName, registerAs);
-            const sql = `INSERT INTO ${tableName} (id, name, email, password) VALUES (?, ?, ?, ?)`;
-            connection.query(sql, [newId, name, email, password], (err, result) => {
-                if (err) {
-                    console.error(`Error during signup ${registerAs}:`, err);
-                    res.redirect(`/signup?error=${registerAs}`);
-                } else {
-                    console.log(`New ${registerAs} registered:`, newId);
-                    res.redirect('/main'); // Redirect to main or dashboard page
-                }
-            });
-        } catch (error) {
-            console.error("Error generating new ID:", error);
-            res.redirect('/signup');
+    try {
+        // Periksa apakah email atau username sudah ada dalam tabel
+        const emailExists = await checkIfEmailExists(email);
+        const usernameExists = await checkIfUsernameExists(name);
+
+        if (emailExists || usernameExists) {
+            // Jika email atau username sudah ada, kirimkan respons ke pengguna
+            res.redirect('/signup?error=duplicate');
+            return;
         }
-    } else {
+
+        // Jika email dan username belum ada, lanjutkan dengan menambahkan data baru ke database
+        const tableName = registerAs === "user" ? "user" : "artist";
+        const newId = await generateNewID(tableName, registerAs);
+        const sql = `INSERT INTO ${tableName} (id, name, email, password) VALUES (?, ?, ?, ?)`;
+        connection.query(sql, [newId, name, email, password], (err, result) => {
+            if (err) {
+                console.error(`Error during signup ${registerAs}:`, err);
+                res.redirect(`/signup?error=${registerAs}`);
+            } else {
+                console.log(`New ${registerAs} registered:`, newId);
+                res.redirect('/main'); // Redirect to main or dashboard page
+            }
+        });
+    } catch (error) {
+        console.error("Error during sign up:", error);
         res.redirect('/signup');
     }
 });
 
+// Fungsi untuk memeriksa apakah email sudah ada dalam tabel
+function checkIfEmailExists(email) {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT COUNT(*) AS count FROM user WHERE email = ?";
+        connection.query(sql, [email], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result[0].count > 0);
+            }
+        });
+    });
+}
+
+// Fungsi untuk memeriksa apakah username sudah ada dalam tabel
+function checkIfUsernameExists(username) {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT COUNT(*) AS count FROM user WHERE name = ?";
+        connection.query(sql, [username], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result[0].count > 0);
+            }
+        });
+    });
+}
+
+
 app.get('/signup', (req, res) => {
     const { error } = req.query;
     let errorMessage = "";
-    if (error === "user") {
+
+    // Tambahkan kondisi untuk menangani kasus error = duplicate
+    if (error === "duplicate") {
+        errorMessage = "Email or username already exists.";
+    } else if (error === "user") {
         errorMessage = "Failed to sign up as a user. Please try again.";
     } else if (error === "artist") {
         errorMessage = "Failed to sign up as an artist. Please try again.";
     }
+
     res.render('signup', { errorMessage });
 });
 
