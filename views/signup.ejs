@@ -6,6 +6,15 @@
     <link rel="stylesheet" href="css/output.css">
     <link rel="stylesheet" href="css/input.css">
     <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <style>
+        .swal-confirm-button-green {
+            background-color: #28a745 !important;
+            color: #fff !important;
+            border-color: #28a745 !important;
+        }
+    </style>
+
     <title>Spotitip</title>
 </head>
 
@@ -53,12 +62,32 @@
                 
                 <button type="submit" class="signUpButton w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-spotitip hover:text-black">Sign Up</button>
             </form>
+            
 
-            <% if (errorMessage) { %>
-                <p class="text-red-500"><%= errorMessage %></p>
-            <% } %>
         </div>
     </div>
-    <!-- <script src="js/SignUp.js"></script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        var error = getUrlParameter('error');
+        if (error === 'duplicate') {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Username or Email already exists!",
+                customClass: {
+                    confirmButton: 'swal-confirm-button-green'
+                },
+            });
+        }
+    </script>
 </body>
 </html>
