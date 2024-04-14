@@ -3,7 +3,10 @@
     "tailwindcss": "^3.4.3"
   },
   "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
     "gulp": "^5.0.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "nodemon": "^3.1.0"
   }
 }
