@@ -20,11 +20,13 @@ body::-webkit-scrollbar {
 
 main {
     width: 100%;
-    height: 767px;
+    /* height: 767px; */
+    height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    padding-bottom: 187px;
 }
 
 main::-webkit-scrollbar {
