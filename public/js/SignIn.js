@@ -3,7 +3,7 @@ const loginButton = document.getElementById('signInButton')
 
 function showSignUpForm( event ) {
     event.preventDefault()
-    window.location.href = 'SignUp.html'
+    // window.location.href = '/src/html/SignUp.html'
 } createAccountLink.addEventListener( 'click', showSignUpForm )
 
 function handleLogin( event ) {
@@ -12,7 +12,7 @@ function handleLogin( event ) {
     const password = document.getElementById('password').value
     if ( email && password ) {
         document.getElementById( 'loginForm' ).submit();
-        window.location.href = '../html/Main.html';
+        // window.location.href = '/src/html/Main.html';
     } else {
         alert('Please fill in both email and password fields.');
     }
