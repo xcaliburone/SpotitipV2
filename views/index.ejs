@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="css/output.css">
     <link rel="stylesheet" href="css/input.css">
     <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <style>
+        .swal-confirm-button-green { background-color: #28a745 !important; color: #fff !important; border-color: #28a745 !important; }
+    </style>
     <title>Spotitip</title>
 </head>
 
@@ -16,8 +20,7 @@
             <img src="images/SPOTITIP.png" alt="hero" class="hover:cursor-not-allowed">
             <h1 class="text-2xl font-bold text-center mb-4 dark:text-neutral-200">Welcome back!</h1>
 
-            <!-- <form id="loginForm" action="./src/php/signIn.php" method="post" onsubmit="return loginUser()"> -->
-            <form id="loginForm" action="/login" method="post" onsubmit="return loginUser()">
+            <form id="loginForm" action="/login" method="post">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-grey-700 dark:text-neutral-300 mb-2">Email Address</label>
                     <input type="email" id="email" class="shadow-sm rounded-md w-full px-3 py-2 border-2 border-neutral-300 focus:outline-none focus:ring-spotitip focus:border-spotitip" placeholder="example@email.com" required name="email">
@@ -34,7 +37,6 @@
                         <input type="checkbox" id="remember" class="h-4 w-4 rounded border-neutral-300 text-spotitip focus:ring-spotitip focus:outline-none accent-spotitip" checked>
                         <label for="remember" class="ml-2 block text-sm text-neutral-700 dark:text-neutral-300">Remember me</label>
                     </div>
-
                     <a href="/signup" id="create-account-link" class="text-xs text-neutral-500 hover:text-spotitip">Create Account</a>
                 </div>
                 
@@ -42,7 +44,15 @@
                 focus:ring-2 focus:ring-offset-2">Sign In</button>
             </form>
         </div>
-    </div>
-    <!-- <script src="js/SignIn.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function getUrlParameter(name) {        // Function to get URL parameters
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }; var error = getUrlParameter('error');
+        if (error === 'account-not-found') { Swal.fire({ icon: "error", title: "Oops...", text: "Email atau password anda mungkin salah, silahkan ulang.", customClass: { confirmButton: 'swal-confirm-button-green' }, }); }
+    </script>
 </body>
 </html>
