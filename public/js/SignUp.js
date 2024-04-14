@@ -1,5 +1,6 @@
 const menuButton = document.getElementById('menu-button')
 const menu = document.querySelector('.absolute')
+const signUpButton = document.querySelector('.signUpButton')
 
 menuButton.addEventListener('click', (event) => {   // event listener pada tombol untuk menampilkan/menyembunyikan menu dropdown
     const expanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
