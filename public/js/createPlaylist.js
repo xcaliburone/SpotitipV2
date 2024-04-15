@@ -1,33 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const createPlaylistButton = document.getElementById('createPlaylistButton');
-    const createPlaylistModal = document.getElementById('createPlaylistModal');
-    const closeCreatePlaylistModal = document.getElementsByClassName('close')[0];
-
-    if (createPlaylistButton) {
-        createPlaylistButton.onclick = function() {
-            createPlaylistModal.style.display = "block";
-        }
-    } else {
-        console.error("Element with ID 'createPlaylistButton' not found.");
-    }
-
-    if (closeCreatePlaylistModal) {
-        closeCreatePlaylistModal.onclick = function() {
-            createPlaylistModal.style.display = "none";
-        }
-    } else {
-        console.error("Element with class 'close' not found.");
-    }
-});
-
-
-// Ketika pengguna mengklik di luar modal, sembunyikan modal
-window.onclick = function(event) {
-    if (event.target == createPlaylistModal) {
-        createPlaylistModal.style.display = "none";
-    }
-}
-
 document.getElementById("createPlaylistForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const name = document.getElementById("playlistName").value;
@@ -54,13 +24,25 @@ document.getElementById("createPlaylistForm").addEventListener("submit", async (
     }
 });
 
-function addPlaylistToUI(playlist) {
+async function addPlaylistToUI(playlist) {
     const playlistContainer = document.querySelector(".list-items");
-    const playlistItem = document.createElement("div");
-    playlistItem.classList.add("item-playlist", "bg-neutral-800", "w-full", "h-[55px]", "list-none", "rounded-md", "overflow-hidden", "flex", "items-center", "hover:opacity-60", "transition", "hover:cursor-pointer");
-    playlistItem.innerHTML = `
-        <img src="images/liked.png" alt="liked songs" class="w-[55px]">
-        <p class="text-neutral-300 ml-3 font-medium">${playlist.name}</p>
-    `;
-    playlistContainer.appendChild(playlistItem);
+    
+    try {
+        const isDuplicate = await checkDuplicatePlaylist(playlist.name);
+        
+        if (isDuplicate) {
+            alert("Playlist with this name already exists. Please choose a different name.");
+            return; // Stop further execution
+        }
+        
+        const playlistItem = document.createElement("div");
+        playlistItem.classList.add("item-playlist", "bg-neutral-800", "w-full", "h-[55px]", "list-none", "rounded-md", "overflow-hidden", "flex", "items-center", "hover:opacity-60", "transition", "hover:cursor-pointer");
+        playlistItem.innerHTML = `
+            <img src="images/liked.png" alt="liked songs" class="w-[55px]">
+            <p class="text-neutral-300 ml-3 font-medium">${playlist.name}</p>
+        `;
+        playlistContainer.appendChild(playlistItem);
+    } catch (error) {
+        console.error("Error adding playlist to UI:", error);
+    }
 }
