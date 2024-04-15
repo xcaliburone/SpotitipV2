@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.get('/', (req, res) => { res.render('index'); });
-app.get('/main', (req, res) => { res.render('main'); });
+app.get('/main-user', (req, res) => { res.render('mainUser'); });
+app.get('/main-artist', (req, res) => { res.render('mainArtist') })
 
 function generateNewID(table, type) {               // Fungsi untuk menghasilkan ID baru sesuai pola yang diberikan
     return new Promise((resolve, reject) => {
@@ -31,16 +32,53 @@ function generateNewID(table, type) {               // Fungsi untuk menghasilkan
     });
 }
 
-app.post('/login', async (req, res) => {        // Middleware untuk menangani rute login
+function generatePlaylistID() {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT MAX(id) AS maxId FROM playlist";
+        connection.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                let maxId = result[0].maxId;
+                if (!maxId) {
+                    maxId = 'PL0';
+                }
+                const numericPart = parseInt(maxId.slice(2), 10);
+                const newId = 'PL' + (numericPart + 1);
+                resolve(newId);
+            }
+        });
+    });
+}
+
+// app.post('/login', async (req, res) => {        // Middleware untuk menangani rute login
+//     const { email, password } = req.body;
+//     try {
+//         const userResult = await checkCredentials('user', email, password);     // Memeriksa kredensial pengguna pada tabel 'user'
+//         const artistResult = await checkCredentials('artist', email, password); // Memeriksa kredensial pengguna pada tabel 'artist'
+//         if (userResult || artistResult) { res.redirect('main'); // Jika kredensial cocok, arahkan ke halaman utama
+//         } else {
+//             res.redirect('/login?error=account-not-found'); return; // Jika tidak cocok, arahkan kembali ke halaman login dengan pesan kesalahan
+//         }
+//     } catch (error) { console.error("Error during login:", error); res.render('index', { errorMessage }); }
+// });
+
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const userResult = await checkCredentials('user', email, password);     // Memeriksa kredensial pengguna pada tabel 'user'
-        const artistResult = await checkCredentials('artist', email, password); // Memeriksa kredensial pengguna pada tabel 'artist'
-        if (userResult || artistResult) { res.redirect('main'); // Jika kredensial cocok, arahkan ke halaman utama
+        const userResult = await checkCredentials('user', email, password);
+        const artistResult = await checkCredentials('artist', email, password);
+        if (userResult) {
+            res.redirect('/main-user'); // Jika login sebagai user, arahkan ke halaman /main-user
+        } else if (artistResult) {
+            res.redirect('/main-artist'); // Jika login sebagai artist, arahkan ke halaman /main-artist
         } else {
-            res.redirect('/login?error=account-not-found'); return; // Jika tidak cocok, arahkan kembali ke halaman login dengan pesan kesalahan
+            res.redirect('/login?error=account-not-found');
         }
-    } catch (error) { console.error("Error during login:", error); res.render('index', { errorMessage }); }
+    } catch (error) {
+        console.error("Error during login:", error);
+        res.render('index', { errorMessage });
+    }
 });
 
 app.get('/login', (req, res) => {       // Di halaman login, tampilkan pesan kesalahan jika ada
@@ -75,7 +113,11 @@ app.post('/signup', async (req, res) => {           // Middleware untuk menangan
                 res.redirect(`/signup?error=${registerAs}`);
             } else {
                 console.log(`New ${registerAs} registered:`, newId);
-                res.redirect('/main'); // Redirect to main or dashboard page
+                if (registerAs === "user") {
+                    res.redirect('/main-user'); // Redirect to main user page
+                } else {
+                    res.redirect('/main-artist'); // Redirect to main artist page
+                }
             }
         });
     } catch (error) { console.error("Error during sign up:", error); res.redirect('/signup'); }
@@ -103,5 +145,30 @@ app.get('/signup', (req, res) => {
     } else if (error === "artist") { errorMessage = "Failed to sign up as an artist. Please try again."; }
     res.render('signup', { errorMessage });
 });
+
+app.post('/createPlaylist', async (req, res) => {
+    const { name } = req.body;
+    try {
+        const newPlaylistId = await generatePlaylistID();
+        const sql = 'INSERT INTO playlist (id, name) VALUES (?, ?)';
+        connection.query(sql, [newPlaylistId, name], (err, result) => { // <-- Fix: Use newPlaylistId instead of newId
+            if (err) {
+                console.error("Error creating playlist:", err);
+                res.status(500).json({ error: "Failed to create playlist" });
+            } else {
+                console.log("Playlist created:", newPlaylistId);
+                res.json({ id: newPlaylistId, name });
+            }
+        });
+    } catch (error) {
+        console.error("Error creating playlist:", error);
+        res.status(500).json({ error: "Failed to create playlist" });
+    }
+});
+
+app.get('/main/profile', (req, res) => {
+    res.render('profile');
+})
+
 app.use('/', (req, res) => { res.status(404); res.send('<h1>404 Page not Found!</h1>') });
 app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
