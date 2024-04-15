@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.header button')
     const sections = document.querySelectorAll('.main > div')
 
-    function showAllSections() {        // Fungsi untuk menampilkan semua section
+    function showAllSections() {       // Fungsi untuk menampilkan semua section
         sections.forEach( section => { section.style.display = 'flex'; } );
     }
 
