@@ -1,0 +1,49 @@
+<div class="artist-popular flex flex-col">
+    <div class="title mb-2">
+        <p class="text-lg font-bold text-neutral-300">Popular Artists</p>
+    </div>
+    <div class="items flex gap-4">
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    // Fetch artists
+                    const artistResponse = await fetch('/artists');
+                    const artistData = await artistResponse.json();
+                    const artists = artistData.artists;
+                    const artistContainer = document.querySelector('.artist-popular .items');
+
+                    if (artists.length === 0) {
+                        // const noSongsMessage = document.createElement('h3');
+                        const noArtistsMessage = document.createElement('div');
+                        noArtistsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                        noArtistsMessage.innerHTML = `
+                        <img src="images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                        <div class="desc-none">
+                            <h1 class="title-playlist font-medium text-white">DATA ARTIST BELUM ADA</h1>
+                            <p class="desc-playlist text-neutral-300">Silahkan Masukkan Data</p>
+                        </div>
+                        `;
+                        // noSongsMessage.textContent = "Data belum ada";
+                        artistContainer.appendChild(noArtistsMessage);
+                    } else {
+                        artists.forEach(artist => {
+                            // Create and append artist items
+                            const artistItem = document.createElement('div');
+                            artistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                            artistItem.innerHTML = `
+                                <img src="images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <div class="desc">
+                                    <h1 class="title-playlist font-medium text-white">${artist.name}</h1>
+                                    <p class="desc-playlist text-neutral-300">${artist.description}</p>
+                                </div>
+                            `;
+                            artistContainer.appendChild(artistItem);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        </script>
+    </div>
+</div>
