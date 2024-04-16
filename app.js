@@ -5,36 +5,61 @@ const port = 3031;
 const mysql = require('mysql');
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
-// const session = require('express-session');
-
-// app.use(session({
-//     secret: 'XcaliburOne@2431@138207', // Ganti dengan kunci rahasia yang lebih aman
-//     resave: false,
-//     saveUninitialized: true
-// }));
 
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
+const { generateNewID, generatePlaylistID } = require('./utils/generateID')
+const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist } = require('./utils/checkCredentials')
+
 app.get('/', (req, res) => { res.render('index'); });
 
-app.get('/main-user', (req, res) => {
-    // const user_id = req.session.user_id;
-    res.render('mainUser', {
-        modalName: 'Playlist',
-        modalForm: 'createPlaylistForm',
-        foridnameTitleModal: 'playlistName',
-        modalPlaceholderTitle: 'Playlist title',
-        foridnameDescModal: 'playlistDescription',
-        modalPlaceholderDesc: 'Playlist description',
-        classModalButton: 'addPlaylist',
-        modalButton: 'Add Playlist',
-        artistHide: '',
-        // user_id: user_id
-    });
+app.get('/main-user', async (req, res) => {
+    try {
+        const keyword = req.query.key; // Ambil kata kunci pencarian dari query parameter
+        const searchResults = await searchAllTables(keyword); // Panggil fungsi pencarian untuk semua tabel
+        res.render('mainUser', {        // Render halaman main-user dengan hasil pencarian
+            searchResults: searchResults,
+            modalName: 'Playlist',
+            modalForm: 'createPlaylistForm',
+            foridnameTitleModal: 'playlistName',
+            modalPlaceholderTitle: 'Playlist title',
+            foridnameDescModal: 'playlistDescription',
+            modalPlaceholderDesc: 'Playlist description',
+            classModalButton: 'addPlaylist',
+            modalButton: 'Add Playlist',
+            artistHide: ''
+        });
+    } catch (error) {
+        console.error("Error searching data:", error);
+        res.redirect('/main-user');
+    }
 });
+
+function searchAllTables(keyword) {
+    return new Promise((resolve, reject) => {
+        // Lakukan pencarian di semua tabel entitas di database
+        const sql = `
+            SELECT title FROM song WHERE title LIKE '%undefined%'
+            UNION
+            SELECT name FROM playlist WHERE name LIKE '%undefined%'
+            UNION
+            SELECT title FROM album WHERE title LIKE '%undefined%'
+            UNION
+            SELECT name FROM artist WHERE name LIKE '%undefined%'
+        `;
+        connection.query(sql, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
 
 app.get('/main-artist', (req, res) =>{
     res.render('mainArtist', {
@@ -49,89 +74,6 @@ app.get('/main-artist', (req, res) =>{
         artistHide: 'hidden',
     });
 });
-
-function generateNewID(table, type) {              
-    return new Promise((resolve, reject) => {
-        const prefix = type === "user" ? "US" : "AR";
-        const sql = `SELECT MAX(id) AS maxId FROM ${table} WHERE id LIKE '${prefix}%'`;
-        connection.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                let maxId = result[0].maxId;
-                if (!maxId) {
-                    maxId = prefix + '01';
-                } else {
-                    const prefixLength = prefix.length;
-                    const numericPart = parseInt(maxId.slice(prefixLength), 10) + 1;
-                    maxId = prefix + (numericPart < 10 ? '0' : '') + numericPart;
-                }
-                resolve(maxId);
-            }
-        });
-    });
-}
-
-function generatePlaylistID() {
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT MAX(id) AS maxId FROM playlist";
-        connection.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                let maxId = result[0].maxId;
-                if (!maxId) {
-                    maxId = 'PL01'; // Mulai dari PL00 jika tidak ada ID sebelumnya
-                } else {
-                    const numericPart = parseInt(maxId.slice(2), 10) + 1;
-                    maxId = 'PL' + (numericPart < 10 ? '0' : '') + numericPart;
-                }
-                resolve(maxId);
-            }
-        });
-    });
-}
-
-// app.post('/login', async (req, res) => {
-//     const { email, password } = req.body;
-//     try {
-//         const userResult = await checkCredentials('user', email, password);
-//         const artistResult = await checkCredentials('artist', email, password);
-//         if (userResult) {
-//             // req.session.user_id = newId; // Menyimpan user_id dalam sesi
-//             res.redirect('/main-user'); // Jika login sebagai user, arahkan ke halaman /main-user
-//         } else if (artistResult) {
-//             // req.session.artist_id = newId; // Menyimpan artist_id dalam sesi
-//             res.redirect('/main-artist'); // Jika login sebagai artist, arahkan ke halaman /main-artist
-//         } else {
-//             res.redirect('/login?error=account-not-found');
-//         }
-//     } catch (error) {
-//         console.error("Error during login:", error);
-//         res.render('index', { errorMessage });
-//     }
-// });
-
-// app.post('/login', async (req, res) => {
-//     const { email, password } = req.body;
-//     try {
-//         const credentials = await checkCredentials(email, password);
-//         if (credentials) {
-//             const { type, id } = credentials;
-//             req.session[type + '_id'] = id; // Menyimpan user_id atau artist_id dalam sesi
-//             if (type === 'user') {
-//                 res.redirect('/main-user'); // Jika login sebagai user, arahkan ke halaman /main-user
-//             } else {
-//                 res.redirect('/main-artist'); // Jika login sebagai artist, arahkan ke halaman /main-artist
-//             }
-//         } else {
-//             res.redirect('/login?error=account-not-found');
-//         }
-//     } catch (error) {
-//         console.error("Error during login:", error);
-//         res.render('index', { errorMessage });
-//     }
-// });
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -158,35 +100,6 @@ app.get('/login', (req, res) => {       // Di halaman login, tampilkan pesan kes
     res.render('index', { errorMessage });
 });
 
-function checkCredentials(table, email, password) {     // Fungsi untuk memeriksa apakah email dan password cocok dengan tabel tertentu
-    return new Promise((resolve, reject) => {
-        const sql = `SELECT COUNT(*) AS count FROM ${table} WHERE email = ? AND password = ?`;
-        connection.query(sql, [email, password], (err, result) => { if (err) { reject(err); } else { resolve(result[0].count > 0); } });
-    });
-}
-
-// function checkCredentials(email, password) {
-//     return new Promise((resolve, reject) => {
-//         const sql = `
-//             SELECT 'user' AS type, id FROM user WHERE email = ? AND password = ? 
-//             UNION ALL 
-//             SELECT 'artist' AS type, id FROM artist WHERE email = ? AND password = ?`;
-
-//         connection.query(sql, [email, password, email, password], (err, result) => {
-//             if (err) {
-//                 reject(err);
-//             } else {
-//                 if (result.length > 0) {
-//                     const { type, id } = result[0];
-//                     resolve({ type, id });
-//                 } else {
-//                     resolve(null);
-//                 }
-//             }
-//         });
-//     });
-// }
-
 app.post('/signup', async (req, res) => {           // Middleware untuk menangani rute sign up
     const { name, email, password, registerAs } = req.body;
     try {   // Periksa apakah email atau username sudah ada dalam tabel
@@ -206,93 +119,34 @@ app.post('/signup', async (req, res) => {           // Middleware untuk menangan
             } else {
                 console.log(`New ${registerAs} registered:`, newId);
                 if (registerAs === "user") {
-                    // req.session.user_id = newId; // Menyimpan user_id dalam sesi
-                    res.redirect('/main-user'); // Redirect to main user page
+                    // req.session.user_id = newId; // Menyimpan user_id dalam session
+                    res.redirect('/main-user');
                 } else {
                     // req.session.artist_id = newId;
-                    res.redirect('/main-artist'); // Redirect to main artist page
+                    res.redirect('/main-artist');
                 }
             }
         });
     } catch (error) { console.error("Error during sign up:", error); res.redirect('/signup'); }
 });
 
-function checkIfEmailExists(email) {        // Fungsi untuk memeriksa apakah email sudah ada dalam tabel
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT COUNT(*) AS count FROM user WHERE email = ?";
-        connection.query(sql, [email], (err, result) => { if (err) { reject(err); } else { resolve(result[0].count > 0); } });
-    });
-}
-
-function checkIfUsernameExists(username) {      // Fungsi untuk memeriksa apakah username sudah ada dalam tabel
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT COUNT(*) AS count FROM user WHERE name = ?";
-        connection.query(sql, [username], (err, result) => { if (err) { reject(err); } else { resolve(result[0].count > 0); } });
-    });
-}
-
 app.get('/signup', (req, res) => {
     const { error } = req.query;
-    let errorMessage = "";      // Tambahkan kondisi untuk menangani kasus error = duplicate
+    let errorMessage = "";      // kondisi untuk menangani kasus error = duplicate
     if (error === "duplicate") { errorMessage = "Email or username already exists.";
     } else if (error === "user") { errorMessage = "Failed to sign up as a user. Please try again.";
     } else if (error === "artist") { errorMessage = "Failed to sign up as an artist. Please try again."; }
     res.render('signup', { errorMessage });
 });
 
-// Fungsi untuk mendapatkan user_id atau artist_id dari sesi
-// function getUserIdFromSessionOrToken(req, type) {
-//     // Contoh menggunakan sesi
-//     if (type === 'user') {
-//         return req.session.user_id;
-//     } else if (type === 'artist') {
-//         return req.session.artist_id;
-//     }
-//     return null;
-// }
-
-// Middleware autentikasi untuk pengguna biasa
-// function authenticateUser() {
-//     return(req, res, next) => {
-//         // Lakukan logika autentikasi untuk pengguna biasa di sini
-//         const user_id = getUserIdFromSessionOrToken(req, 'user');
-    
-//         if (!user_id) {
-//             return res.status(401).json({ message: 'Unauthorized' });
-//         }
-    
-//         req.user_id = user_id; // Tambahkan user_id ke objek req untuk digunakan di endpoint selanjutnya
-//         next();
-//     };
-// }
-
-// Middleware autentikasi untuk artis
-// function authenticateArtist() {
-//     return(req, res, next) => {
-//         // Lakukan logika autentikasi untuk artis di sini
-//         const artist_id = getUserIdFromSessionOrToken(req, 'artist');
-
-//         if (!artist_id) {
-//             return res.status(401).json({ message: 'Unauthorized' });
-//         }
-
-//         req.artist_id = artist_id; // Tambahkan artist_id ke objek req untuk digunakan di endpoint selanjutnya
-//         next();
-//     };
-// }
-
 app.post('/createPlaylist', async (req, res) => {
     const { name, user_id } = req.body;
     try {
-        // Periksa apakah nama playlist sudah ada dalam database
-        const isDuplicate = await checkDuplicatePlaylist(name);
-        if (isDuplicate) {
-            // Jika ada duplikat, kirimkan respons dengan parameter error=duplicate
+        const isDuplicate = await checkDuplicatePlaylist(name); // Periksa apakah nama playlist sudah ada dalam database
+        if (isDuplicate) {  // Jika ada duplikat, kirimkan respons dengan parameter error=duplicate
             res.redirect('/createPlaylist?error=duplicate');
             return;
-        }
-        
-        // Jika tidak ada duplikat, tambahkan playlist ke database
+        }   // Jika tidak ada duplikat, tambahkan playlist ke database
         const newPlaylistId = await generatePlaylistID();
         const sql = 'INSERT INTO playlist (id, name) VALUES (?, ?)';
         connection.query(sql, [newPlaylistId, name], async (err, result) => {
@@ -309,7 +163,6 @@ app.post('/createPlaylist', async (req, res) => {
                         console.error("Error adding playlist to user:", err);
                         // res.redirect('/createPlaylist?error=user_playlist_create');
                     } else {
-                        // Redirect to main page after successful creation
                         res.redirect('/main');
                     }
                 });
@@ -317,11 +170,19 @@ app.post('/createPlaylist', async (req, res) => {
         });
     } catch (error) {
         console.error("Error creating playlist:", error);
-        res.redirect('/createPlaylist'); // Redirect to createPlaylist page if any error occurs
+        // res.redirect('/createPlaylist');
     }
 });
 
-app.get('/createPlaylist', (req, res) => {
+app.get('/playlists', async (req, res) => {
+    try {
+        const playlists = await getAllPlaylists(); // Fungsi untuk mengambil semua playlist dari database
+        res.json({ playlists });
+    } catch (error) {
+        console.error("Error fetching playlists:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+
     const { error } = req.query;
     let errorMessage = "";
     if (error === "duplicate") {
@@ -332,18 +193,45 @@ app.get('/createPlaylist', (req, res) => {
     res.render('createPlaylist', { errorMessage });
 });
 
-async function checkDuplicatePlaylist(name) {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT COUNT(*) AS count FROM playlist WHERE name = ?';
-        connection.query(sql, [name], (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result[0].count > 0);
-            }
-        });
-    });
-}
+app.get('/albums', async (req, res) => {
+    try {
+        const albums = await getAllAlbums(); // Fungsi untuk mengambil semua album dari database
+        res.json({ albums });
+    } catch (error) {
+        console.error("Error fetching albums:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/artists', async (req, res) => {
+    try {
+        const artists = await getAllArtists(); // Fungsi untuk mengambil semua artist dari database
+        res.json({ artists });
+    } catch (error) {
+        console.error("Error fetching artists:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/songs', async (req, res) => {
+    try {
+        const songs = await getAllSongs(); // Fungsi untuk mengambil semua lagu dari database
+        res.json({ songs });
+    } catch (error) {
+        console.error("Error fetching songs:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/users', async (req, res) => {
+    try {
+        const users = await getAllUsers(); // Fungsi untuk mengambil semua lagu dari database
+        res.json({ users });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 app.get('/main/profile', (req, res) => {
     res.render('profile');
