@@ -8,8 +8,14 @@
             <button id="button-artists" data-target="artist-popular" class="button-artists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
                 Artist
             </button>
+            <button id="button-users" data-target="newest-user" class="button-artists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                User
+            </button>
             <button id="button-albums" data-target="album-popular" class="button-albums rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer"">
                 Albums
+            </button>
+            <button id="button-playlists" data-target="playlist-popular" class="button-playlists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer"">
+                Playlists
             </button>
             <button id="button-songs" data-target="newest-song" class="button-songs rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
                 Songs
@@ -18,59 +24,52 @@
 
         <div class="box relative">
             <form name="search">
-                <input type="text" class="input font-semibold" name="key" 
+                <input type="text" id="searchInput" class="input font-semibold" name="key" 
                 placeholder="Search..." autocomplete="off">
             </form>
         </div>
-        
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const searchParams = new URLSearchParams(window.location.search);
+                    const keyword = searchParams.get('key');
+
+                    // Fetch songs based on search keyword
+                    const songResponse = await fetch(`/main-user?key=${keyword}`);
+                    const songData = await songResponse.json();
+                    const songs = songData.songs;
+                    const songContainer = document.querySelector('.song-section .items');
+
+                    // Render songs on the page
+                    songs.forEach(song => {
+                        const songItem = document.createElement('div');
+                            songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                            songItem.innerHTML = `
+                                <img src="images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <div class="desc">
+                                    <h1 class="title-playlist font-medium text-white">${song.name}</h1>
+                                    <p class="desc-playlist text-neutral-300">${song.description}</p>
+                                </div>
+                            `;
+                    });
+                } catch (error) {
+                    console.error("Error fetching songs:", error);
+                }
+            });
+        </script> 
     </div>
 
     <div class="main gap-y-9">
 
-        <div class="newest-song flex flex-col">
-            <div class="title mb-2">
-                <p class="text-lg font-bold text-neutral-300">Newest Songs</p>
-            </div>
-            <div class="items">
-                <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                    <img src="images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                    <div class="desc">
-                        <h1 class="title-song font-medium text-lg text-white">title-song</h1>
-                        <p class="desc-song text-neutral-300">desc-song</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <%- include('./newest-song') %>    
+        
+        <%- include('./artist-popular') %>    
+        
+        <%- include('./album-popular') %>
+        
+        <%- include('./playlist-popular') %>
+        
+        <%- include('./newest-user') %>
 
-        <div class="artist-popular flex flex-col">
-            <div class="title mb-2">
-                <p class="text-lg font-bold text-neutral-300">Popural Artist</p>
-            </div>
-            <div class="items flex gap-4">
-                <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                    <img src="images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                    <div class="desc">
-                        <h1 class="title-artist font-medium text-white">title-artist</h1>
-                        <p class="desc-artist text-neutral-300">desc-artist</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="album-popular flex flex-col">
-            <div class="title mb-2">
-                <p class="text-lg font-bold text-neutral-300">Popular Albums</p>
-            </div>
-
-            <div class="items flex gap-4">
-                <div class="list-items bg-neutral-800 rounded-md overflow-hidden w-[250px] h-[320px] flex flex-col gap-y-3 p-4">
-                    <img src="images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                    <div class="desc">
-                        <h1 class="title-album font-medium text-white">title-album</h1>
-                        <p class="desc-album text-neutral-300">desc-album</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
