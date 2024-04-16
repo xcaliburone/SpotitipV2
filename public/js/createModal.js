@@ -4,26 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const closecreateModal = document.getElementsByClassName('close')[0];
 
     if (createModalButton) {
-        createModalButton.onclick = function() {
-            createModal.style.display = "block";
-        }
+        createModalButton.onclick = function() { createModal.style.display = "block"; }
     } else {
-        console.error("Element with ID 'createModalButton' not found.");
+        console.error("Element dengan ID 'createModalButton' tidak ditemukan.");
     }
 
     if (closecreateModal) {
-        closecreateModal.onclick = function() {
-            createModal.style.display = "none";
-        }
+        closecreateModal.onclick = function() { createModal.style.display = "none"; }
     } else {
         console.error("Element with class 'close' not found.");
     }
 });
 
-
-// Ketika pengguna mengklik di luar modal, sembunyikan modal
-window.onclick = function(event) {
-    if (event.target == createModal) {
-        createModal.style.display = "none";
-    }
+window.onclick = function(event) {  // klik luar modal untuk sembunyikan modal
+    if (event.target == createModal) { createModal.style.display = "none"; }
 }
