@@ -1,7 +1,7 @@
 document.getElementById("createAlbumForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const title = document.getElementById("albumName").value;
-    const description = document.getElementById("albumDescription").value; // Added line to get description
+    const description = document.getElementById("albumDescription").value;
 
     try {
         const response = await fetch("/createAlbum", {
@@ -9,13 +9,13 @@ document.getElementById("createAlbumForm").addEventListener("submit", async (eve
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ title, description }) // Passing title and description
+            body: JSON.stringify({ title, description }) // Passing title and desc
         });
 
         if (response.ok) {
             const album = await response.json();
             addPlaylistToUI(album);
-            closeModal(); // Implement closeModal function to close the modal
+            closeModal(); // closeModal function untuk tutup modal
         } else {
             throw new Error("Failed to create album");
         }
@@ -32,7 +32,7 @@ async function addAlbumToUI(album) {
         
         if (isDuplicate) {
             alert("Album with this name already exists. Please choose a different name.");
-            return; // Stop further execution
+            return;
         }
         
         const albumItem = document.createElement("div");
