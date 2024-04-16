@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             albumButton.classList.remove('active')
         }
     })
-
     // Tampilkan semua item saat tidak ada tombol yang aktif
     if (!playlistButton.classList.contains('active') && !albumButton.classList.contains('active')) { showAllItems() }
 });
