@@ -43,4 +43,44 @@ function generatePlaylistID() {
     });
 }
 
-module.exports = { generateNewID, generatePlaylistID }
+function generateAlbumID() {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT MAX(id) AS maxId FROM album";
+        connection.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                let maxId = result[0].maxId;
+                if (!maxId) {
+                    maxId = 'AL01'; // Mulai dari PL01 jika tidak ada ID sebelumnya
+                } else {
+                    const numericPart = parseInt(maxId.slice(2), 10) + 1;
+                    maxId = 'AL' + (numericPart < 10 ? '0' : '') + numericPart;
+                }
+                resolve(maxId);
+            }
+        });
+    });
+}
+
+function generateSongID() {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT MAX(id) AS maxId FROM song";
+        connection.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                let maxId = result[0].maxId;
+                if (!maxId) {
+                    maxId = 'SO01'; // Mulai dari PL01 jika tidak ada ID sebelumnya
+                } else {
+                    const numericPart = parseInt(maxId.slice(2), 10) + 1;
+                    maxId = 'SO' + (numericPart < 10 ? '0' : '') + numericPart;
+                }
+                resolve(maxId);
+            }
+        });
+    });
+}
+
+module.exports = { generateNewID, generatePlaylistID, generateAlbumID, generateSongID }
