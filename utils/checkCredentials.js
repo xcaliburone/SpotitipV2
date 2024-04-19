@@ -3,8 +3,18 @@ const connection = mysql.createConnection({ host: 'localhost', user: 'root', pas
 
 function checkCredentials(table, email, password) {     // Fungsi untuk memeriksa apakah email dan password cocok dengan tabel tertentu
     return new Promise((resolve, reject) => {
-        const sql = `SELECT COUNT(*) AS count FROM ${table} WHERE email = ? AND password = ?`;
-        connection.query(sql, [email, password], (err, result) => { if (err) { reject(err); } else { resolve(result[0].count > 0); } });
+        // const sql = `SELECT COUNT(*) AS count FROM ${table} WHERE email = ? AND password = ?`;
+        const sql = `SELECT id FROM ${table} WHERE email = ? AND password = ?`;
+        connection.query(sql, [email, password], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                // resolve(result[0].count > 0);
+                if (results.length > 0) { resolve(results[0]); // Mengembalikan objek pengguna/artis yang cocok
+                } else { resolve(null); // Jika tidak ada hasil yang cocok
+                }
+            }
+        });
     });
 }
 
@@ -35,4 +45,30 @@ async function checkDuplicatePlaylist(name) {
     });
 }
 
-module.exports = { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist }
+async function checkDuplicateAlbum(name) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT COUNT(*) AS count FROM album WHERE name = ?';
+        connection.query(sql, [name], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result[0].count > 0);
+            }
+        });
+    });
+}
+
+async function checkDuplicateSong(name) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT COUNT(*) AS count FROM song WHERE name = ?';
+        connection.query(sql, [name], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result[0].count > 0);
+            }
+        });
+    });
+}
+
+module.exports = { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong }
