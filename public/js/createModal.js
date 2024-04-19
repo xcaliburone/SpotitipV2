@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const createModalButton = document.getElementById('createModalButton');
+    const createModalButtonCreate = document.getElementById('createModalButtonCreate');
     const createModal = document.getElementById('createModal');
     const closecreateModal = document.getElementsByClassName('close')[0];
 
-    if (createModalButton) {
-        createModalButton.onclick = function() { createModal.style.display = "block"; }
+    if (createModalButtonCreate) {
+        createModalButtonCreate.onclick = function() { createModal.style.display = "block"; }
     } else {
-        console.error("Element dengan ID 'createModalButton' tidak ditemukan.");
+        console.error("Element dengan ID 'createModalButtonCreate' tidak ditemukan.");
     }
 
     if (closecreateModal) {
