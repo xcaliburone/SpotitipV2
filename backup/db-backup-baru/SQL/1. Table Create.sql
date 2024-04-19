@@ -24,23 +24,22 @@ CREATE TABLE IF NOT EXISTS `artist` (
 
 CREATE TABLE IF NOT EXISTS `song` (
   `id` varchar(12) NOT NULL,
-  `title` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `genre` varchar(50) NOT NULL,
   `duration` TIME NOT NULL,
   `listeners` int(11) DEFAULT 0,
   PRIMARY KEY (`id`),
-  INDEX idx_song_title (`title`),
+  INDEX idx_song_name (`name`),
   INDEX idx_song_genre (`genre`)
 );
 
 CREATE TABLE IF NOT EXISTS `album` (
   `id` varchar(12) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `release` date NOT NULL,
+  `name` varchar(50) NOT NULL,
   `num_song` int(11) NOT NULL,
   `duration` TIME NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX idx_album_title (`title`)
+  INDEX idx_album_name (`name`)
 );
 
 CREATE TABLE IF NOT EXISTS `playlist` (
@@ -81,6 +80,16 @@ CREATE TABLE IF NOT EXISTS `user_playlist_follow` (
   KEY `playlist_id_follow` (`playlist_id`),
   CONSTRAINT `user_id_follow_playlist` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `playlist_id_follow` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `user_album_follow` (
+  `user_id` varchar(12) NOT NULL,
+  `album_id` varchar(12) NOT NULL,
+  UNIQUE KEY `unique_user_album_follow` (`user_id`, `album_id`),
+  KEY `user_id_follow_playlist` (`user_id`),
+  KEY `album_id_follow` (`album_id`),
+  CONSTRAINT `user_id_follow_album` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `album_id_follow` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `user_song_liked` (
