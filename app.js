@@ -1,28 +1,37 @@
 const express = require('express');
 const app = express();
 const port = 3031;
-
 const mysql = require('mysql');
+const session = require('express-session');
+app.use(express.static(__dirname + '/public'));
+
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
 
+app.use(session({ secret: 'secret-key', resave: false, saveUninitialized: false }));
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
-const { generateNewID, generatePlaylistID } = require('./utils/generateID')
-const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist } = require('./utils/checkCredentials')
+const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
+const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong } = require('./utils/checkCredentials')
 
 app.get('/', (req, res) => { res.render('index'); });
 
-app.get('/main-user', async (req, res) => {
+app.get('/main-user/:userId', (req, res) => {
+    const userId = req.params.userId;
+    console.log("User ID main :", userId);
+
+    if (!userId) {
+        console.error("User ID is undefined");
+        return res.status(400).send("User ID is missing");
+    }
+
     try {
-        const keyword = req.query.key; // Ambil kata kunci pencarian dari query parameter
-        const searchResults = await searchAllTables(keyword); // Panggil fungsi pencarian untuk semua tabel
-        res.render('mainUser', {        // Render halaman main-user dengan hasil pencarian
-            searchResults: searchResults,
+        res.render('mainUser', {        
+            userId: userId,
             modalName: 'Playlist',
             modalForm: 'createPlaylistForm',
             foridnameTitleModal: 'playlistName',
@@ -31,39 +40,30 @@ app.get('/main-user', async (req, res) => {
             modalPlaceholderDesc: 'Playlist description',
             classModalButton: 'addPlaylist',
             modalButton: 'Add Playlist',
-            artistHide: ''
+            artistHide: '',
+            userHide: 'hidden',
+            artistButtonleft: 'hidden',
+            userButtonleft: '',
+            onlyArtistContent: 'hidden',
+            onlyUserContent: '',
         });
     } catch (error) {
-        console.error("Error searching data:", error);
+        console.error("Error rendering data:", error);
         res.redirect('/main-user');
     }
 });
 
-function searchAllTables(keyword) {
-    return new Promise((resolve, reject) => {
-        // Lakukan pencarian di semua tabel entitas di database
-        const sql = `
-            SELECT title FROM song WHERE title LIKE '%undefined%'
-            UNION
-            SELECT name FROM playlist WHERE name LIKE '%undefined%'
-            UNION
-            SELECT title FROM album WHERE title LIKE '%undefined%'
-            UNION
-            SELECT name FROM artist WHERE name LIKE '%undefined%'
-        `;
-        connection.query(sql, (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-}
+app.get('/main-artist/:artistId', (req, res) => {
+    const artistId = req.params.artistId;
+    console.log("Artist ID:", artistId);
 
-app.get('/main-artist', (req, res) =>{
+    if (!artistId) {
+        console.error("Artist ID is undefined");
+        return res.status(400).send("Artist ID is missing");
+    }
+
     res.render('mainArtist', {
-        modalName: 'Album',
+        modalName: 'album',
         modalForm: 'createAlbumForm',
         foridnameTitleModal: 'albumName',
         modalPlaceholderTitle: 'Album title',
@@ -72,40 +72,72 @@ app.get('/main-artist', (req, res) =>{
         classModalButton: 'addAlbum',
         modalButton: 'Add Album',
         artistHide: 'hidden',
+        userHide: '',
+        artistButtonleft: '',
+        userButtonleft: 'hidden',
+        onlyArtistContent: '',
+        onlyUserContent: 'hidden',
     });
+
+});
+
+app.get('/login/:userId?', (req, res) => {
+    const userId = req.params.userId;
+    console.log("User ID:", userId);
+
+    if (userId) { res.render('login', { userId: userId });
+
+        const { error } = req.query;
+        let errorMessage = "";
+        if (error === "account-not-found") { errorMessage = "Email atau password anda mungkin salah, silahkan ulang."; }
+        res.render('index', { errorMessage });
+    } else {
+        // Tangani permintaan ke /login tanpa parameter userId di sini
+        // res.status(400).send("User ID is missing");
+        res.redirect('/login/login?error=account-not-found');
+    }
 });
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const userResult = await checkCredentials('user', email, password);
-        const artistResult = await checkCredentials('artist', email, password);
-        if (userResult) {
-            res.redirect('/main-user'); // Jika login sebagai user, arahkan ke halaman /main-user
-        } else if (artistResult) {
-            res.redirect('/main-artist'); // Jika login sebagai artist, arahkan ke halaman /main-artist
+        const userResult = await checkCredentials('user', email, password); // Cek apakah data cocok dengan tabel user
+        if (!userResult) { // Jika tidak ada hasil di tabel user, coba mencari di tabel artist
+            const artistResult = await checkCredentials('artist', email, password);
+            if (artistResult) {
+                req.session.artist_id = artistResult.id; // Menyimpan ID artis dalam session
+                res.redirect(`/main-artist/${artistResult.id}`); return; // Redirect ke halaman main-artist dengan artist ID
+            }
         } else {
-            res.redirect('/login?error=account-not-found');
+            req.session.user_id = userResult.id; // Menyimpan ID pengguna dalam session
+            res.redirect(`/main-user/${userResult.id}`); // Redirect ke halaman main-user dengan user ID
+            return;            // Jika hasil ditemukan di tabel user, pengguna merupakan seorang user
         }
+        
+        // Jika tidak ada hasil dalam kedua tabel, kirimkan pesan kesalahan
+        res.redirect('login?error=account-not-found');
     } catch (error) {
         console.error("Error during login:", error);
         res.render('index', { errorMessage });
     }
 });
 
-app.get('/login', (req, res) => {       // Di halaman login, tampilkan pesan kesalahan jika ada
+app.get('/signup', (req, res) => {
     const { error } = req.query;
-    let errorMessage = "";
-    if (error === "account-not-found") { errorMessage = "Email atau password anda mungkin salah, silahkan ulang."; }
-    res.render('index', { errorMessage });
+    let errorMessage = "";      // kondisi untuk menangani kasus error = duplicate
+    if (error === "duplicate") { errorMessage = "Email or username already exists.";
+    } else if (error === "user") { errorMessage = "Failed to sign up as a user. Please try again.";
+    } else if (error === "artist") { errorMessage = "Failed to sign up as an artist. Please try again."; }
+    res.render('signup', { errorMessage });
 });
 
-app.post('/signup', async (req, res) => {           // Middleware untuk menangani rute sign up
+app.post('/signup', async (req, res) => {           
     const { name, email, password, registerAs } = req.body;
-    try {   // Periksa apakah email atau username sudah ada dalam tabel
+    try {
+        // Periksa apakah email atau username sudah ada dalam tabel
         const emailExists = await checkIfEmailExists(email);
         const usernameExists = await checkIfUsernameExists(name);
-        if (emailExists || usernameExists) {    // Jika email atau username sudah ada, kirimkan respons ke pengguna
+        if (emailExists || usernameExists) {    
             res.redirect('/signup?error=duplicate'); return;
         }
         // Jika email dan username belum ada, lanjutkan dengan menambahkan data baru ke database
@@ -119,79 +151,180 @@ app.post('/signup', async (req, res) => {           // Middleware untuk menangan
             } else {
                 console.log(`New ${registerAs} registered:`, newId);
                 if (registerAs === "user") {
-                    // req.session.user_id = newId; // Menyimpan user_id dalam session
-                    res.redirect('/main-user');
+                    req.session.user_id = newId; // Menyimpan ID pengguna dalam session
+                    res.redirect(`/main-user/${newId}`);
                 } else {
-                    // req.session.artist_id = newId;
-                    res.redirect('/main-artist');
+                    req.session.artist_id = newId; // Menyimpan ID artis dalam session
+                    res.redirect(`/main-artist/${newId}`);
                 }
             }
         });
-    } catch (error) { console.error("Error during sign up:", error); res.redirect('/signup'); }
+    } catch (error) { 
+        console.error("Error during sign up:", error); 
+        res.redirect('/signup'); 
+    }
 });
 
-app.get('/signup', (req, res) => {
-    const { error } = req.query;
-    let errorMessage = "";      // kondisi untuk menangani kasus error = duplicate
-    if (error === "duplicate") { errorMessage = "Email or username already exists.";
-    } else if (error === "user") { errorMessage = "Failed to sign up as a user. Please try again.";
-    } else if (error === "artist") { errorMessage = "Failed to sign up as an artist. Please try again."; }
-    res.render('signup', { errorMessage });
+app.post('/createSong', async (req, res) => {
+    const { artistId, name, genre, duration } = req.body;
+
+    console.log("Request body:", req.body);
+
+    console.log("Arist ID yahaha:", artistId);
+    if (artistId) { console.log("artist id untuk song adalah:", artistId);
+    } else { console.log("artist id untuk song tidak ada:", artistId); }
+
+    try {
+        const isDuplicate = await checkDuplicateSong(name); // Periksa apakah nama album sudah ada
+
+        if (isDuplicate) {
+            return res.redirect('/createSong?error=duplicate');
+        }
+        
+        const songId = await generateSongID(); // Generate ID untuk album
+
+        const insertSongQuery = 'INSERT INTO song (id, name, genre, duration) VALUES (?, ?, ?, ?)';
+        connection.query(insertSongQuery, [songId, name, genre, duration], async (err, result) => {
+            if (err) {
+                console.error("Error creating song:", err);
+                res.redirect('/createSong?error=song');
+                return res.status(500).send("Failed to create song: " + err.message);
+            }
+
+            const currentArtistId = req.session.artist_id;
+
+            const insertArtistAlbumQuery = 'INSERT INTO song_artist_sing (song_id, artist_id) VALUES (?, ?)';
+            connection.query(insertArtistAlbumQuery, [songId, currentArtistId], (err, result) => {
+                if (err) {
+                    console.error("Error creating artist song entry:", err);
+                    return res.status(500).send("Failed to create song.");
+                }
+                return res.status(200).send("Song Uploaded successfully.");
+            });
+        });
+    } catch (error) {
+        console.error("Error uploading song:", error);
+        return res.status(500).send("Failed to upload song.");
+    }
 });
 
 app.post('/createPlaylist', async (req, res) => {
-    const { name, user_id } = req.body;
+    const { userId, name } = req.body;
+
+    console.log("User ID yahaha:", userId);
+    if (userId) { console.log("user id untuk playlist adalah:", userId);
+    } else { console.log("user id untuk playlist tidak ada:", userId); }
+
     try {
-        const isDuplicate = await checkDuplicatePlaylist(name); // Periksa apakah nama playlist sudah ada dalam database
-        if (isDuplicate) {  // Jika ada duplikat, kirimkan respons dengan parameter error=duplicate
-            res.redirect('/createPlaylist?error=duplicate');
-            return;
-        }   // Jika tidak ada duplikat, tambahkan playlist ke database
-        const newPlaylistId = await generatePlaylistID();
-        const sql = 'INSERT INTO playlist (id, name) VALUES (?, ?)';
-        connection.query(sql, [newPlaylistId, name], async (err, result) => {
+        const isDuplicate = await checkDuplicatePlaylist(name); // Periksa apakah judul playlist sudah ada
+
+        if (isDuplicate) {
+            return res.redirect('/createPlaylist?error=duplicate');
+        }
+        
+        const playlistId = await generatePlaylistID();  // Generate ID untuk playlist
+
+        const insertPlaylistQuery = 'INSERT INTO playlist (id, name) VALUES (?, ?)';
+        connection.query(insertPlaylistQuery, [playlistId, name], async (err, result) => {
             if (err) {
                 console.error("Error creating playlist:", err);
                 res.redirect('/createPlaylist?error=playlist');
-            } else {
-                console.log("Playlist create:", newPlaylistId);
-
-                // Tambahkan entri ke tabel user_playlist_create
-                const sql2 = 'INSERT INTO user_playlist_create (user_id, playlist_id, date_created) VALUES (?, ?, NOW())';
-                connection.query(sql2, [user_id, newPlaylistId], (err, result) => {
-                    if (err) {
-                        console.error("Error adding playlist to user:", err);
-                        // res.redirect('/createPlaylist?error=user_playlist_create');
-                    } else {
-                        res.redirect('/main');
-                    }
-                });
+                return res.status(500).send("Failed to create playlist: " + err.message);
             }
+
+            const currentUserId = req.session.user_id;  // Dapatkan ID pengguna dari sesi
+
+            // Simpan entri baru dalam tabel user_playlist_create
+            const dateCreated = new Date().toISOString().slice(0, 10);
+            const insertUserPlaylistQuery = 'INSERT INTO user_playlist_create (user_id, playlist_id, date_created) VALUES (?, ?, ?)';
+            connection.query(insertUserPlaylistQuery, [currentUserId, playlistId, dateCreated], (err, result) => {
+                if (err) {
+                    console.error("Error creating user playlist entry:", err);
+                    return res.status(500).send("Failed to create playlist.");
+                }
+                // return res.redirect('/createPlaylist?success=true'); 
+                return res.status(200).send("Playlist created successfully.");
+            });
         });
     } catch (error) {
         console.error("Error creating playlist:", error);
-        // res.redirect('/createPlaylist');
+        return res.status(500).send("Failed to create playlist.");
     }
 });
 
-app.get('/playlists', async (req, res) => {
+app.post('/createAlbum', async (req, res) => {
+    const { artistId, name } = req.body;
+
+    console.log("Arist ID yahaha:", artistId);
+    if (artistId) { console.log("user id untuk playlist adalah:", artistId);
+    } else { console.log("user id untuk playlist tidak ada:", artistId); }
+
     try {
-        const playlists = await getAllPlaylists(); // Fungsi untuk mengambil semua playlist dari database
-        res.json({ playlists });
-    } catch (error) {
-        console.error("Error fetching playlists:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
+        const isDuplicate = await checkDuplicateAlbum(name); // Periksa apakah nama album sudah ada
 
-    const { error } = req.query;
-    let errorMessage = "";
-    if (error === "duplicate") {
-        errorMessage = "Playlist name already exists, please choose another name.";
-    } else if (error === "playlist") {
-        errorMessage = "Failed to create playlist. Please try again.";
+        if (isDuplicate) {
+            return res.redirect('/createAlbum?error=duplicate');
+        }
+        
+        const albumId = await generateAlbumID(); // Generate ID untuk album
+
+        const insertAlbumQuery = 'INSERT INTO album (id, name) VALUES (?, ?)';
+        connection.query(insertAlbumQuery, [albumId, name], async (err, result) => {
+            if (err) {
+                console.error("Error creating album:", err);
+                res.redirect('/createAlbum?error=album');
+                return res.status(500).send("Failed to create album: " + err.message);
+            }
+
+            const currentArtistId = req.session.artist_id;
+
+            const date_created = new Date().toISOString().slice(0, 10);
+            const insertArtistAlbumQuery = 'INSERT INTO album_artist_has (artist_id, album_id, date_created) VALUES (?, ?, ?)';
+            connection.query(insertArtistAlbumQuery, [currentArtistId, albumId, date_created], (err, result) => {
+                if (err) {
+                    console.error("Error creating artist album entry:", err);
+                    return res.status(500).send("Failed to create album.");
+                }
+                return res.status(200).send("Album created successfully.");
+            });
+        });
+    } catch (error) {
+        console.error("Error creating album:", error);
+        return res.status(500).send("Failed to create album.");
     }
-    res.render('createPlaylist', { errorMessage });
 });
+
+//     const artistId = req.params.artistId;
+//     // const { artistId } = req.body;
+//     console.log("Artist ID:", artistId);
+
+//     if (!artistId) {
+//         console.error("Artist ID is undefined");
+//         return res.status(400).send("Artist ID is missing");
+//     }
+
+//     res.render('uploadSong')
+// })
+
+// app.get('/userPlaylists', async (req, res) => {
+//     const userId = req.session.user_id; // Ambil user_id dari sesi
+//     try {
+//         const playlistsQuery = `
+//             SELECT p.id, p.name, p.num_song, p.duration FROM user_playlist_create upc 
+//             JOIN playlist p ON upc.playlist_id = p.id WHERE upc.user_id = ?
+//         `;
+//         connection.query(playlistsQuery, [userId], (err, result) => {
+//             if (err) {
+//                 console.error("Error retrieving user playlists:", err);
+//                 return res.status(500).send("Failed to retrieve user playlists.");
+//             }
+//             res.json(result); // Mengembalikan daftar playlist sebagai respons JSON
+//         });
+//     } catch (error) {
+//         console.error("Error retrieving user playlists:", error);
+//         return res.status(500).send("Failed to retrieve user playlists.");
+//     }
+// });
 
 app.get('/albums', async (req, res) => {
     try {
@@ -233,9 +366,50 @@ app.get('/users', async (req, res) => {
     }
 });
 
-app.get('/main/profile', (req, res) => {
-    res.render('profile');
-})
+app.get('/playlists', async (req, res) => {
+    try {
+        const playlists = await getAllPlaylists();
+        res.json({ playlists })
+    } catch (error) {
+        console.error("Error fetching playlists:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/main-user/:userId/profile', (req, res) => {
+    const userId = req.params.userId; // Mendapatkan userId dari parameter URL
+    console.log("user profile id : ", userId);
+    if (userId === req.session.user_id) { // Membandingkan dengan userId yang disimpan dalam session
+        // Jika userId cocok, lakukan apa yang diperlukan, misalnya, ambil data profil pengguna dari database
+        // dan kemudian tampilkan halaman profil pengguna.
+        res.render('userProfile', { userId: userId }); // Menggunakan userId dalam pemanggilan res.render
+    } else {
+        // Jika userId tidak cocok dengan yang disimpan dalam session, mungkin ada upaya akses yang tidak sah,
+        // Anda dapat mengarahkan pengguna kembali ke halaman login atau melakukan tindakan yang sesuai.
+        res.redirect('/main-user/' + req.session.user_id + '/profile');
+    }
+});
+
+// app.post('/addSongToAlbum', async (req, res) => {
+//     const { songId, albumId } = req.body;
+
+//     try {
+//         // Lakukan validasi data jika diperlukan
+
+//         // Tambahkan lagu ke dalam album di database
+//         const insertQuery = 'INSERT INTO song_album_contains (song_id, album_id) VALUES (?, ?)';
+//         connection.query(insertQuery, [songId, albumId], (err, result) => {
+//             if (err) {
+//                 console.error("Error adding song to album:", err);
+//                 return res.status(500).send("Failed to add song to album.");
+//             }
+//             return res.status(200).send("Song added to album successfully.");
+//         });
+//     } catch (error) {
+//         console.error("Error adding song to album:", error);
+//         return res.status(500).send("Failed to add song to album.");
+//     }
+// });
 
 app.use('/', (req, res) => { res.status(404); res.send('<h1>404 Page not Found!</h1>') });
 app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
