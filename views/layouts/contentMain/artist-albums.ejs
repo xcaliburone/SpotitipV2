@@ -1,0 +1,49 @@
+<div class="my-albums flex flex-col">
+    <div class="title mb-2">
+        <p class="text-lg font-bold text-neutral-300">My Albums</p>
+    </div>
+    <div class="items">
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    // Fetch songs
+                    const myalbumsResponse = await fetch('/myalbums');
+                    const myalbumsData = await myalbumsResponse.json();
+                    const myalbums = myalbumsData.albums;
+                    const myalbumsContainer = document.querySelector('.my-albums .items');
+
+                    if (myalbums.length === 0) {
+                        // const noSongsMessage = document.createElement('h3');
+                        const nomyAlbumsMessage = document.createElement('div');
+                        nomyAlbumsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[255px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                        nomyAlbumsMessage.innerHTML = `
+                        <img src="../images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                        <div class="desc-none flex flex-col justify-center items-center">
+                            <h1 class="title-playlist font-medium text-white">DATA ALBUM KAMU BELUM ADA</h1>
+                            <p class="desc-playlist text-neutral-300">Silahkan Upload Album</p>
+                        </div>
+                        `;
+                        // noSongsMessage.textContent = "Data belum ada";
+                        myalbumsContainer.appendChild(nomyAlbumsMessage);
+                    } else {
+                        myalbums.forEach(myalbum => {
+                            // Create and append song items
+                            const myalbumItem = document.createElement('div');
+                            myalbumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[255px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                            myalbumItem.innerHTML = `
+                                <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <div class="desc">
+                                    <h1 class="title-myalbum font-medium text-white">${myalbum.name}</h1>
+                                    <p class="desc-myalbum text-neutral-300">${myalbum.description}</p>
+                                </div>
+                            `;
+                            myalbumsContainer.appendChild(myalbumItem);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        </script>
+    </div>
+</div>
