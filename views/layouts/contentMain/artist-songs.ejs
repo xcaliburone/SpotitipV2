@@ -1,0 +1,49 @@
+<div class="my-songs flex flex-col mt-2">
+    <div class="title mb-2">
+        <p class="text-lg font-bold text-neutral-300">My Songs</p>
+    </div>
+    <div class="items">
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    // Fetch songs
+                    const mysongsResponse = await fetch('/mysongs');
+                    const mysongsData = await mysongsResponse.json();
+                    const mysongs = mysongsData.songs;
+                    const mysongsContainer = document.querySelector('.my-songs .items');
+
+                    if (mysongs.length === 0) {
+                        // const noSongsMessage = document.createElement('h3');
+                        const nomySongsMessage = document.createElement('div');
+                        nomySongsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[255px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                        nomySongsMessage.innerHTML = `
+                        <img src="../images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                        <div class="desc-none flex flex-col justify-center items-center">
+                            <h1 class="title-playlist font-medium text-white">DATA LAGU KAMU BELUM ADA</h1>
+                            <p class="desc-playlist text-neutral-300">Silahkan Upload Lagu</p>
+                        </div>
+                        `;
+                        // noSongsMessage.textContent = "Data belum ada";
+                        mysongsContainer.appendChild(nomySongsMessage);
+                    } else {
+                        mysongs.forEach(mysong => {
+                            // Create and append song items
+                            const mysongItem = document.createElement('div');
+                            mysongItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[255px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                            mysongItem.innerHTML = `
+                                <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <div class="desc">
+                                    <h1 class="title-mysong font-medium text-white">${mysong.name}</h1>
+                                    <p class="desc-mysong text-neutral-300">${mysong.description}</p>
+                                </div>
+                            `;
+                            mysongsContainer.appendChild(mysongItem);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        </script>
+    </div>
+</div>
