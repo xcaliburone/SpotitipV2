@@ -39,7 +39,7 @@ main::-webkit-scrollbar {
 
 .main {
     width: 100%;
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     flex-wrap: wrap;
 }
@@ -160,16 +160,34 @@ option:active {
     width: 80%;
 }
 
-.close {
+/* .close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
+} */
 
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.close-song:hover,
+.close-song:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* bg-neutral-800 hover:opacity-60 transition rounded-xl h-[34px] w-full text-neutral-300 */
+
+#createModalButtonCreate,
+#createModalButtonSong {
+    /* background-color: rgb(115, 115, 115); */
+    background-color: rgb(38, 38, 38);
+    /* margin-top: 12px; */
+    height: 100px;
+    overflow: hidden;
 }
