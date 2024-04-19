@@ -1,26 +1,8 @@
 <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
 
     <div class="header flex justify-between">
-        <div class="button-left flex gap-x-3">
-            <button id="button-all" data-target="main" class="button-all rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
-                All
-            </button>
-            <button id="button-artists" data-target="artist-popular" class="button-artists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
-                Artist
-            </button>
-            <button id="button-users" data-target="newest-user" class="button-artists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
-                User
-            </button>
-            <button id="button-albums" data-target="album-popular" class="button-albums rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer"">
-                Albums
-            </button>
-            <button id="button-playlists" data-target="playlist-popular" class="button-playlists rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer"">
-                Playlists
-            </button>
-            <button id="button-songs" data-target="newest-song" class="button-songs rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
-                Songs
-            </button>
-        </div>
+        <%- include('./main-buttonleft-user') %>
+        <%- include('./main-buttonleft-artist') %>
 
         <div class="box relative">
             <form name="search">
@@ -28,48 +10,26 @@
                 placeholder="Search..." autocomplete="off">
             </form>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', async () => {
-                try {
-                    const searchParams = new URLSearchParams(window.location.search);
-                    const keyword = searchParams.get('key');
-
-                    // Fetch songs based on search keyword
-                    const songResponse = await fetch(`/main-user?key=${keyword}`);
-                    const songData = await songResponse.json();
-                    const songs = songData.songs;
-                    const songContainer = document.querySelector('.song-section .items');
-
-                    // Render songs on the page
-                    songs.forEach(song => {
-                        const songItem = document.createElement('div');
-                            songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
-                            songItem.innerHTML = `
-                                <img src="images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
-                                    <h1 class="title-playlist font-medium text-white">${song.name}</h1>
-                                    <p class="desc-playlist text-neutral-300">${song.description}</p>
-                                </div>
-                            `;
-                    });
-                } catch (error) {
-                    console.error("Error fetching songs:", error);
-                }
-            });
-        </script> 
     </div>
 
-    <div class="main gap-y-9">
+    <div class="main flex gap-y-9 <%= onlyUserContent %>">
 
-        <%- include('./newest-song') %>    
+        <%- include('./contentMain/newest-song') %>    
         
-        <%- include('./artist-popular') %>    
+        <%- include('./contentMain/artist-popular') %>    
         
-        <%- include('./album-popular') %>
+        <%- include('./contentMain/album-popular') %>
         
-        <%- include('./playlist-popular') %>
+        <%- include('./contentMain/playlist-popular') %>
         
-        <%- include('./newest-user') %>
+        <%- include('./contentMain/newest-user') %>
 
     </div>
+    <!-- <div class="main flex gap-y-2 <%= //onlyArtistContent %>">
+
+        <%- //include('./contentMain/artist-albums') %>
+        
+        <%- //include('./contentMain/artist-songs') %>
+
+    </div> -->
 </div>
