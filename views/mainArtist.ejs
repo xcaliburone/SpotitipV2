@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/output.css">
-    <link rel="stylesheet" href="css/input.css">
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
-    <title>Spotitip</title>
-</head>
+<%- include('./layouts/header') %>
 <body>
     <div class="cont bg-black flex gap-2">
         
@@ -31,11 +21,16 @@
     </div>
 
     <%- include('./layouts/createModal') %>
+    <%- include('./layouts/createModalSong') %>
+    <%- include('./layouts/createModalSongToAlbum') %>
 
-    <script src="js/sideBottom.js"></script>
-    <script src="js/mainContent.js"></script>
-    <script src="js/searchButton.js"></script>
-    <script src="js/createAlbum.js"></script>
-    <script src="js/createModal.js"></script>
+    <script src="../js/sideBottom.js"></script>
+    <script src="../js/mainContent.js"></script>
+    <script src="../js/searchButton.js"></script>
+    <script src="../js/createAlbum.js"></script>
+    <script src="../js/createSong.js"></script>
+    <script src="../js/createModal.js"></script>
+    <script src="../js/createModalSongAlbum.js"></script>
+    <script src="../js/createModalSong.js"></script>
 </body>
 </html>
