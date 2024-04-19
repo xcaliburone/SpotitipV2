@@ -16,7 +16,7 @@ async function getAllPlaylists() {
 
 async function getAllAlbums() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT title FROM album';
+        const sql = 'SELECT name FROM album';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
@@ -42,7 +42,7 @@ async function getAllArtists() {
 
 async function getAllSongs() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT title FROM song';
+        const sql = 'SELECT name FROM song';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
