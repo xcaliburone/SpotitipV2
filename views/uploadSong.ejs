@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/input.css">
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <style>
+        .swal-confirm-button-green { background-color: #28a745 !important; color: #fff !important; border-color: #28a745 !important; }
+    </style>
+        
+    <title>Spotitip</title>
+</head>
+<body class="bg-black h-full w-full">
+    <main class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md">
+
+        <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full h-full">
+
+            <header class="flex flex-col gap-y-8 mb-1 w-full">
+                <div class="button-container flex justify-between">
+                    <div class="button-up md:flex gap-x-2 items-center">
+                        <button class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex items-center justify-center hover:cursor-not-allowed">
+                            &lt;
+                        </button>
+                    </div>                 
+                </div>
+                <h1 class="font-bold text-4xl text-white">Dashboard Songs!</h1>
+            </header>
+
+        </div>
+
+        <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+
+            <div class="header flex justify-between">
+                <div class="button-left flex gap-x-3">
+                    <button id="button-myalls" data-target="main" class="button-myalls rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                        All
+                    </button>
+                    
+                    <button id="button-myalbums" data-target="my-albums" class="button-myalbums rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                        My Albums
+                    </button>
+                    
+                    <button id="button-mysongs" data-target="my-songs" class="button-mysongs rounded-full bg-neutral-800 hover:opacity-60 transition text-neutral-300 h-[42px] w-[100px] flex items-center justify-center hover:cursor-pointer">
+                        My Songs
+                    </button>
+                </div>
+        
+                <div class="box relative">
+                    <form name="search">
+                        <input type="text" id="searchInput" class="input font-semibold" name="key" 
+                        placeholder="Search..." autocomplete="off">
+                    </form>
+                </div>
+            </div>
+        
+            <div class="main flex gap-y-9">
+                    
+            </div>
+            <div class="main flex gap-y-2">
+        
+        
+            </div>
+        </div>
+        
+    </main>
+</body>
+</html>
