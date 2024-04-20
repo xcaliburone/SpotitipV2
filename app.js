@@ -414,8 +414,9 @@ app.get('/myusers', async (req, res) => {
 });
 
 app.get('/myUserArtistFollows', async (req, res) => {
+    const userId = req.query.userId
     try {
-        const userArtistFollows = await getAllMyUserArtistFollow(); // Fungsi untuk mengambil semua lagu dari database
+        const userArtistFollows = await getAllMyUserArtistFollow(userId); // Fungsi untuk mengambil semua lagu dari database
         res.json({ userArtistFollows });
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -424,8 +425,9 @@ app.get('/myUserArtistFollows', async (req, res) => {
 });
 
 app.get('/myUserAlbumFollows', async (req, res) => {
+    const userId = req.query.userId
     try {
-        const userAlbumFollows = await getAllMyUserAlbumFollow(); // Fungsi untuk mengambil semua lagu dari database
+        const userAlbumFollows = await getAllMyUserAlbumFollow(userId); // Fungsi untuk mengambil semua lagu dari database
         res.json({ userAlbumFollows });
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -488,6 +490,86 @@ app.get('/myartists', async (req, res) => {
     } catch (error) {
         console.error("Error fetching users:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post('/userAlbumFollow', async (req, res) => {
+    const { albumId } = req.body;
+    const userId = req.query.userId;
+    try {
+        const sql = 'INSERT INTO user_album_follow (user_id, album_id) VALUES (?, ?)';
+        await new Promise((resolve, reject) => {
+            connection.query(sql, [userId, albumId], (err, result) => {
+                if (err) reject(err); else resolve(result);
+            });
+        });
+        res.json({ message: 'Follow action processed' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/userArtistFollow', async (req, res) => {
+    const { artistId } = req.body;
+    const userId = req.query.userId;
+    try {
+        // Lakukan tindakan yang sesuai dengan permintaan follow (misalnya, masukkan ke dalam tabel)
+        const sql = 'INSERT INTO user_artist_follow (user_id, artist_id) VALUES (?, ?)';
+        await new Promise((resolve, reject) => {
+            connection.query(sql, [userId, artistId], (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+
+        // Kirim respons ke klien
+        res.json({ message: 'Follow action processed' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/userPlaylistFollow', async (req, res) => {
+    const { playlistId } = req.body;
+    const userId = req.query.userId;
+    try {
+        // Lakukan tindakan yang sesuai dengan permintaan follow (misalnya, masukkan ke dalam tabel)
+        const sql = 'INSERT INTO user_playlist_follow (user_id, playlist_id) VALUES (?, ?)';
+        await new Promise((resolve, reject) => {
+            connection.query(sql, [userId, playlistId], (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+
+        // Kirim respons ke klien
+        res.json({ message: 'Follow action processed' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/userSongLiked', async (req, res) => {
+    const { songId } = req.body;
+    const userId = req.query.userId;
+    try {
+        // Lakukan tindakan yang sesuai dengan permintaan follow (misalnya, masukkan ke dalam tabel)
+        const sql = 'INSERT INTO user_song_liked (user_id, song_id) VALUES (?, ?)';
+        await new Promise((resolve, reject) => {
+            connection.query(sql, [userId, songId], (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+
+        // Kirim respons ke klien
+        res.json({ message: 'Follow action processed' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
