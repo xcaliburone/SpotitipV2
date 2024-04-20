@@ -1,0 +1,53 @@
+<main id="myUserPlaylistFollow" class="profile-section bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px] flex flex-col gap-2 text-neutral-300">
+
+    <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full"></div>
+    
+    <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+
+        <div class="title mb-2">
+            <p class="font-bold text-neutral-300">Followed Playlists</p>
+        </div>
+    
+        <div class="main flex gap-y-9 flex-col">
+            <script>
+                document.addEventListener('DOMContentLoaded', async () => {
+                    try {
+                        const userId = '<%= userId %>'
+                        const myUserPlaylistFollowsResponse = await fetch(`/myUserPlaylistFollows?userId=${ userId }`);
+                        const myUserPlaylistFollowsData = await myUserPlaylistFollowsResponse.json();
+                        const userPlaylistFollows = myUserPlaylistFollowsData.userPlaylistFollows;
+                        const myUserPlaylistFollowsContainer = document.querySelector('#myUserPlaylistFollow .main');
+                        myUserPlaylistFollowsContainer.innerHTML = '';
+            
+                        if (userPlaylistFollows.length === 0) { // Memeriksa jika tidak ada data yang ditemukan
+                            const noUserPlaylistFollowsMessage = document.createElement('div');
+                            noUserPlaylistFollowsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
+                            noUserPlaylistFollowsMessage.innerHTML = `
+                                <img src="/images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                                <div class="desc-none flex flex-col justify-center items-center">
+                                    <h1 class="title-playlist font-medium text-white">DATA MENGIKUTI ANDA BELUM ADA</h1>
+                                    <p class="desc-playlist text-neutral-300">Silahkan Membuat Terlebih Dahulu</p>
+                                </div>
+                            `;
+                            myUserPlaylistFollowsContainer.appendChild(noUserPlaylistFollowsMessage);
+                        } else {
+                            userPlaylistFollows.forEach(userPlaylistFollow => {
+                                const myUserPlaylistFollowsItem = document.createElement('div');
+                                myUserPlaylistFollowsItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                myUserPlaylistFollowsItem.innerHTML = `
+                                    <img src="/images/liked.png" alt="cover" class="w-[225px] rounded-md"> <!-- Perubahan di sini -->
+                                    <div class="desc mt-2">
+                                        <h1 class="title-playlist font-medium text-white">${userPlaylistFollow.name}</h1>
+                                    </div>
+                                `;
+                                myUserPlaylistFollowsContainer.appendChild(myUserPlaylistFollowsItem);
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user data:", error);
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</main>
