@@ -5,12 +5,18 @@
     /* cursor: default; */
 }
 
-main {
-    height: 855px !important;
+main::-webkit-scrollbar {
+    display: none;
 }
 
-.sideProfileUser > button {
+main {
+    height: 850px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 
+.sideProfileUser > button,
+.sideProfileArtist > button {
     height: 100px;
     background-color: rgb(38, 38, 38);
     overflow: hidden;
@@ -25,12 +31,20 @@ main {
     font-size: 50px;
 }
 
-.user-item {
+.user-item,
+.artist-item {
     margin-bottom: 48px;
     gap: 10px;
     padding: 25px !important;
 }
 
-#userDeleteBtn {
-    margin-bottom: 225px;
+#userLogoutBtn,
+#artistLogoutBtn {
+    margin-bottom: 100px;
+}
+
+#userLogoutBtn:hover,
+#artistLogoutBtn:hover {
+    opacity: 70% !important;
+    cursor: pointer !important;
 }
