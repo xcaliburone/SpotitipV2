@@ -1,0 +1,56 @@
+<main id="myUser" class="profile-section bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px] flex flex-col gap-2 text-neutral-300">
+    <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full"></div>
+    
+    <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+        <div class="title mb-2"><p class="font-bold text-neutral-300">User Account Info</p></div>
+    
+        <div class="main flex gap-y-9 flex-col">
+            <script>
+                document.addEventListener('DOMContentLoaded', async () => {
+                    try {
+                        const myusersResponse = await fetch('/myusers');
+                        const myusersData = await myusersResponse.json();
+                        const myusers = myusersData.users;
+                        const myusersContainer = document.querySelector('#myUser .main');
+                        myusersContainer.innerHTML = '';
+
+                        if (myusers.length === 0) {
+                            const noUsersMessage = document.createElement('div');
+                            noUsersMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
+                            noUsersMessage.innerHTML = `
+                            <img src="/images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                            <div class="desc-none flex flex-col justify-center items-center">
+                                <h1 class="title-playlist font-medium text-white">DATA USER ANDA BELUM ADA</h1>
+                                <p class="desc-playlist text-neutral-300">Silahkan Mengisi Data Terlebih Dahulu</p>
+                            </div>
+                            `;
+                            myUserArtistFollowsContainer.appendChild(noUsersMessage);
+                        } else {
+                            myusers.forEach(myuser => {
+                                const myuserItem = document.createElement('div');
+                                myuserItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex', 'flex-col');
+                                myuserItem.innerHTML = `
+                                    <h1 class="text-white">Username : ${myuser.name}</h1>
+                                    <p class="text-white" >Email : ${myuser.email}</p>
+                                    <p class="text-white" >Followers : ${myuser.followers}</p>
+                                    <p class="text-white" >Following : ${myuser.following}</p>
+                                `;
+                                myusersContainer.appendChild(myuserItem);
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user data:", error);
+                    }
+                });
+            </script>
+        </div>
+        
+        <div id="userEditBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
+            <button>Edit Account</button>
+        </div>
+        <div id="userDeleteBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
+            <button>Delete Account</button>
+        </div>
+
+    </div>
+</main>
