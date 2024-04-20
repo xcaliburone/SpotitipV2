@@ -58,4 +58,40 @@ async function getAllMyUserCreatePlaylist(userId) {
     });
 }
 
-module.exports = { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist }
+async function getAllMyUserFollowPlaylist(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT p.name
+            FROM user_playlist_create upc
+            JOIN playlist p ON upc.playlist_id = p.id
+            WHERE upc.user_id = ?
+        `;
+        connection.query(sql, [userId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+async function getAllMyUserLikedSong(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT p.name
+            FROM user_playlist_create upc
+            JOIN playlist p ON upc.playlist_id = p.id
+            WHERE upc.user_id = ?
+        `;
+        connection.query(sql, [userId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+module.exports = { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist, getAllMyUserFollowPlaylist, getAllMyUserLikedSong }
