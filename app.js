@@ -17,6 +17,7 @@ app.use(express.static('public'));
 const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
 const { getAllMyAlbums, getAllMySongs, getAllMyPlaylists } = require('./utils/callTables2')
 const { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist, getAllMyUserFollowPlaylist, getAllMyUserLikedSong } = require('./utils/UserInfo')
+const { getAllMyArtists } = require('./utils/ArtistInfo')
 const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
 const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong } = require('./utils/checkCredentials')
 
@@ -402,8 +403,9 @@ app.get('/main-user/:userId/profileUser', async (req, res) => {
 });
 
 app.get('/myusers', async (req, res) => {
+    const userId = req.query.userId;
     try {
-        const users = await getAllMyUsers(); // Fungsi untuk mengambil semua lagu dari database
+        const users = await getAllMyUsers(userId);
         res.json({ users });
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -464,7 +466,7 @@ app.get('/myUserSongLikeds', async (req, res) => {
     }
 });
 
-app.get('/main-artist/:artistId/profile', async (req, res) => {
+app.get('/main-artist/:artistId/profileArtist', async (req, res) => {
     const artistId = req.params.artistId; // Mendapatkan userId dari parameter URL
     console.log("artist profile id : ", artistId);
     if (artistId === req.session.artist_id) { // Membandingkan dengan userId yang disimpan dalam session
@@ -474,7 +476,18 @@ app.get('/main-artist/:artistId/profile', async (req, res) => {
     } else {
         // Jika userId tidak cocok dengan yang disimpan dalam session, mungkin ada upaya akses yang tidak sah,
         // Anda dapat mengarahkan pengguna kembali ke halaman login atau melakukan tindakan yang sesuai.
-        res.redirect('/main-user/' + req.session.artist_id + '/profileArtist');
+        res.redirect('/main-artist/' + req.session.artist_id + '/profileArtist');
+    }
+});
+
+app.get('/myartists', async (req, res) => {
+    const artistId = req.query.artistId;
+    try {
+        const artists = await getAllMyArtists(artistId);
+        res.json({ artists });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
