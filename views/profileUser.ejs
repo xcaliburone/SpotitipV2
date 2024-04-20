@@ -11,7 +11,15 @@
 <body class="bg-black">
         
     <aside class="w-[300px] ml-3 flex flex-col gap-y-3 fixed h-[97%]">
-        <div class="sideProfileUser bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-full flex flex-col gap-y-8 hover:cursor-pointer">
+        <div class="sideProfileUser bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-full flex flex-col gap-y-6 hover:cursor-pointer">
+
+            <div class="button-up md:flex items-center">
+                <a href="/main-user/<%= userId %>">
+                    <button class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex items-center justify-center hover:cursor-pointer">
+                        &lt;
+                    </button>
+                </a>
+            </div>
             
             <button id="showUser" data-target="myUser" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
                 call db.user
