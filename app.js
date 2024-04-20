@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
 const { getAllMyAlbums, getAllMySongs, getAllMyPlaylists } = require('./utils/callTables2')
-const { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist } = require('./utils/UserInfo')
+const { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist, getAllMyUserFollowPlaylist, getAllMyUserLikedSong } = require('./utils/UserInfo')
 const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
 const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong } = require('./utils/checkCredentials')
 
@@ -432,11 +432,32 @@ app.get('/myUserAlbumFollows', async (req, res) => {
 });
 
 app.get('/myUserPlaylistCreates', async (req, res) => {
-    // const userId = req.params.userId
     const userId = req.query.userId
     try {
         const userPlaylistCreates = await getAllMyUserCreatePlaylist(userId); // Fungsi untuk mengambil semua lagu dari database
         res.json({ userPlaylistCreates });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/myUserPlaylistFollows', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userPlaylistFollows = await getAllMyUserFollowPlaylist(userId); // Fungsi untuk mengambil semua lagu dari database
+        res.json({ userPlaylistFollows });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/myUserSongLikeds', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userSongLikeds = await getAllMyUserLikedSong(userId); // Fungsi untuk mengambil semua lagu dari database
+        res.json({ userSongLikeds });
     } catch (error) {
         console.error("Error fetching users:", error);
         res.status(500).json({ error: "Internal server error" });
