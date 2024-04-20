@@ -29,11 +29,11 @@
                 call db.user_playlist_create
             </button>
 
-            <button id="showUserPlaylistFollow" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+            <button id="showUserPlaylistFollow" data-target="myUserPlaylistFollow" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
                 call db.user_playlist_follow?
             </button>
 
-            <button id="showUserSongLiked" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+            <button id="showUserSongLiked" data-target="myUserSongLiked" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
                 call db.user_song_liked?
             </button>
 
@@ -44,6 +44,8 @@
     <%- include('./layouts/profileUser/showUserArtistFollows') %>
     <%- include('./layouts/profileUser/showUserAlbumFollows') %>
     <%- include('./layouts/profileUser/showUserPlaylistCreates') %>
+    <%- include('./layouts/profileUser/showUserPlaylistFollows') %>
+    <%- include('./layouts/profileUser/showUserSongLiked') %>
 
 
     <script src="/js/profileUser.js"></script>
