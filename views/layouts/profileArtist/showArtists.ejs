@@ -1,0 +1,60 @@
+<main id="myArtist" class="profile-section bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px] flex flex-col gap-2 text-neutral-300">
+    <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full"></div>
+    
+    <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+        <div class="title mb-2"><p class="font-bold text-neutral-300">Artist Account Info</p></div>
+    
+        <div class="main flex gap-y-9 flex-col">
+            <script>
+                document.addEventListener('DOMContentLoaded', async () => {
+                    try {
+                        const artistId = '<%= artistId %>'
+                        const myartistsResponse = await fetch(`/myartists?artistId=${ artistId }`);
+                        const myartistsData = await myartistsResponse.json();
+                        const myartists = myartistsData.artists;
+                        const myartistsContainer = document.querySelector('#myArtist .main');
+                        myartistsContainer.innerHTML = '';
+
+                        if (myartists.length === 0) {
+                            const noArtistsMessage = document.createElement('div');
+                            noArtistsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
+                            noArtistsMessage.innerHTML = `
+                            <img src="/images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                            <div class="desc-none flex flex-col justify-center items-center">
+                                <h1 class="title-playlist font-medium text-white">DATA USER ANDA BELUM ADA</h1>
+                                <p class="desc-playlist text-neutral-300">Silahkan Mengisi Data Terlebih Dahulu</p>
+                            </div>
+                            `;
+                            myartistsContainer.appendChild(noArtistsMessage);
+                        } else {
+                            myartists.forEach(myartist => {
+                                const myartistItem = document.createElement('div');
+                                myartistItem.classList.add('artist-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex', 'flex-col');
+                                myartistItem.innerHTML = `
+                                    <h1 class="text-white">Artist Name : ${myartist.name}</h1>
+                                    <p class="text-white" >Email : ${myartist.email}</p>
+                                    <p class="text-white" >Password : ${myartist.password}</p>
+                                    <p class="text-white" >Followers : ${myartist.followers}</p>
+                                `;
+                                myartistsContainer.appendChild(myartistItem);
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Error fetching artist data:", error);
+                    }
+                });
+            </script>
+        </div>
+        
+        <div id="artistEditBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
+            <button disabled>Edit Account</button>
+        </div>
+        <div id="artistDeleteBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
+            <button disabled>Delete Account</button>
+        </div>
+        <div id="artistLogoutBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col text-center">
+            <a href="/"><button>Logout</button></a>
+        </div>
+
+    </div>
+</main>
