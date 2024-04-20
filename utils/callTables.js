@@ -3,7 +3,7 @@ const connection = mysql.createConnection({ host: 'localhost', user: 'root', pas
 
 async function getAllPlaylists() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name FROM playlist';
+        const sql = 'SELECT id, name FROM playlist';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
@@ -16,7 +16,7 @@ async function getAllPlaylists() {
 
 async function getAllAlbums() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name FROM album';
+        const sql = 'SELECT id, name FROM album';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
@@ -29,7 +29,7 @@ async function getAllAlbums() {
 
 async function getAllArtists() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name FROM artist';
+        const sql = 'SELECT id, name FROM artist';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
@@ -42,7 +42,7 @@ async function getAllArtists() {
 
 async function getAllSongs() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name FROM song';
+        const sql = 'SELECT id, name FROM song';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
@@ -55,7 +55,7 @@ async function getAllSongs() {
 
 async function getAllUsers() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name FROM user';
+        const sql = 'SELECT id, name FROM user';
         connection.query(sql, (err, results) => {
             if (err) {
                 reject(err);
