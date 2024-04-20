@@ -3,6 +3,9 @@
         <p class="text-lg font-bold text-neutral-300">Popular Albums</p>
     </div>
     <div class="items flex gap-4">
+
+                        
+
         <script>
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
@@ -29,10 +32,15 @@
                             albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             albumItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc mt-2">
-                                    <h1 class="title-playlist font-medium text-white">${album.name}</h1>
-                                    <p class="desc-playlist text-neutral-300">Created by. Artist Name</p>
-                                </div>
+                                <div class="flex justify-between">
+                                    <div class="desc mt-2">
+                                        <h1 class="title-playlist font-medium text-white">${album.name}</h1>
+                                        <p class="desc-playlist text-neutral-300">Created by. Artist Name</p>
+                                    </div>
+
+                                    
+
+                                </div>   
                             `;
                             albumContainer.appendChild(albumItem);
                         });
