@@ -30,9 +30,9 @@
                             playlistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             playlistItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
+                                <div class="desc mt-2">
                                     <h1 class="title-playlist font-medium text-white">${playlist.name}</h1>
-                                    <p class="desc-playlist text-neutral-300">${playlist.description}</p>
+                                    <p class="desc-playlist text-neutral-300">Created by. User Name</p>
                                 </div>
                             `;
                             playlistContainer.appendChild(playlistItem);
