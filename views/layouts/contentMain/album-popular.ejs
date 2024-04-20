@@ -3,17 +3,14 @@
         <p class="text-lg font-bold text-neutral-300">Popular Albums</p>
     </div>
     <div class="items flex gap-4">
-
-                        
-
         <script>
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
-                    // Fetch albums
                     const albumResponse = await fetch('/albums');
                     const albumData = await albumResponse.json();
                     const albums = albumData.albums;
                     const albumContainer = document.querySelector('.album-popular .items');
+                    const userId = '<%= userId %>';
 
                     if (albums.length === 0) {
                         const noAlbumsMessage = document.createElement('div');
@@ -29,20 +26,35 @@
                     } else {
                         albums.forEach(album => {
                             const albumItem = document.createElement('div');
-                            albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                            albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             albumItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="flex justify-between">
-                                    <div class="desc mt-2">
-                                        <h1 class="title-playlist font-medium text-white">${album.name}</h1>
-                                        <p class="desc-playlist text-neutral-300">Created by. Artist Name</p>
-                                    </div>
-
-                                    
-
-                                </div>   
+                                <div class="desc mt-2">
+                                    <h1 class="title-playlist font-medium text-white">${album.name}</h1>
+                                    <p class="desc-playlist text-neutral-300">By. ${album.artistName}</p>
+                                </div>
+                                <button class="btnFollow" data-album-id="${album.id}">Follow</button>
                             `;
                             albumContainer.appendChild(albumItem);
+
+                            const btnFollow = albumItem.querySelector('.btnFollow');
+                            btnFollow.addEventListener('click', async () => {
+                                try {
+                                    const albumId = btnFollow.getAttribute('data-album-id');
+                                    const response = await fetch(`/userAlbumFollow?userId=${ userId }`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ albumId })
+                                    });
+
+                                    const data = await response.json();
+                                    // Handle response data if needed
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                }
+                            });
                         });
                     }
                 } catch (error) {
