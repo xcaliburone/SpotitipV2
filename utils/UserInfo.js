@@ -14,10 +14,14 @@ async function getAllMyUsers(userId) {
     });
 }
 
-async function getAllMyUserArtistFollow() {
+async function getAllMyUserArtistFollow(userId) {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name, email, password, followers, following FROM user';
-        connection.query(sql, (err, results) => {
+        const sql = `
+            SELECT a.name
+            FROM user_artist_follow uaf JOIN artist a ON uaf.artist_id = a.id
+            WHERE uaf.user_id = ?
+        `;
+        connection.query(sql, [userId], (err, results) => {
             if (err) {
                 reject(err);
             } else {
@@ -27,10 +31,14 @@ async function getAllMyUserArtistFollow() {
     });
 }
 
-async function getAllMyUserAlbumFollow() {
+async function getAllMyUserAlbumFollow(userId) {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name, email, password, followers, following FROM user';
-        connection.query(sql, (err, results) => {
+        const sql = `
+            SELECT a.name
+            FROM user_album_follow uaf JOIN album a ON uaf.album_id = a.id
+            WHERE uaf.user_id = ?
+        `;
+        connection.query(sql, [userId], (err, results) => {
             if (err) {
                 reject(err);
             } else {
@@ -62,9 +70,9 @@ async function getAllMyUserFollowPlaylist(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
             SELECT p.name
-            FROM user_playlist_create upc
-            JOIN playlist p ON upc.playlist_id = p.id
-            WHERE upc.user_id = ?
+            FROM user_playlist_follow upf
+            JOIN playlist p ON upf.playlist_id = p.id
+            WHERE upf.user_id = ?
         `;
         connection.query(sql, [userId], (err, results) => {
             if (err) {
@@ -79,10 +87,10 @@ async function getAllMyUserFollowPlaylist(userId) {
 async function getAllMyUserLikedSong(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT p.name
-            FROM user_playlist_create upc
-            JOIN playlist p ON upc.playlist_id = p.id
-            WHERE upc.user_id = ?
+            SELECT s.name
+            FROM user_song_liked usl
+            JOIN song s ON usl.song_id = s.id
+            WHERE usl.user_id = ?
         `;
         connection.query(sql, [userId], (err, results) => {
             if (err) {
