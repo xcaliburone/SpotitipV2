@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
+    <title>Spotitip</title>
+</head>
+<body class="bg-black">
+        
+    <aside class="w-[300px] ml-3 flex flex-col gap-y-3 fixed h-[97%]">
+        <div class="sideProfileUser bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-full flex flex-col gap-y-8 hover:cursor-pointer">
+            
+            <button id="showUser" data-target="myUser" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.user
+            </button>
+
+            <button id="showUserArtistFollow" data-target="myUserArtistFollow" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.user_artist_follow?
+            </button>
+
+            <button id="showUserAlbumFollow" data-target="myUserAlbumFollow" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.user_album_follow?
+            </button>
+
+            <button id="showUserPlaylistCreate" data-target="myUserPlaylistCreate" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.user_playlist_create
+            </button>
+
+            <button id="showUserPlaylistFollow" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.user_playlist_follow?
+            </button>
+
+            <button id="showUserSongLiked" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.user_song_liked?
+            </button>
+
+        </div>
+    </aside>
+
+    <%- include('./layouts/profileUser/showUsers') %>
+    <%- include('./layouts/profileUser/showUserArtistFollows') %>
+    <%- include('./layouts/profileUser/showUserAlbumFollows') %>
+    <%- include('./layouts/profileUser/showUserPlaylistCreates') %>
+
+
+    <script src="/js/profileUser.js"></script>
+</body>
+</html>
