@@ -1,4 +1,4 @@
-<div class="my-albums flex flex-col">
+<div class="my-albums flex flex-col mt-2">
     <div class="title mb-2">
         <p class="text-lg font-bold text-neutral-300">My Albums</p>
     </div>
@@ -32,9 +32,9 @@
                             myalbumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[255px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             myalbumItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
+                                <div class="desc mt-2">
                                     <h1 class="title-myalbum font-medium text-white">${myalbum.name}</h1>
-                                    <p class="desc-myalbum text-neutral-300">${myalbum.description}</p>
+                                    <p class="desc-myalbum text-neutral-300">Created by. Artist Name</p>
                                 </div>
                             `;
                             myalbumsContainer.appendChild(myalbumItem);

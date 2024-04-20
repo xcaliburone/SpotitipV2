@@ -29,12 +29,11 @@
                         artists.forEach(artist => {
                             // Create and append artist items
                             const artistItem = document.createElement('div');
-                            artistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                            artistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
                             artistItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
+                                <div class="desc mt-2">
                                     <h1 class="title-playlist font-medium text-white">${artist.name}</h1>
-                                    <p class="desc-playlist text-neutral-300">${artist.description}</p>
                                 </div>
                             `;
                             artistContainer.appendChild(artistItem);

@@ -25,14 +25,13 @@
                         albumContainer.appendChild(noAlbumsMessage);
                     } else {
                         albums.forEach(album => {
-                            // Create and append album items
                             const albumItem = document.createElement('div');
                             albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             albumItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
+                                <div class="desc mt-2">
                                     <h1 class="title-playlist font-medium text-white">${album.name}</h1>
-                                    <p class="desc-playlist text-neutral-300">${album.description}</p>
+                                    <p class="desc-playlist text-neutral-300">Created by. Artist Name</p>
                                 </div>
                             `;
                             albumContainer.appendChild(albumItem);
