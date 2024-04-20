@@ -1,10 +1,10 @@
 const mysql = require('mysql');
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 
-async function getAllMyUsers() {
+async function getAllMyUsers(userId) {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT name, email, password, followers, following FROM user';
-        connection.query(sql, (err, results) => {
+        const sql = 'SELECT name, email, password, followers, following FROM user WHERE id = ?';
+        connection.query(sql, [userId], (err, results) => {
             if (err) {
                 reject(err);
             } else {
