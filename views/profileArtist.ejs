@@ -4,23 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/output.css">
-    <!-- <link rel="stylesheet" href="/css/profile.css"> -->
+    <link rel="stylesheet" href="/css/profile.css">
     <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
     <title>Spotitip</title>
 </head>
 <body class="bg-black">
         
-    <aside class="w-[300px] m-3 flex flex-col gap-y-3 fixed">
-        <div class="side-top bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md flex flex-col gap-y-7">
+    <aside class="w-[300px] ml-3 flex flex-col gap-y-3 fixed h-[97%]">
+        <div class="sideProfileArtist bg-neutral-900 text-neutral-300 pl-5 p-4 rounded-md h-full flex flex-col gap-y-8 hover:cursor-pointer">
+
+            <div class="button-up md:flex items-center">
+                <a href="/main-artist/<%= artistId %>">
+                    <button class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex items-center justify-center hover:cursor-pointer">
+                        &lt;
+                    </button>
+                </a>
+            </div>
+            
+            <button id="showArtist" data-target="myArtist" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                call db.artist
+            </button>
+
         </div>
     </aside>
 
-    <main class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
+    <%- include('./layouts/profileArtist/showArtists') %>
 
-        <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full">
-        </div>
-        
-    </main>
-
+    <!-- <script src="/js/profileUser.js"></script> -->
+    <script src="/js/profileArtist.js"></script>
 </body>
 </html>
