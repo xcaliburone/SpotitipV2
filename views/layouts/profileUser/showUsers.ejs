@@ -8,7 +8,8 @@
             <script>
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
-                        const myusersResponse = await fetch('/myusers');
+                        const userId = '<%= userId %>'
+                        const myusersResponse = await fetch(`/myusers?userId=${ userId }`);
                         const myusersData = await myusersResponse.json();
                         const myusers = myusersData.users;
                         const myusersContainer = document.querySelector('#myUser .main');
@@ -24,7 +25,7 @@
                                 <p class="desc-playlist text-neutral-300">Silahkan Mengisi Data Terlebih Dahulu</p>
                             </div>
                             `;
-                            myUserArtistFollowsContainer.appendChild(noUsersMessage);
+                            myusersContainer.appendChild(noUsersMessage);
                         } else {
                             myusers.forEach(myuser => {
                                 const myuserItem = document.createElement('div');
@@ -32,6 +33,7 @@
                                 myuserItem.innerHTML = `
                                     <h1 class="text-white">Username : ${myuser.name}</h1>
                                     <p class="text-white" >Email : ${myuser.email}</p>
+                                    <p class="text-white" >Paswword : ${myuser.password}</p>
                                     <p class="text-white" >Followers : ${myuser.followers}</p>
                                     <p class="text-white" >Following : ${myuser.following}</p>
                                 `;
@@ -50,6 +52,9 @@
         </div>
         <div id="userDeleteBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
             <button>Delete Account</button>
+        </div>
+        <div id="userLogoutBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col text-center">
+            <a href="/"><button>Logout</button></a>
         </div>
 
     </div>
