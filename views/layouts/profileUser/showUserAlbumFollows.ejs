@@ -4,11 +4,12 @@
     <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
         <div class="title mb-2"><p class="font-bold text-neutral-300">Followed Albums</p></div>
     
-        <div class="main flex gap-y-9 flex-col">
+        <div class="main flex">
             <script>
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
-                        const myUserAlbumFollowsResponse = await fetch('/myUserAlbumFollows');
+                        const userId = '<%= userId %>';
+                        const myUserAlbumFollowsResponse = await fetch(`/myUserAlbumFollows?userId=${userId}`);
                         const myUserAlbumFollowsData = await myUserAlbumFollowsResponse.json();
                         const userAlbumFollows = myUserAlbumFollowsData.userAlbumFollows;
                         const myUserAlbumFollowsContainer = document.querySelector('#myUserAlbumFollow .main');
