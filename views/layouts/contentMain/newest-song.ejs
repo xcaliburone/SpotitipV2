@@ -3,6 +3,7 @@
         <p class="text-lg font-bold text-neutral-300">Newest Songs</p>
     </div>
     <div class="items">
+
         <script>
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
@@ -32,9 +33,28 @@
                             songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             songItem.innerHTML = `
                                 <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                                <div class="desc">
+                                <div class="flex justify-between">
+                                <div class="desc mt-2">
                                     <h1 class="title-playlist font-medium text-white">${song.name}</h1>
-                                    <p class="desc-playlist text-neutral-300">${song.description}</p>
+                                    <p class="desc-playlist text-neutral-300">By. Artist Name</p>
+                                </div>
+                                <div class="more">
+                                    <button class="more-btn"><span class="more-dot"></span><span class="more-dot"></span><span class="more-dot"></span></button>
+                                    <div class="more-menu">
+                                        <div class="more-menu-caret">
+                                            <div class="more-menu-caret-outer"></div>
+                                            <div class="more-menu-caret-inner"></div>
+                                        </div>
+                                        <ul class="more-menu-items" tabindex="-1" role="menu" aria-labelledby="more-btn" aria-hidden="true">
+                                            <li class="more-menu-item" role="presentation">
+                                                <button id="addToPlaylistBtn" type="button" class="more-menu-btn" role="menuitem" onclick="addToPlaylist()">Add to Playlist</button>
+                                            </li>
+                                            <li class="more-menu-item" role="presentation">
+                                                <button id="addToPlaylistBtn" type="button" class="more-menu-btn" role="menuitem" onclick="delteFromPlaylist()">Remove from Playlist</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 </div>
                             `;
                             songContainer.appendChild(songItem);
