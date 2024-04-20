@@ -6,7 +6,7 @@
     <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
 
         <div class="title mb-2">
-            <p class="font-bold text-neutral-300">Playlist Created</p>
+            <p class="font-bold text-neutral-300">Created Playlists</p>
         </div>
     
         <div class="main flex gap-y-9 flex-col">
@@ -14,7 +14,7 @@
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
                         const userId = '<%= userId %>'
-                        const myUserPlaylistCreatesResponse = await fetch(`/myUserPlaylistCreates?userId=${ userId }`); // Mengganti userId dengan nilai yang sesuai
+                        const myUserPlaylistCreatesResponse = await fetch(`/myUserPlaylistCreates?userId=${ userId }`);
                         const myUserPlaylistCreatesData = await myUserPlaylistCreatesResponse.json();
                         const userPlaylistCreates = myUserPlaylistCreatesData.userPlaylistCreates;
                         const myUserPlaylistCreatesContainer = document.querySelector('#myUserPlaylistCreate .main');
