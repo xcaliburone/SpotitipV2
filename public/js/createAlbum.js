@@ -11,9 +11,8 @@ document.getElementById("createAlbumForm").addEventListener("submit", async (eve
         });
 
         if (response.ok) {
-            const message = await response.text(); // Mendapatkan pesan respons dari server
-            alert(message); // Menampilkan pesan respons
-            // Refresh halaman atau lakukan aksi lain yang sesuai
+            const message = await response.text();
+            alert(message);
             closeModal();
         } else {
             console.error("Error creating album:", response.statusText);
