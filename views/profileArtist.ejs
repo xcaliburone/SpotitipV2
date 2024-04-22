@@ -24,13 +24,18 @@
             <button id="showArtist" data-target="myArtist" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
                 call db.artist
             </button>
+            
+            <button id="createModalSongToAlbum" data-target="myAlbumToSong" class="hover:opacity-60 transition rounded-xl w-full text-neutral-300 ">
+                push song album contains
+            </button>
 
         </div>
     </aside>
 
     <%- include('./layouts/profileArtist/showArtists') %>
+    <%- include('./layouts/profileArtist/showSongToAlbum') %>
 
-    <!-- <script src="/js/profileUser.js"></script> -->
     <script src="/js/profileArtist.js"></script>
+    <script src="/js/addSongToAlbum.js"></script>
 </body>
 </html>
