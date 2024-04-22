@@ -1,54 +1,60 @@
 <%- include('./layouts/header') %>
-<body>
-    <div class="cont bg-black flex gap-2">
+<body class="bg-black">
+    <div class="cont bg-black flex gap-2 flex-col">
         
         <aside class="w-[300px] m-3 flex flex-col gap-y-3 fixed h-[97%]">
             <%- include('./layouts/asideTop') %>
             <%- include('./layouts/asideBottom') %>
         </aside>
 
-        <main class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
-
+        <main id="homescreen" class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
             <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full">
-
                 <%- include('./layouts/mainHeadUser') %>
-
             </div>
-
             <%- include('./layouts/mainContent') %>
-            
         </main>
+
+        <main id="searchscreen" class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
+            <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full">
+                <p class="searchTitle font-bold text-neutral-300">Temukan Yang Anda Cari</p>
+            </div>
+            <%- include('./layouts/searchContent') %>
+        </main>
+        
     </div>
 
     <%- include('./layouts/createModal') %>
+    <%- include('./layouts/createModalPTS') %>
 
     <script src="../js/sideBottom.js"></script>
     <script src="../js/mainContent.js"></script>
-    <script src="../js/searchButton.js"></script>
     <script src="../js/createModal.js"></script>
+    <script src="../js/createModalPTS.js"></script>
     <script src="../js/createPlaylist.js"></script>
+    <script src="../js/addSongToPlaylist.js"></script>
     <script src="../js/songBUllets.js"></script>
+    <script src="../js/sideTop.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            function getUrlParameter(name) {            // Function to get URL parameters
-                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-                var results = regex.exec(location.search);
-                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-            };
-            
-            var error = getUrlParameter('error');
-            
-            if (error === 'duplicate') {
-                Swal.fire({icon: "error",
-                    title: "Oops...",
-                    text: "Playlist name already exists!",
-                    customClass: {
-                        confirmButton: 'swal-confirm-button-green'
-                    }
-                });
-            }
-        </script>
+    <script>
+        function getUrlParameter(name) {            // Function to get URL parameters
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+        
+        var error = getUrlParameter('error');
+        
+        if (error === 'duplicate') {
+            Swal.fire({icon: "error",
+                title: "Oops...",
+                text: "Playlist name already exists!",
+                customClass: {
+                    confirmButton: 'swal-confirm-button-green'
+                }
+            });
+        }
+    </script>
 </body>
 </html>
