@@ -13,7 +13,6 @@ document.getElementById("createSongForm").addEventListener("submit", async (even
     console.log("Song Genre:", genre);
     console.log("Song Duration:", duration);
 
-
     try {
         const response = await fetch('/createSong', { // Perbarui URL permintaan
         // const response = await fetch(`/main-artist/${artistId}/upload-song`, { // Perbarui URL permintaan
