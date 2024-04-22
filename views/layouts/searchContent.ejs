@@ -1,0 +1,129 @@
+<div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+
+    <div class="searchBar">
+        <form class="searchForm" name="searchDatas" onsubmit="event.preventDefault(); search()">
+            <input type="text" id="searchInput" class="input font-semibold" name="key" placeholder="..." autocomplete="off">
+            <button class="searcButton" type="submit">Search</button>
+        </form>           
+    </div>
+
+    <div id="searchResults" class="main flex gap-y-9">
+
+        <div class="search-results flex flex-col">
+            <div class="title mb-2 ml-2">
+                <p class="text-lg font-bold text-neutral-300">Hasil Pencarian</p>
+            </div>
+            
+            <div class="items flex gap-4">
+                <script>
+                    // Proses hasil pencarian di sisi klien
+                    async function search() {
+                        try {
+                            const keyword = document.getElementById('searchInput').value;
+                            const searchResponse = await fetch(`/search?keyword=${encodeURIComponent(keyword)}`);
+                            const searchData = await searchResponse.json();
+                            const searchs = searchData.results;
+                            const searchContainer = document.getElementById('searchResults').querySelector('.items');
+
+                            searchContainer.innerHTML = '';
+
+                            if (searchs.length === 0) {
+                                // Tampilkan pesan jika tidak ada hasil pencarian
+                                const noDataMessage = document.createElement('div');
+                                noDataMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                                noDataMessage.innerHTML = `
+                                    <img src="../images/nothing.png" alt="noData" class="w-[225px] rounded-md">
+                                    <div class="desc-none flex flex-col justify-center items-center">
+                                        <h1 class="title-playlist font-medium text-white">DATA TIDAK DITEMUKAN</h1>
+                                        <p class="desc-playlist text-neutral-300">Silahkan Masukkan Data yang benar</p>
+                                    </div>
+                                `;
+                                searchContainer.appendChild(noDataMessage);
+                            } else {
+                                searchs.forEach(search => {
+                                    // Tampilkan entitas berdasarkan jenisnya (type)
+                                    if (search.type === 'user') {
+                                        // Tampilkan entitas user
+                                        const userItem = document.createElement('div');
+                                        userItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                        userItem.innerHTML = `
+                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <div class="desc mt-2">
+                                                <h1 class="title-playlist font-medium text-white">${search.name}</h1>
+                                            </div>
+                                        `;
+                                        searchContainer.appendChild(userItem);
+                                    } else if (search.type === 'artist') {
+                                        // Tampilkan entitas artist
+                                        const artistItem = document.createElement('div');
+                                        artistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                        artistItem.innerHTML = `
+                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <div class="desc mt-2">
+                                                <h1 class="title-playlist font-medium text-white">${search.name}</h1>
+                                            </div>
+                                            <button class="btnFollow" data-artist-id="${search.id}">Follow</button>
+                                        `;
+                                        searchContainer.appendChild(artistItem);
+                                    } else if (search.type === 'playlist') {
+                                        // Tampilkan entitas playlist
+                                        const playlistItem = document.createElement('div');
+                                        playlistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                                        playlistItem.innerHTML = `
+                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <div class="desc mt-2">
+                                                <h1 class="title-playlist font-medium text-white">${search.name}</h1>
+                                                <p class="desc-playlist text-neutral-300">Created by. User Name</p>
+                                            </div>
+                                            <button class="btnFollow" data-playlist-id="${search.id}">Follow</button>
+                                        `;
+                                        searchContainer.appendChild(playlistItem);
+                                    } else if (search.type === 'album') {
+                                        // Tampilkan entitas album
+                                        const albumItem = document.createElement('div');
+                                        albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                                        albumItem.innerHTML = `
+                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <div class="desc mt-2">
+                                                <h1 class="title-playlist font-medium text-white">${search.name}</h1>
+                                                <p class="desc-playlist text-neutral-300">By. ${search.artistName}</p>
+                                            </div>
+                                            <button class="btnFollow" data-album-id="${search.id}">Follow</button>
+                                        `;
+                                        searchContainer.appendChild(albumItem);
+                                    } else if (search.type === 'song') {
+                                        // Tampilkan entitas lagu
+                                        const songItem = document.createElement('div');
+                                        songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                                        songItem.innerHTML = `
+                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <div class="desc mt-2">
+                                                <h1 class="title-playlist font-medium text-white">${search.name}</h1>
+                                                <p class="desc-playlist text-neutral-300">By. ${search.artistName}</p>
+                                            </div>
+                                            <button class="btnFollow" data-song-id="${search.id}">Follow</button>
+                                        `;
+                                        searchContainer.appendChild(songItem);
+                                    }
+                                });
+                            }
+                        } catch (error) {
+                            console.error("Error fetching data:", error);
+                        }
+                    }
+
+
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        const form = document.querySelector('form[name="searchDatas"]');
+                        form.addEventListener('submit', async (event) => {
+                            event.preventDefault();
+                            await search();
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+
+    </div>
+
+</div>
