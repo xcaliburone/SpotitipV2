@@ -3,7 +3,9 @@ const app = express();
 const port = 3031;
 const mysql = require('mysql');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
 
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
@@ -20,21 +22,21 @@ const { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAll
 const { getAllMyArtists } = require('./utils/ArtistInfo')
 const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
 const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong } = require('./utils/checkCredentials')
+const { getAllDatas, formatResults } = require('./utils/searchDatas')
 
 app.get('/', (req, res) => { res.render('index'); });
 
 app.get('/main-user/:userId', (req, res) => {
     const userId = req.params.userId;
+    const artistId = req.query.artistId;
     console.log("User ID main :", userId);
 
-    if (!userId) {
-        console.error("User ID is undefined");
-        return res.status(400).send("User ID is missing");
-    }
+    if (!userId) { console.error("User ID is undefined"); return res.status(400).send("User ID is missing"); }
 
     try {
         res.render('mainUser', {        
             userId: userId,
+            artistId: artistId,
             modalName: 'Playlist',
             modalForm: 'createPlaylistForm',
             foridnameTitleModal: 'playlistName',
@@ -50,22 +52,19 @@ app.get('/main-user/:userId', (req, res) => {
             onlyArtistContent: 'hidden',
             onlyUserContent: '',
         });
-    } catch (error) {
-        console.error("Error rendering data:", error);
-        res.redirect('/main-user');
-    }
+    } catch (error) { console.error("Error rendering data:", error); res.redirect('/main-user'); }
 });
 
 app.get('/main-artist/:artistId', (req, res) => {
     const artistId = req.params.artistId;
+    const userId = req.query.artistId;
     console.log("Artist ID:", artistId);
 
-    if (!artistId) {
-        console.error("Artist ID is undefined");
-        return res.status(400).send("Artist ID is missing");
+    if (!artistId) { console.error("Artist ID is undefined"); return res.status(400).send("Artist ID is missing");
     }
 
     res.render('mainArtist', {
+        userId: userId,
         artistId: artistId,
         modalName: 'album',
         modalForm: 'createAlbumForm',
@@ -82,7 +81,6 @@ app.get('/main-artist/:artistId', (req, res) => {
         onlyArtistContent: '',
         onlyUserContent: 'hidden',
     });
-
 });
 
 app.get('/login/:userId?', (req, res) => {
@@ -573,26 +571,167 @@ app.post('/userSongLiked', async (req, res) => {
     }
 });
 
-// app.post('/addSongToAlbum', async (req, res) => {
-//     const { songId, albumId } = req.body;
+app.get('/search', async (req, res) => {
+    try {
+        const { keyword } = req.query; // Ambil kata kunci pencarian dari query string
+        const results = await getAllDatas(keyword); // Panggil fungsi pencarian di database
+        const formattedResults = formatResults(results); // Format hasil pencarian dengan menambahkan properti "type"
+        res.json({ results: formattedResults }); // Kirim hasil pencarian ke klien sebagai JSON
+    } catch (error) {
+        console.error("Error searching:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
-//     try {
-//         // Lakukan validasi data jika diperlukan
+// Endpoint untuk mencari ID playlist berdasarkan namanya
+app.get('/findPlaylistId', async (req, res) => {
+    try {
+        const { playlistNameDua } = req.query;
+        const playlistIdQuery = 'SELECT id FROM playlist WHERE name = ?';
+        connection.query(playlistIdQuery, [playlistNameDua], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            if (results.length > 0) {
+                const playlistId = results[0].id;
+                res.json({ id: playlistId });
+            } else {
+                res.status(404).json({ error: 'Playlist not found' });
+            }
+        });
+    } catch (error) {
+        console.error('Error finding playlist ID:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
-//         // Tambahkan lagu ke dalam album di database
-//         const insertQuery = 'INSERT INTO song_album_contains (song_id, album_id) VALUES (?, ?)';
-//         connection.query(insertQuery, [songId, albumId], (err, result) => {
-//             if (err) {
-//                 console.error("Error adding song to album:", err);
-//                 return res.status(500).send("Failed to add song to album.");
-//             }
-//             return res.status(200).send("Song added to album successfully.");
-//         });
-//     } catch (error) {
-//         console.error("Error adding song to album:", error);
-//         return res.status(500).send("Failed to add song to album.");
-//     }
-// });
+app.get('/findAlbumId', async (req, res) => {
+    try {
+        const { albumNameDua } = req.query;
+        const albumIdQuery = 'SELECT id FROM album WHERE name = ?';
+        connection.query(albumIdQuery, [albumNameDua], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            if (results.length > 0) {
+                const albumId = results[0].id;
+                res.json({ id: albumId });
+            } else {
+                res.status(404).json({ error: 'Album not found' })
+            }
+        });
+    } catch (error) {
+        console.error('Error adding album ID:', error);
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
 
-app.use('/', (req, res) => { res.status(404); res.send('<h1>404 Page not Found!</h1>') });
+// Endpoint untuk mencari ID lagu berdasarkan namanya
+app.get('/findSongId', async (req, res) => {
+    try {
+        const { songName } = req.query;
+        const songIdQuery = 'SELECT id FROM song WHERE name = ?';
+        connection.query(songIdQuery, [songName], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            if (results.length > 0) {
+                const songId = results[0].id;
+                res.json({ id: songId });
+            } else {
+                res.status(404).json({ error: 'Song not found' });
+            }
+        });
+    } catch (error) {
+        console.error('Error finding song ID:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Endpoint untuk mencari ID lagu berdasarkan namanya
+app.get('/findDuaSongId', async (req, res) => {
+    try {
+        const { songNameDua } = req.query;
+        const songIdQuery = 'SELECT id FROM song WHERE name = ?';
+        connection.query(songIdQuery, [songNameDua], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            if (results.length > 0) {
+                const songId = results[0].id;
+                res.json({ id: songId });
+            } else {
+                res.status(404).json({ error: 'Song not found' });
+            }
+        });
+    } catch (error) {
+        console.error('Error finding song ID:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Endpoint untuk menambahkan lagu ke dalam playlist
+app.post('/addSongToPlaylist', async (req, res) => {
+    try {
+        const { playlistId, songId } = req.body;
+        const insertQuery = 'INSERT INTO song_playlist_contains (playlist_id, song_id) VALUES (?, ?)';
+        connection.query(insertQuery, [playlistId, songId], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.sendStatus(200)
+        });
+    } catch (error) {
+        console.error('Error adding song to playlist:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/addSongToAlbum', async (req, res) => {
+    try {
+        const { albumId, songId, artistId } = req.body;
+        // const artistId = req.query.artistId;
+        // const artistId = req.params.artistId;
+        // const artistId = req.session.artistId;
+
+        console.log("albumid woy : ", albumId);
+        console.log("sogid woy : ", songId);
+        console.log("artistid woy : ", artistId);
+
+        // Periksa apakah artis terkait dengan lagu yang ingin ditambahkan
+        const artistSongQuery = 'SELECT * FROM song_artist_sing WHERE artist_id = ? AND song_id = ?';
+        connection.query(artistSongQuery, [artistId, songId], (error1, songResults) => {
+
+            if (error1) {
+                throw error1;
+            }
+
+            // Periksa apakah artis terkait dengan album yang ingin ditambahkan
+            const artistAlbumQuery = 'SELECT * FROM album_artist_has WHERE artist_id = ? AND album_id = ?';
+            connection.query(artistAlbumQuery, [artistId, albumId], (error2, albumResults) => {
+                if (error2) {
+                    throw error2;
+                }
+
+                // Jika artis terkait dengan lagu dan album, tambahkan lagu ke album
+                if (songResults.length > 0 && albumResults.length > 0) {
+                    const insertQuery = 'INSERT INTO song_album_contains (album_id, song_id) VALUES (?, ?)';
+                    connection.query(insertQuery, [albumId, songId], (error3, results) => {
+                        if (error3) {
+                            throw error3;
+                        }
+                        res.sendStatus(200);
+                    });
+                } else {
+                    res.status(403).json({ error: 'Artist is not authorized to add this song to the album' });
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error Adding song to albums:', error);
+        res.status(500).json({ error: 'Internal server error' })
+    }
+});
+
+app.use('/', (req, res) => { res.status(404).render('404')});
 app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
