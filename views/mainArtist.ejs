@@ -1,6 +1,6 @@
 <%- include('./layouts/header') %>
-<body>
-    <div class="cont bg-black flex gap-2">
+<body class="bg-black">
+    <div class="cont bg-black flex gap-2 flex-col">
         
         <aside class="w-[300px] m-3 flex flex-col gap-y-3 fixed h-[97%]">
             <%- include('./layouts/asideTop') %>
@@ -8,15 +8,10 @@
         </aside>
 
         <main class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
-
             <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full">
-
                 <%- include('./layouts/mainHeadArtist') %>
-
             </div>
-
             <%- include('./layouts/mainContent') %>
-
         </main>
     </div>
 
