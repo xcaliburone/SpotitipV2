@@ -3,13 +3,6 @@
     <div class="header flex justify-between">
         <%- include('./main-buttonleft-user') %>
         <%- include('./main-buttonleft-artist') %>
-
-        <div class="box relative">
-            <form name="search">
-                <input type="text" id="searchInput" class="input font-semibold" name="key" 
-                placeholder="Search..." autocomplete="off">
-            </form>
-        </div>
     </div>
 
     <div class="main flex gap-y-9 <%= onlyUserContent %>">
@@ -32,4 +25,5 @@
         <%- include('./contentMain/artist-songs') %>
 
     </div>
+
 </div>
