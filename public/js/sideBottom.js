@@ -1,4 +1,3 @@
-document.querySelector('.search').addEventListener('click', function() { window.location.href = 'BrowseAll.html' })
 
 document.addEventListener('DOMContentLoaded', () => {
     const playlistButton = document.getElementById('aside-playlists-button')
