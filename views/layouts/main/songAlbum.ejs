@@ -18,7 +18,7 @@
 
                 if (albums.length === 0) {
                     const noAlbumsMessage = document.createElement('div');
-                    noAlbumsMessage.innerHTML = `<p>No albums available</p>`;
+                    noAlbumsMessage.innerHTML = `<h1>No albums available</h1>`;
                     albumContainer.appendChild(noAlbumsMessage);
                 } else {
                     albums.forEach((album) => {
@@ -48,7 +48,6 @@
                         `;
                         repeaterDiv.appendChild(albumSection);
 
-                        // Tambahkan song section
                         const songSection = document.createElement('div');
                         songSection.classList.add('songSection');
                         const table = document.createElement('table');
@@ -63,7 +62,6 @@
                         `;
                         table.appendChild(titleRow);
 
-                        // Tambahkan contentRow untuk setiap lagu
                         album.songs.forEach((song, index) => {
                             const contentRow = document.createElement('tr');
                             contentRow.classList.add('contentRow');
@@ -82,7 +80,6 @@
                         songSection.appendChild(table);
                         repeaterDiv.appendChild(songSection);
 
-                        // Tambahkan div repeater ke albumContainer
                         albumContainer.appendChild(repeaterDiv);
                     });
                 }
