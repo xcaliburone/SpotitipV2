@@ -13,7 +13,8 @@ buttons.forEach(button => {
         const targetId = this.getAttribute('data-target');
         const mains = document.querySelectorAll('main');
         mains.forEach(main => {
-            if (main.id === targetId) { main.style.display = 'flex';
+            if (main.id === targetId) {
+                main.style.display = 'flex';
             } else { main.style.display = 'none'; }
         });
         buttons.forEach(btn => { btn.classList.remove('active'); });

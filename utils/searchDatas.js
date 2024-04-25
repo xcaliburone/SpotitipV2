@@ -20,12 +20,11 @@ async function getAllDatas(keyword) {
     });
 }
 
-// Format hasil pencarian dengan menambahkan properti "type"
 function formatResults(results) {
     return results.map(result => {
         return {
             name: result.name,
-            type: result.type // Tambahkan properti "type" sesuai dengan jenis entitas
+            type: result.type
         };
     });
 }

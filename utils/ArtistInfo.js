@@ -5,11 +5,8 @@ async function getAllMyArtists(artistId) {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT name, email, password, followers FROM artist WHERE id = ?';
         connection.query(sql, [artistId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+            if (err) { reject(err);
+            } else { resolve(results); }
         });
     });
 }

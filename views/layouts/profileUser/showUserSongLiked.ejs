@@ -19,13 +19,13 @@
                         const myUserSongLikedsContainer = document.querySelector('#myUserSongLiked .main');
                         myUserSongLikedsContainer.innerHTML = '';
             
-                        if (userSongLikeds.length === 0) { // Memeriksa jika tidak ada data yang ditemukan
+                        if (userSongLikeds.length === 0) {
                             const noUserSongLikedsMessage = document.createElement('div');
                             noUserSongLikedsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
                             noUserSongLikedsMessage.innerHTML = `
                                 <img src="/images/nothing.png" alt="noData" class="w-[225px] rounded-md">
                                 <div class="desc-none flex flex-col justify-center items-center">
-                                    <h1 class="title-playlist font-medium text-white">DATA MENGIKUTI ANDA BELUM ADA</h1>
+                                    <h1 class="title-playlist font-medium text-white">BELUM ADA LAGU YANG DISUKAI</h1>
                                     <p class="desc-playlist text-neutral-300">Silahkan Membuat Terlebih Dahulu</p>
                                 </div>
                             `;

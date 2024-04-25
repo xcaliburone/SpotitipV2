@@ -10,13 +10,8 @@ document.getElementById("createPlaylistForm").addEventListener("submit", async (
             body: JSON.stringify({ name, description })
         });
 
-        if (response.ok) {
-            // const playlist = await response.json();
-            // addPlaylistToUI(playlist);
-            closeModal();
-        } else {
-            console.error("Error creating playlist:", error);
-        }
+        if (response.ok) { closeModal();
+        } else { console.error("Error creating playlist:", error); }
     } catch (error) { console.error("Error creating playlist:", error); }
 });
 
@@ -32,9 +27,7 @@ async function addPlaylistToUI(playlist) {
         }
 
         const response = await fetch("/userPlaylists");
-        if (!response.ok) {
-            throw new Error("Failed to retrieve user playlists");
-        }
+        if (!response.ok) { throw new Error("Failed to retrieve user playlists"); }
         const playlists = await response.json();
 
         playlists.forEach(playlist => {
@@ -46,10 +39,6 @@ async function addPlaylistToUI(playlist) {
             `;
             playlistContainer.appendChild(playlistItem);
         });
-
         return res.status(200).json({ message: 'Playlist created successfully.' });
-
-    } catch (error) {
-        console.error("Error adding playlist to UI:", error);
-    }
+    } catch (error) { console.error("Error adding playlist to UI:", error); }
 }

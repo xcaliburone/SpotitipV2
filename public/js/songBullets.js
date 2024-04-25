@@ -14,7 +14,6 @@ function showMenu(e) {
 function hideMenu(e) {
     var parentMore = e.target.closest('.more');
     if (!parentMore) {
-        // Menu is not clicked
         var menus = document.querySelectorAll('.more-menu');
         menus.forEach(function(menu) {
             menu.setAttribute('aria-hidden', true);
@@ -54,14 +53,12 @@ async function addToPlaylist() {
     nameLabel.classList.add("block", "text-sm", "font-medium", "text-grey-700", "dark:text-neutral-300", "mb-2");
     nameLabel.textContent = "Choose Playlist : ";
 
-    // Buat elemen select
     var selectMenu = document.createElement("select");
     selectMenu.id = "playlistSelect";
     selectMenu.classList.add("shadow-sm", "rounded-md", "w-full", "px-3", "py-2", "border-2", "border-neutral-300", "focus:outline-none", "focus:ring-spotitip", "focus:border-spotitip");
     selectMenu.required = true;
     selectMenu.name = "playlistSelect";
 
-    // Buat opsi default
     var defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "Select Playlist";
@@ -73,7 +70,6 @@ async function addToPlaylist() {
     uploadButton.textContent = "Add";
     uploadButton.addEventListener("click", uploadSong);
 
-    // Append semua elemen ke dalam modalContent
     modalContent.appendChild(title);
     modalContent.appendChild(closeButton);
     form.appendChild(nameLabel);
@@ -81,12 +77,9 @@ async function addToPlaylist() {
     form.appendChild(uploadButton);
     modalContent.appendChild(form);
     modal.appendChild(modalContent);
-
-    // Append modal ke dalam body
     document.body.appendChild(modal);
 
     try {
-        // Lakukan fetch untuk mengambil data playlist dari server
         const response = await fetch('/myplaylists');
         if (!response.ok) {
             throw new Error('Failed to fetch playlists');
@@ -95,7 +88,6 @@ async function addToPlaylist() {
         const data = await response.json();
         const playlists = data.myplaylists;
 
-        // Tambahkan opsi playlist ke dalam select menu
         playlists.forEach(function(playlist) {
             var option = document.createElement("option");
             option.value = playlist.id;
@@ -103,40 +95,24 @@ async function addToPlaylist() {
             selectMenu.appendChild(option);
         });
 
-        // Tambahkan event listener untuk tombol yang memicu tampilan modal
-        // var addToPlaylistBtn = document.getElementById("addToPlaylistBtn");
-        // addToPlaylistBtn.addEventListener('click', showModal);
-    } catch (error) {
-        console.error('Error fetching playlists:', error);
-        // Handle error fetching playlists
-    }
+    } catch (error) { console.error('Error fetching playlists:', error); }
 }
 
-// Panggil addToPlaylist di luar fungsi untuk memulai proses
 addToPlaylist();
 
 function showModal() {
     var modal = document.getElementById("createModalSong");
-    if (!modal) {
-        modal = document.getElementById("createModalSong");
-    }
+    if (!modal) { modal = document.getElementById("createModalSong"); }
     modal.style.display = "block";
 }
 
-// Fungsi untuk menutup modal
 function closeModal() {
     var modal = document.getElementById("createModalSong");
     modal.style.display = "none";
 }
 
 function uploadSong() {
-    // Lakukan logika pengunggahan lagu di sini
-    // Contoh: Validasi input, kirim data ke server, dll.
-
-    // Setelah selesai, tutup modal
     closeModal();
 }
 
-function deleteFromPlaylist() {
-    // Tambahkan logika untuk menghapus lagu dari playlist
-}
+function deleteFromPlaylist() {}

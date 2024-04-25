@@ -10,7 +10,6 @@
     <style>
         .swal-confirm-button-green { background-color: #28a745 !important; color: #fff !important; border-color: #28a745 !important; }
     </style>
-
     <title>Spotitip</title>
 </head>
 
@@ -21,25 +20,21 @@
             <img src="images/SPOTITIP.png" alt="hero" class="">
             <h1 class="text-2xl font-bold text-center mb-4 dark:text-neutral-200">Create Account</h1>
 
-            <%- include('./layouts/signup-form') %>
+            <%- include('./layouts/signupForm') %>
 
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function getUrlParameter(name) {            // Function to get URL parameters
+        function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
             var results = regex.exec(location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }; var error = getUrlParameter('error');
-        if (error === 'duplicate') {
-            Swal.fire({icon: "error",
-            title: "Oops...",
-            text: "Username or Email already exists!",
-            customClass: {
-                confirmButton: 'swal-confirm-button-green'
-            },
+        if (error === 'duplicate') { Swal.fire({icon: "error", title: "Oops...", text: "Username or Email already exists!",
+            customClass: { confirmButton: 'swal-confirm-button-green' },
         });
     }
     </script>

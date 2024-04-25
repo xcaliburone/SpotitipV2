@@ -12,7 +12,6 @@ function handleLogin( event ) {
     const password = document.getElementById('password').value
     if ( email && password ) {
         document.getElementById( 'loginForm' ).submit();
-        // window.location.href = '/src/html/Main.html';
     } else {
         alert('Please fill in both email and password fields.');
     }

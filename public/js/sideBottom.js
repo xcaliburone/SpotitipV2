@@ -1,31 +1,30 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const playlistButton = document.getElementById('aside-playlists-button')
     const albumButton = document.getElementById('aside-albums-button')
     const albumItems = document.querySelectorAll('.item-album')
     const playlistItems = document.querySelectorAll('.item-playlist')
 
-    function showAllItems() {       // Fungsi untuk menampilkan semua item
+    function showAllItems() {
         albumItems.forEach( item => { item.style.display = 'flex'; })
         playlistItems.forEach( item => { item.style.display = 'flex'; })
     }
 
-    function hideAllItems() {       // Fungsi untuk menyembunyikan semua item
+    function hideAllItems() {
         albumItems.forEach( item => { item.style.display = 'none'; })
         playlistItems.forEach(item => { item.style.display = 'none'; })
     }
 
-    function showPlaylists() {      // Fungsi untuk menampilkan item playlist dan menyembunyikan item album
+    function showPlaylists() {
         hideAllItems()
         playlistItems.forEach( item => { item.style.display = 'flex'; })
     }
 
-    function showAlbums() {         // Fungsi untuk menampilkan item album dan menyembunyikan item playlist
+    function showAlbums() {
         hideAllItems()
         albumItems.forEach( item => { item.style.display = 'flex'; })
     }
 
-    playlistButton.addEventListener('click', () => {             // Atur event listener untuk tombol Playlists
+    playlistButton.addEventListener('click', () => {
         if (!playlistButton.classList.contains('active')) {
             showPlaylists()
             playlistButton.classList.add('active')
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
-    albumButton.addEventListener('click', () => {               // Atur event listener untuk tombol Albums
+    albumButton.addEventListener('click', () => {
         if (!albumButton.classList.contains('active')) {
             showAlbums()
             albumButton.classList.add('active')
@@ -46,6 +45,5 @@ document.addEventListener('DOMContentLoaded', () => {
             albumButton.classList.remove('active')
         }
     })
-    // Tampilkan semua item saat tidak ada tombol yang aktif
     if (!playlistButton.classList.contains('active') && !albumButton.classList.contains('active')) { showAllItems() }
 });

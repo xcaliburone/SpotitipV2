@@ -14,9 +14,7 @@ document.getElementById("createAlbumForm").addEventListener("submit", async (eve
             const message = await response.text();
             alert(message);
             closeModal();
-        } else {
-            console.error("Error creating album:", response.statusText);
-        }
+        } else { console.error("Error creating album:", response.statusText); }
     } catch (error) {
         console.error("Error creating album:", error);
     }

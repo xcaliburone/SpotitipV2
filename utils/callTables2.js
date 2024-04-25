@@ -10,11 +10,8 @@ async function getAllMySongs(artistId) {
             WHERE sa.artist_id = ?
         `;
         connection.query(sql, [artistId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+            if (err) { reject(err);
+            } else { resolve(results); }
         });
     });
 }
@@ -28,11 +25,8 @@ async function getAllMyAlbums(artistId) {
             WHERE aa.artist_id = ?
         `;
         connection.query(sql, [artistId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+            if (err) { reject(err);
+            } else { resolve(results); }
         });
     });
 }
@@ -46,16 +40,10 @@ async function getAllMyPlaylists(artistId) {
             WHERE upc.user_id = ?
         `;
         connection.query(sql, [artistId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+            if (err) { reject(err);
+            } else { resolve(results); }
         });
     });
 }
-
-//              SELECT p.id, p.name, p.num_song, p.duration FROM user_playlist_create upc 
-//             JOIN playlist p ON upc.playlist_id = p.id WHERE upc.user_id = ?
 
 module.exports = { getAllMyAlbums, getAllMySongs, getAllMyPlaylists }

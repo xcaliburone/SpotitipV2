@@ -6,12 +6,10 @@ function generateNewID(table, type) {
         const prefix = type === "user" ? "US" : "AR";
         const sql = `SELECT MAX(id) AS maxId FROM ${table} WHERE id LIKE '${prefix}%'`;
         connection.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
+            if (err) { reject(err);
             } else {
                 let maxId = result[0].maxId;
-                if (!maxId) {
-                    maxId = prefix + '01';
+                if (!maxId) { maxId = prefix + '01';
                 } else {
                     const prefixLength = prefix.length;
                     const numericPart = parseInt(maxId.slice(prefixLength), 10) + 1;
@@ -31,8 +29,7 @@ function generatePlaylistID() {
                 reject(err);
             } else {
                 let maxId = result[0].maxId;
-                if (!maxId) {
-                    maxId = 'PL01'; // Mulai dari PL01 jika tidak ada ID sebelumnya
+                if (!maxId) { maxId = 'PL01';
                 } else {
                     const numericPart = parseInt(maxId.slice(2), 10) + 1;
                     maxId = 'PL' + (numericPart < 10 ? '0' : '') + numericPart;
@@ -51,8 +48,7 @@ function generateAlbumID() {
                 reject(err);
             } else {
                 let maxId = result[0].maxId;
-                if (!maxId) {
-                    maxId = 'AL01'; // Mulai dari PL01 jika tidak ada ID sebelumnya
+                if (!maxId) { maxId = 'AL01';
                 } else {
                     const numericPart = parseInt(maxId.slice(2), 10) + 1;
                     maxId = 'AL' + (numericPart < 10 ? '0' : '') + numericPart;
@@ -71,8 +67,7 @@ function generateSongID() {
                 reject(err);
             } else {
                 let maxId = result[0].maxId;
-                if (!maxId) {
-                    maxId = 'SO01'; // Mulai dari PL01 jika tidak ada ID sebelumnya
+                if (!maxId) { maxId = 'SO01';
                 } else {
                     const numericPart = parseInt(maxId.slice(2), 10) + 1;
                     maxId = 'SO' + (numericPart < 10 ? '0' : '') + numericPart;
