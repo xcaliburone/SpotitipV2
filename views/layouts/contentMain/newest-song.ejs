@@ -39,30 +39,21 @@
                             `;
                             songContainer.appendChild(songItem);
 
-                            // Tambahkan event listener di dalam loop untuk setiap tombol "Follow"
                             const btnFollow = songItem.querySelector('.btnFollow');
                             btnFollow.addEventListener('click', async () => {
                                 try {
                                     const songId = btnFollow.getAttribute('data-song-id');
                                     const response = await fetch(`/userSongLiked?userId=${userId}`, {
                                         method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
+                                        headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify({ songId })
                                     });
-
                                     const data = await response.json();
-                                    // Handle response data if needed
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                }
+                                } catch (error) { console.error('Error:', error); }
                             });
                         });
                     }
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                }
+                } catch (error) { console.error("Error fetching data:", error); }
             });
         </script>
     </div>
