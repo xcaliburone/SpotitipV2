@@ -15,9 +15,9 @@
                         const myUserAlbumFollowsContainer = document.querySelector('#myUserAlbumFollow .main');
                         myUserAlbumFollowsContainer.innerHTML = '';
 
-                        if (userAlbumFollows.length === 1) {
+                        if (userAlbumFollows.length === 0) {
                             const noUserAlbumFollowsMessage = document.createElement('div');
-                            noUserAlbumFollowsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
+                            noUserAlbumFollowsMessage.classList.add('profileEmpty', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
                             noUserAlbumFollowsMessage.innerHTML = `
                                 <img src="/images/nothing.png" alt="noData" class="w-[225px] rounded-md">
                                 <div class="desc-none flex flex-col justify-center items-center">
