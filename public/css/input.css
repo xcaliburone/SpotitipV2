@@ -6,7 +6,11 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    /* cursor: default; */
+}
+
+#searchScreen2,
+#albumSong {
+    display: none;
 }
 
 body::-webkit-scrollbar {
@@ -15,8 +19,6 @@ body::-webkit-scrollbar {
 
 .side-top > button {
     height: 35px;
-    /* width: 200px; */
-    /* background-color: rgb(38, 38, 38); */
     overflow: hidden;
 }
 
@@ -39,7 +41,17 @@ main {
     flex-direction: column;
     /* padding-bottom: 150px; */
     /* padding-bottom: 125px; */
-    padding-bottom: 100px;
+    padding-bottom: 90px;
+}
+
+.list-items {
+    width: 260px !important;
+    padding-bottom: 21px !important;
+}
+
+.list-items2 {
+    width: 260px !important;
+    padding-bottom: 320px !important;
 }
 
 main::-webkit-scrollbar {
@@ -290,6 +302,25 @@ option:active {
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    z-index: 1;
+    font-weight: 600;
+    font-size: 12px;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    color: var(--color);
+}
+
+.btnFollowDelay {
+    --color: #00A97F;
+    --color2: rgb(10, 25, 30);
+    padding: 0.8em 1.75em;
+    background-color: transparent;
+    border-radius: 6px;
+    border: .3px solid var(--color);
+    /* transition: .5s; */
+    position: relative;
+    overflow: hidden;
+    cursor: not-allowed;
     z-index: 1;
     font-weight: 600;
     font-size: 12px;
