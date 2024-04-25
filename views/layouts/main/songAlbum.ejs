@@ -1,0 +1,95 @@
+<main id="albumSong" class="bg-neutral-900 mt-3 mr-3 mb-3 rounded-md ml-[330px]">
+    <div class="bg-gradient-to-b from-emerald-800 px-6 py-11 rounded-md flex w-full">
+        <p class="searchTitle font-bold text-neutral-300">Your Albums</p>
+    </div>
+    
+    <div class="songAlbumContains">
+        <!-- rawrr -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const artistId = '<%= artistId %>';
+                const albumResponse = await fetch(`/songAlbum?artistId=${artistId}`);
+                const albumData = await albumResponse.json();
+                const albums = albumData.albums;
+                const albumContainer = document.querySelector('#albumSong .songAlbumContains');
+
+                if (albums.length === 0) {
+                    const noAlbumsMessage = document.createElement('div');
+                    noAlbumsMessage.innerHTML = `<p>No albums available</p>`;
+                    albumContainer.appendChild(noAlbumsMessage);
+                } else {
+                    albums.forEach((album) => {
+                        const monthNames = [
+                            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                        ];
+
+                        const rawDate = new Date(album.date_created);
+                        const formattedDate = `${rawDate.getDate()} ${monthNames[rawDate.getMonth()]} ${rawDate.getFullYear()}`;
+
+                        const repeaterDiv = document.createElement('div');
+                        repeaterDiv.classList.add('repeater');
+
+                        const albumSection = document.createElement('div');
+                        albumSection.classList.add('albumSection');
+                        albumSection.innerHTML = `
+                            <img src="../images/liked.png" alt="cover" class="psImage w-[225px] rounded-md">
+                            <div class="psDesc">
+                                <h1>${album.name}</h1>
+                                <div class="psSpan">
+                                    <p>Album</p><p>&bullet;</p>
+                                    <p>${formattedDate}</p><p>&bullet;</p>
+                                    ${album.num_song !== null ? `<p>${album.num_song} Songs</p>` : '<p>0 Songs</p>'}
+                                </div>
+                            </div>
+                        `;
+                        repeaterDiv.appendChild(albumSection);
+
+                        // Tambahkan song section
+                        const songSection = document.createElement('div');
+                        songSection.classList.add('songSection');
+                        const table = document.createElement('table');
+                        const titleRow = document.createElement('tr');
+                        titleRow.classList.add('titleRow');
+                        titleRow.innerHTML = `
+                            <th class="numberSong">#</th>
+                            <th class="titleSong1">Title</th>
+                            <th class="">Genre</th>
+                            <th class="">Duration</th>
+                            <th class="">Listeners</th>
+                        `;
+                        table.appendChild(titleRow);
+
+                        // Tambahkan contentRow untuk setiap lagu
+                        album.songs.forEach((song, index) => {
+                            const contentRow = document.createElement('tr');
+                            contentRow.classList.add('contentRow');
+                            contentRow.innerHTML = `
+                                <td class="numberSong">${index + 1}</td>
+                                <td class="titleSong2">
+                                    <h1 class="titleKernel">${song.title}</h1>
+                                    <p>${song.artist}</p>
+                                </td>
+                                <td class="genreSong">${song.genre}</td>
+                                <td class="durationSong">${song.duration}</td>
+                                <td class="listenersSong">${song.listeners}</td>
+                            `;
+                            table.appendChild(contentRow);
+                        });
+                        songSection.appendChild(table);
+                        repeaterDiv.appendChild(songSection);
+
+                        // Tambahkan div repeater ke albumContainer
+                        albumContainer.appendChild(repeaterDiv);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    </script>
+
+</main>
