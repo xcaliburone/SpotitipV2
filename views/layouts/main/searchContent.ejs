@@ -16,7 +16,6 @@
             
             <div class="items flex gap-4">
                 <script>
-                    // Proses hasil pencarian di sisi klien
                     async function search() {
                         try {
                             const keyword = document.getElementById('searchInput').value;
@@ -28,7 +27,6 @@
                             searchContainer.innerHTML = '';
 
                             if (searchs.length === 0) {
-                                // Tampilkan pesan jika tidak ada hasil pencarian
                                 const noDataMessage = document.createElement('div');
                                 noDataMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                 noDataMessage.innerHTML = `
@@ -41,9 +39,7 @@
                                 searchContainer.appendChild(noDataMessage);
                             } else {
                                 searchs.forEach(search => {
-                                    // Tampilkan entitas berdasarkan jenisnya (type)
                                     if (search.type === 'user') {
-                                        // Tampilkan entitas user
                                         const userItem = document.createElement('div');
                                         userItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
                                         userItem.innerHTML = `
@@ -54,7 +50,6 @@
                                         `;
                                         searchContainer.appendChild(userItem);
                                     } else if (search.type === 'artist') {
-                                        // Tampilkan entitas artist
                                         const artistItem = document.createElement('div');
                                         artistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
                                         artistItem.innerHTML = `
@@ -66,7 +61,6 @@
                                         `;
                                         searchContainer.appendChild(artistItem);
                                     } else if (search.type === 'playlist') {
-                                        // Tampilkan entitas playlist
                                         const playlistItem = document.createElement('div');
                                         playlistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                         playlistItem.innerHTML = `
@@ -79,7 +73,6 @@
                                         `;
                                         searchContainer.appendChild(playlistItem);
                                     } else if (search.type === 'album') {
-                                        // Tampilkan entitas album
                                         const albumItem = document.createElement('div');
                                         albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                         albumItem.innerHTML = `
@@ -92,7 +85,6 @@
                                         `;
                                         searchContainer.appendChild(albumItem);
                                     } else if (search.type === 'song') {
-                                        // Tampilkan entitas lagu
                                         const songItem = document.createElement('div');
                                         songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                         songItem.innerHTML = `
@@ -112,7 +104,6 @@
                         }
                     }
 
-
                     document.addEventListener('DOMContentLoaded', async () => {
                         const form = document.querySelector('form[name="searchDatas"]');
                         form.addEventListener('submit', async (event) => {
@@ -123,7 +114,5 @@
                 </script>
             </div>
         </div>
-
     </div>
-
 </div>
