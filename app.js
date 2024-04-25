@@ -23,6 +23,7 @@ const { getAllMyArtists } = require('./utils/ArtistInfo')
 const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
 const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong } = require('./utils/checkCredentials')
 const { getAllDatas, formatResults } = require('./utils/searchDatas')
+const { getPlaylistsAndSongs } = require('./utils/playlistServices')
 
 app.get('/', (req, res) => { res.render('index'); });
 
@@ -60,8 +61,7 @@ app.get('/main-artist/:artistId', (req, res) => {
     const userId = req.query.artistId;
     console.log("Artist ID:", artistId);
 
-    if (!artistId) { console.error("Artist ID is undefined"); return res.status(400).send("Artist ID is missing");
-    }
+    if (!artistId) { console.error("Artist ID is undefined"); return res.status(400).send("Artist ID is missing"); }
 
     res.render('mainArtist', {
         userId: userId,
@@ -87,36 +87,30 @@ app.get('/login/:userId?', (req, res) => {
     const userId = req.params.userId;
     console.log("User ID:", userId);
 
-    if (userId) { res.render('login', { userId: userId });
-
+    if (userId) {
+        res.render('login', { userId: userId });
         const { error } = req.query;
         let errorMessage = "";
-        if (error === "account-not-found") { errorMessage = "Email atau password anda mungkin salah, silahkan ulang."; }
+        if (error === "account-not-found") { errorMessage = "Incorrect Email or Password."; }
         res.render('index', { errorMessage });
-    } else {
-        // Tangani permintaan ke /login tanpa parameter userId di sini
-        // res.status(400).send("User ID is missing");
-        res.redirect('/login/login?error=account-not-found');
-    }
+    } else { res.redirect('/login/login?error=account-not-found'); }
 });
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const userResult = await checkCredentials('user', email, password); // Cek apakah data cocok dengan tabel user
-        if (!userResult) { // Jika tidak ada hasil di tabel user, coba mencari di tabel artist
+        const userResult = await checkCredentials('user', email, password);
+        if (!userResult) {
             const artistResult = await checkCredentials('artist', email, password);
             if (artistResult) {
-                req.session.artist_id = artistResult.id; // Menyimpan ID artis dalam session
-                res.redirect(`/main-artist/${artistResult.id}`); return; // Redirect ke halaman main-artist dengan artist ID
+                req.session.artist_id = artistResult.id;
+                res.redirect(`/main-artist/${artistResult.id}`); return;
             }
         } else {
-            req.session.user_id = userResult.id; // Menyimpan ID pengguna dalam session
-            res.redirect(`/main-user/${userResult.id}`); // Redirect ke halaman main-user dengan user ID
-            return;            // Jika hasil ditemukan di tabel user, pengguna merupakan seorang user
+            req.session.user_id = userResult.id;
+            res.redirect(`/main-user/${userResult.id}`);
+            return;
         }
-        
-        // Jika tidak ada hasil dalam kedua tabel, kirimkan pesan kesalahan
         res.redirect('login?error=account-not-found');
     } catch (error) {
         console.error("Error during login:", error);
@@ -126,7 +120,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/signup', (req, res) => {
     const { error } = req.query;
-    let errorMessage = "";      // kondisi untuk menangani kasus error = duplicate
+    let errorMessage = "";
     if (error === "duplicate") { errorMessage = "Email or username already exists.";
     } else if (error === "user") { errorMessage = "Failed to sign up as a user. Please try again.";
     } else if (error === "artist") { errorMessage = "Failed to sign up as an artist. Please try again."; }
@@ -136,13 +130,11 @@ app.get('/signup', (req, res) => {
 app.post('/signup', async (req, res) => {           
     const { name, email, password, registerAs } = req.body;
     try {
-        // Periksa apakah email atau username sudah ada dalam tabel
         const emailExists = await checkIfEmailExists(email);
         const usernameExists = await checkIfUsernameExists(name);
         if (emailExists || usernameExists) {    
             res.redirect('/signup?error=duplicate'); return;
         }
-        // Jika email dan username belum ada, lanjutkan dengan menambahkan data baru ke database
         const tableName = registerAs === "user" ? "user" : "artist";
         const newId = await generateNewID(tableName, registerAs);
         const sql = `INSERT INTO ${tableName} (id, name, email, password) VALUES (?, ?, ?, ?)`;
@@ -153,10 +145,10 @@ app.post('/signup', async (req, res) => {
             } else {
                 console.log(`New ${registerAs} registered:`, newId);
                 if (registerAs === "user") {
-                    req.session.user_id = newId; // Menyimpan ID pengguna dalam session
+                    req.session.user_id = newId
                     res.redirect(`/main-user/${newId}`);
                 } else {
-                    req.session.artist_id = newId; // Menyimpan ID artis dalam session
+                    req.session.artist_id = newId;
                     res.redirect(`/main-artist/${newId}`);
                 }
             }
@@ -170,21 +162,14 @@ app.post('/signup', async (req, res) => {
 app.post('/createSong', async (req, res) => {
     const { artistId, name, genre, duration } = req.body;
 
-    console.log("Request body:", req.body);
-
-    console.log("Arist ID yahaha:", artistId);
-    if (artistId) { console.log("artist id untuk song adalah:", artistId);
-    } else { console.log("artist id untuk song tidak ada:", artistId); }
+    if (artistId) { console.log("artist id for song is : ", artistId);
+    } else { console.log("artist id for song is missing : ", artistId); }
 
     try {
-        const isDuplicate = await checkDuplicateSong(name); // Periksa apakah nama album sudah ada
-
-        if (isDuplicate) {
-            return res.redirect('/createSong?error=duplicate');
-        }
+        const isDuplicate = await checkDuplicateSong(name);
+        if (isDuplicate) { return res.redirect('/createSong?error=duplicate'); }
         
-        const songId = await generateSongID(); // Generate ID untuk album
-
+        const songId = await generateSongID();
         const insertSongQuery = 'INSERT INTO song (id, name, genre, duration) VALUES (?, ?, ?, ?)';
         connection.query(insertSongQuery, [songId, name, genre, duration], async (err, result) => {
             if (err) {
@@ -192,9 +177,7 @@ app.post('/createSong', async (req, res) => {
                 res.redirect('/createSong?error=song');
                 return res.status(500).send("Failed to create song: " + err.message);
             }
-
             const currentArtistId = req.session.artist_id;
-
             const insertArtistAlbumQuery = 'INSERT INTO song_artist_sing (song_id, artist_id) VALUES (?, ?)';
             connection.query(insertArtistAlbumQuery, [songId, currentArtistId], (err, result) => {
                 if (err) {
@@ -213,19 +196,14 @@ app.post('/createSong', async (req, res) => {
 app.post('/createPlaylist', async (req, res) => {
     const { userId, name } = req.body;
 
-    console.log("User ID yahaha:", userId);
-    if (userId) { console.log("user id untuk playlist adalah:", userId);
-    } else { console.log("user id untuk playlist tidak ada:", userId); }
+    if (userId) { console.log("user id for playlist is : ", userId);
+    } else { console.log("user id for playlist is missing : ", userId); }
 
     try {
-        const isDuplicate = await checkDuplicatePlaylist(name); // Periksa apakah judul playlist sudah ada
-
-        if (isDuplicate) {
-            return res.redirect('/createPlaylist?error=duplicate');
-        }
+        const isDuplicate = await checkDuplicatePlaylist(name);
+        if (isDuplicate) { return res.redirect('/createPlaylist?error=duplicate'); }
         
-        const playlistId = await generatePlaylistID();  // Generate ID untuk playlist
-
+        const playlistId = await generatePlaylistID();
         const insertPlaylistQuery = 'INSERT INTO playlist (id, name) VALUES (?, ?)';
         connection.query(insertPlaylistQuery, [playlistId, name], async (err, result) => {
             if (err) {
@@ -233,10 +211,7 @@ app.post('/createPlaylist', async (req, res) => {
                 res.redirect('/createPlaylist?error=playlist');
                 return res.status(500).send("Failed to create playlist: " + err.message);
             }
-
-            const currentUserId = req.session.user_id;  // Dapatkan ID pengguna dari sesi
-
-            // Simpan entri baru dalam tabel user_playlist_create
+            const currentUserId = req.session.user_id;
             const dateCreated = new Date().toISOString().slice(0, 10);
             const insertUserPlaylistQuery = 'INSERT INTO user_playlist_create (user_id, playlist_id, date_created) VALUES (?, ?, ?)';
             connection.query(insertUserPlaylistQuery, [currentUserId, playlistId, dateCreated], (err, result) => {
@@ -244,7 +219,6 @@ app.post('/createPlaylist', async (req, res) => {
                     console.error("Error creating user playlist entry:", err);
                     return res.status(500).send("Failed to create playlist.");
                 }
-                // return res.redirect('/createPlaylist?success=true'); 
                 return res.status(200).send("Playlist created successfully.");
             });
         });
@@ -257,19 +231,15 @@ app.post('/createPlaylist', async (req, res) => {
 app.post('/createAlbum', async (req, res) => {
     const { artistId, name } = req.body;
 
-    console.log("Arist ID yahaha:", artistId);
-    if (artistId) { console.log("user id untuk playlist adalah:", artistId);
-    } else { console.log("user id untuk playlist tidak ada:", artistId); }
+    if (artistId) { console.log("artist id for album is : ", artistId);
+    } else { console.log("artist id for playlist is missing : ", artistId); }
 
     try {
-        const isDuplicate = await checkDuplicateAlbum(name); // Periksa apakah nama album sudah ada
+        const isDuplicate = await checkDuplicateAlbum(name);
 
-        if (isDuplicate) {
-            return res.redirect('/createAlbum?error=duplicate');
-        }
+        if (isDuplicate) { return res.redirect('/createAlbum?error=duplicate'); }
         
-        const albumId = await generateAlbumID(); // Generate ID untuk album
-
+        const albumId = await generateAlbumID();
         const insertAlbumQuery = 'INSERT INTO album (id, name) VALUES (?, ?)';
         connection.query(insertAlbumQuery, [albumId, name], async (err, result) => {
             if (err) {
@@ -279,7 +249,6 @@ app.post('/createAlbum', async (req, res) => {
             }
 
             const currentArtistId = req.session.artist_id;
-
             const date_created = new Date().toISOString().slice(0, 10);
             const insertArtistAlbumQuery = 'INSERT INTO album_artist_has (artist_id, album_id, date_created) VALUES (?, ?, ?)';
             connection.query(insertArtistAlbumQuery, [currentArtistId, albumId, date_created], (err, result) => {
@@ -298,7 +267,7 @@ app.post('/createAlbum', async (req, res) => {
 
 app.get('/albums', async (req, res) => {
     try {
-        const albums = await getAllAlbums(); // Fungsi untuk mengambil semua album dari database
+        const albums = await getAllAlbums();
         res.json({ albums });
     } catch (error) {
         console.error("Error fetching albums:", error);
@@ -309,12 +278,9 @@ app.get('/albums', async (req, res) => {
 app.get('/myalbums', async (req, res) => {
     try {
         const artistId = req.session.artist_id;
-
-        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing in session" }); }
-
+        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
         const albums = await getAllMyAlbums(artistId);
         res.json({ albums });
-
     } catch (error) {
         console.error("Error fetching my albums:", error);
         res.status(500).json({ error: "Internal server error" });
@@ -323,7 +289,7 @@ app.get('/myalbums', async (req, res) => {
 
 app.get('/artists', async (req, res) => {
     try {
-        const artists = await getAllArtists(); // Fungsi untuk mengambil semua artist dari database
+        const artists = await getAllArtists();
         res.json({ artists });
     } catch (error) {
         console.error("Error fetching artists:", error);
@@ -333,7 +299,7 @@ app.get('/artists', async (req, res) => {
 
 app.get('/songs', async (req, res) => {
     try {
-        const songs = await getAllSongs(); // Fungsi untuk mengambil semua lagu dari database
+        const songs = await getAllSongs();
         res.json({ songs });
     } catch (error) {
         console.error("Error fetching songs:", error);
@@ -344,12 +310,9 @@ app.get('/songs', async (req, res) => {
 app.get('/mysongs', async (req, res) => {
     try {
         const artistId = req.session.artist_id;
-
-        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing in session" }); }
-
+        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
         const songs = await getAllMySongs(artistId);
         res.json({ songs });
-        
     } catch (error) {
         console.error("Error fetching my songs:", error);
         res.status(500).json({ error: "Internal server error" });
@@ -358,7 +321,7 @@ app.get('/mysongs', async (req, res) => {
 
 app.get('/users', async (req, res) => {
     try {
-        const users = await getAllUsers(); // Fungsi untuk mengambil semua lagu dari database
+        const users = await getAllUsers();
         res.json({ users });
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -381,21 +344,17 @@ app.get('/myplaylists', async (req, res) => {
         const myplaylists = await getAllMyPlaylists();
         res.json({ myplaylists })
     } catch (error) {
-        console.error("Error fetching playlists:", error);
+        console.error("Error fetching my playlists:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
 
 app.get('/main-user/:userId/profileUser', async (req, res) => {
-    const userId = req.params.userId; // Mendapatkan userId dari parameter URL
+    const userId = req.params.userId;
     console.log("user profile id : ", userId);
-    if (userId === req.session.user_id) { // Membandingkan dengan userId yang disimpan dalam session
-        // Jika userId cocok, lakukan apa yang diperlukan, misalnya, ambil data profil pengguna dari database
-        // dan kemudian tampilkan halaman profil pengguna.
-        res.render('profileUser', { userId: userId }); // Menggunakan userId dalam pemanggilan res.render
+    if (userId === req.session.user_id) {
+        res.render('profileUser', { userId: userId });
     } else {
-        // Jika userId tidak cocok dengan yang disimpan dalam session, mungkin ada upaya akses yang tidak sah,
-        // Anda dapat mengarahkan pengguna kembali ke halaman login atau melakukan tindakan yang sesuai.
         res.redirect('/main-user/' + req.session.user_id + '/profileUser');
     }
 });
@@ -414,10 +373,10 @@ app.get('/myusers', async (req, res) => {
 app.get('/myUserArtistFollows', async (req, res) => {
     const userId = req.query.userId
     try {
-        const userArtistFollows = await getAllMyUserArtistFollow(userId); // Fungsi untuk mengambil semua lagu dari database
+        const userArtistFollows = await getAllMyUserArtistFollow(userId);
         res.json({ userArtistFollows });
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching user artist follow:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -425,10 +384,10 @@ app.get('/myUserArtistFollows', async (req, res) => {
 app.get('/myUserAlbumFollows', async (req, res) => {
     const userId = req.query.userId
     try {
-        const userAlbumFollows = await getAllMyUserAlbumFollow(userId); // Fungsi untuk mengambil semua lagu dari database
+        const userAlbumFollows = await getAllMyUserAlbumFollow(userId);
         res.json({ userAlbumFollows });
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching user album follow:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -436,10 +395,10 @@ app.get('/myUserAlbumFollows', async (req, res) => {
 app.get('/myUserPlaylistCreates', async (req, res) => {
     const userId = req.query.userId
     try {
-        const userPlaylistCreates = await getAllMyUserCreatePlaylist(userId); // Fungsi untuk mengambil semua lagu dari database
+        const userPlaylistCreates = await getAllMyUserCreatePlaylist(userId);
         res.json({ userPlaylistCreates });
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching user playlist create:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -447,10 +406,10 @@ app.get('/myUserPlaylistCreates', async (req, res) => {
 app.get('/myUserPlaylistFollows', async (req, res) => {
     const userId = req.query.userId
     try {
-        const userPlaylistFollows = await getAllMyUserFollowPlaylist(userId); // Fungsi untuk mengambil semua lagu dari database
+        const userPlaylistFollows = await getAllMyUserFollowPlaylist(userId);
         res.json({ userPlaylistFollows });
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching user playlist follow:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -458,24 +417,20 @@ app.get('/myUserPlaylistFollows', async (req, res) => {
 app.get('/myUserSongLikeds', async (req, res) => {
     const userId = req.query.userId
     try {
-        const userSongLikeds = await getAllMyUserLikedSong(userId); // Fungsi untuk mengambil semua lagu dari database
+        const userSongLikeds = await getAllMyUserLikedSong(userId);
         res.json({ userSongLikeds });
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching user liked songs:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
 
 app.get('/main-artist/:artistId/profileArtist', async (req, res) => {
-    const artistId = req.params.artistId; // Mendapatkan userId dari parameter URL
+    const artistId = req.params.artistId;
     console.log("artist profile id : ", artistId);
-    if (artistId === req.session.artist_id) { // Membandingkan dengan userId yang disimpan dalam session
-        // Jika userId cocok, lakukan apa yang diperlukan, misalnya, ambil data profil pengguna dari database
-        // dan kemudian tampilkan halaman profil pengguna.
-        res.render('profileArtist', { artistId: artistId }); // Menggunakan userId dalam pemanggilan res.render
+    if (artistId === req.session.artist_id) {
+        res.render('profileArtist', { artistId: artistId });
     } else {
-        // Jika userId tidak cocok dengan yang disimpan dalam session, mungkin ada upaya akses yang tidak sah,
-        // Anda dapat mengarahkan pengguna kembali ke halaman login atau melakukan tindakan yang sesuai.
         res.redirect('/main-artist/' + req.session.artist_id + '/profileArtist');
     }
 });
@@ -486,7 +441,7 @@ app.get('/myartists', async (req, res) => {
         const artists = await getAllMyArtists(artistId);
         res.json({ artists });
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching artists:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -512,7 +467,6 @@ app.post('/userArtistFollow', async (req, res) => {
     const { artistId } = req.body;
     const userId = req.query.userId;
     try {
-        // Lakukan tindakan yang sesuai dengan permintaan follow (misalnya, masukkan ke dalam tabel)
         const sql = 'INSERT INTO user_artist_follow (user_id, artist_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, artistId], (err, result) => {
@@ -520,8 +474,6 @@ app.post('/userArtistFollow', async (req, res) => {
                 else resolve(result);
             });
         });
-
-        // Kirim respons ke klien
         res.json({ message: 'Follow action processed' });
     } catch (error) {
         console.error('Error:', error);
@@ -533,7 +485,6 @@ app.post('/userPlaylistFollow', async (req, res) => {
     const { playlistId } = req.body;
     const userId = req.query.userId;
     try {
-        // Lakukan tindakan yang sesuai dengan permintaan follow (misalnya, masukkan ke dalam tabel)
         const sql = 'INSERT INTO user_playlist_follow (user_id, playlist_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, playlistId], (err, result) => {
@@ -541,8 +492,6 @@ app.post('/userPlaylistFollow', async (req, res) => {
                 else resolve(result);
             });
         });
-
-        // Kirim respons ke klien
         res.json({ message: 'Follow action processed' });
     } catch (error) {
         console.error('Error:', error);
@@ -554,7 +503,6 @@ app.post('/userSongLiked', async (req, res) => {
     const { songId } = req.body;
     const userId = req.query.userId;
     try {
-        // Lakukan tindakan yang sesuai dengan permintaan follow (misalnya, masukkan ke dalam tabel)
         const sql = 'INSERT INTO user_song_liked (user_id, song_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, songId], (err, result) => {
@@ -562,9 +510,7 @@ app.post('/userSongLiked', async (req, res) => {
                 else resolve(result);
             });
         });
-
-        // Kirim respons ke klien
-        res.json({ message: 'Follow action processed' });
+        res.json({ message: 'Like action processed' });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -573,31 +519,26 @@ app.post('/userSongLiked', async (req, res) => {
 
 app.get('/search', async (req, res) => {
     try {
-        const { keyword } = req.query; // Ambil kata kunci pencarian dari query string
-        const results = await getAllDatas(keyword); // Panggil fungsi pencarian di database
-        const formattedResults = formatResults(results); // Format hasil pencarian dengan menambahkan properti "type"
-        res.json({ results: formattedResults }); // Kirim hasil pencarian ke klien sebagai JSON
+        const { keyword } = req.query;
+        const results = await getAllDatas(keyword);
+        const formattedResults = formatResults(results);
+        res.json({ results: formattedResults });
     } catch (error) {
         console.error("Error searching:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
 
-// Endpoint untuk mencari ID playlist berdasarkan namanya
 app.get('/findPlaylistId', async (req, res) => {
     try {
         const { playlistNameDua } = req.query;
         const playlistIdQuery = 'SELECT id FROM playlist WHERE name = ?';
         connection.query(playlistIdQuery, [playlistNameDua], (error, results) => {
-            if (error) {
-                throw error;
-            }
+            if (error) { throw error; }
             if (results.length > 0) {
                 const playlistId = results[0].id;
                 res.json({ id: playlistId });
-            } else {
-                res.status(404).json({ error: 'Playlist not found' });
-            }
+            } else { res.status(404).json({ error: 'Playlist not found' }); }
         });
     } catch (error) {
         console.error('Error finding playlist ID:', error);
@@ -610,15 +551,11 @@ app.get('/findAlbumId', async (req, res) => {
         const { albumNameDua } = req.query;
         const albumIdQuery = 'SELECT id FROM album WHERE name = ?';
         connection.query(albumIdQuery, [albumNameDua], (error, results) => {
-            if (error) {
-                throw error;
-            }
+            if (error) { throw error; }
             if (results.length > 0) {
                 const albumId = results[0].id;
                 res.json({ id: albumId });
-            } else {
-                res.status(404).json({ error: 'Album not found' })
-            }
+            } else { res.status(404).json({ error: 'Album not found' }) }
         });
     } catch (error) {
         console.error('Error adding album ID:', error);
@@ -626,21 +563,16 @@ app.get('/findAlbumId', async (req, res) => {
     }
 })
 
-// Endpoint untuk mencari ID lagu berdasarkan namanya
 app.get('/findSongId', async (req, res) => {
     try {
         const { songName } = req.query;
         const songIdQuery = 'SELECT id FROM song WHERE name = ?';
         connection.query(songIdQuery, [songName], (error, results) => {
-            if (error) {
-                throw error;
-            }
+            if (error) { throw error; }
             if (results.length > 0) {
                 const songId = results[0].id;
                 res.json({ id: songId });
-            } else {
-                res.status(404).json({ error: 'Song not found' });
-            }
+            } else { res.status(404).json({ error: 'Song not found' }); }
         });
     } catch (error) {
         console.error('Error finding song ID:', error);
@@ -648,21 +580,16 @@ app.get('/findSongId', async (req, res) => {
     }
 });
 
-// Endpoint untuk mencari ID lagu berdasarkan namanya
 app.get('/findDuaSongId', async (req, res) => {
     try {
         const { songNameDua } = req.query;
         const songIdQuery = 'SELECT id FROM song WHERE name = ?';
         connection.query(songIdQuery, [songNameDua], (error, results) => {
-            if (error) {
-                throw error;
-            }
+            if (error) { throw error; }
             if (results.length > 0) {
                 const songId = results[0].id;
                 res.json({ id: songId });
-            } else {
-                res.status(404).json({ error: 'Song not found' });
-            }
+            } else { res.status(404).json({ error: 'Song not found' }); }
         });
     } catch (error) {
         console.error('Error finding song ID:', error);
@@ -670,15 +597,12 @@ app.get('/findDuaSongId', async (req, res) => {
     }
 });
 
-// Endpoint untuk menambahkan lagu ke dalam playlist
 app.post('/addSongToPlaylist', async (req, res) => {
     try {
         const { playlistId, songId } = req.body;
         const insertQuery = 'INSERT INTO song_playlist_contains (playlist_id, song_id) VALUES (?, ?)';
         connection.query(insertQuery, [playlistId, songId], (error, results) => {
-            if (error) {
-                throw error;
-            }
+            if (error) { throw error; }
             res.sendStatus(200)
         });
     } catch (error) {
@@ -690,41 +614,22 @@ app.post('/addSongToPlaylist', async (req, res) => {
 app.post('/addSongToAlbum', async (req, res) => {
     try {
         const { albumId, songId, artistId } = req.body;
-        // const artistId = req.query.artistId;
-        // const artistId = req.params.artistId;
-        // const artistId = req.session.artistId;
 
-        console.log("albumid woy : ", albumId);
-        console.log("sogid woy : ", songId);
-        console.log("artistid woy : ", artistId);
-
-        // Periksa apakah artis terkait dengan lagu yang ingin ditambahkan
         const artistSongQuery = 'SELECT * FROM song_artist_sing WHERE artist_id = ? AND song_id = ?';
         connection.query(artistSongQuery, [artistId, songId], (error1, songResults) => {
+            if (error1) { throw error1; }
 
-            if (error1) {
-                throw error1;
-            }
-
-            // Periksa apakah artis terkait dengan album yang ingin ditambahkan
             const artistAlbumQuery = 'SELECT * FROM album_artist_has WHERE artist_id = ? AND album_id = ?';
             connection.query(artistAlbumQuery, [artistId, albumId], (error2, albumResults) => {
-                if (error2) {
-                    throw error2;
-                }
+                if (error2) { throw error2; }
 
-                // Jika artis terkait dengan lagu dan album, tambahkan lagu ke album
                 if (songResults.length > 0 && albumResults.length > 0) {
                     const insertQuery = 'INSERT INTO song_album_contains (album_id, song_id) VALUES (?, ?)';
                     connection.query(insertQuery, [albumId, songId], (error3, results) => {
-                        if (error3) {
-                            throw error3;
-                        }
+                        if (error3) { throw error3; }
                         res.sendStatus(200);
                     });
-                } else {
-                    res.status(403).json({ error: 'Artist is not authorized to add this song to the album' });
-                }
+                } else { res.status(403).json({ error: 'Artist is not authorized to add this song to the album' }); }
             });
         });
     } catch (error) {
@@ -733,5 +638,91 @@ app.post('/addSongToAlbum', async (req, res) => {
     }
 });
 
-app.use('/', (req, res) => { res.status(404).render('404')});
+app.get('/songPlaylist', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        console.log('woi apasih : ', userId)
+        const playlists = await getAllPlaylists2(userId);
+        const playlistsWithSongs = await Promise.all(playlists.map(async (playlist) => {
+            const songs = await getSongsForPlaylist(playlist.id);
+            return { ...playlist, songs };
+        }));
+        res.json({ playlists: playlistsWithSongs });
+    } catch (error) {
+        console.error("Error fetching playlists:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/songAlbum', async (req, res) => {
+    try {
+        const artistId = req.query.artistId;
+        console.log("apasih kamu ini", artistId);
+        const albums = await getAllAlbums2(artistId);
+        const albumsWithSongs = await Promise.all(albums.map(async (album) => {
+            const songs = await getSongsForAlbum(album.id)
+            return { ...album, songs };
+        }));
+        res.json({ albums: albumsWithSongs });
+    } catch (error) {
+        console.error("Error fetching albums:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+async function getAllPlaylists2(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT playlist.id, playlist.name, playlist.num_song, playlist.duration, user_playlist_create.date_created FROM playlist INNER JOIN user_playlist_create ON playlist.id = user_playlist_create.playlist_id WHERE user_playlist_create.user_id = ?';
+        connection.query(sql, [userId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+async function getSongsForPlaylist(playlistId) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT song.id, song.name AS title, song.genre, song.duration, song.listeners FROM song INNER JOIN song_playlist_contains ON song.id = song_playlist_contains.song_id WHERE song_playlist_contains.playlist_id = ?';
+        connection.query(sql, [playlistId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+async function getAllAlbums2(artistId) {
+    return new Promise((resolve, reject) => {
+        // Lakukan query database untuk mengambil semua album berdasarkan userId
+        const sql = 'SELECT album.id, album.name, album.num_song, album.duration, album_artist_has.date_created FROM album INNER JOIN album_artist_has ON album.id = album_artist_has.album_id WHERE album_artist_has.artist_id = ?';
+        connection.query(sql, [artistId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+async function getSongsForAlbum(albumId) {
+    return new Promise((resolve, reject) => {
+        // Lakukan query database untuk mengambil semua lagu untuk album tertentu
+        const sql = 'SELECT song.id, song.name AS title, song.genre, song.duration, song.listeners FROM song INNER JOIN song_album_contains ON song.id = song_album_contains.song_id WHERE song_album_contains.album_id = ?';
+        connection.query(sql, [albumId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+app.use('/', (req, res) => { res.status(404).render('./partials/404')});
 app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
