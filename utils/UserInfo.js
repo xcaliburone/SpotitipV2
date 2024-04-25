@@ -15,7 +15,8 @@ async function getAllMyUsers(userId) {
 async function getAllMyUserArtistFollow(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT a.name FROM user_artist_follow uaf JOIN artist a ON uaf.artist_id = a.id
+            SELECT a.name FROM user_artist_follow uaf
+            JOIN artist a ON uaf.artist_id = a.id
             WHERE uaf.user_id = ?
         `;
         connection.query(sql, [userId], (err, results) => {
@@ -28,7 +29,8 @@ async function getAllMyUserArtistFollow(userId) {
 async function getAllMyUserAlbumFollow(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT a.name FROM user_album_follow uaf JOIN album a ON uaf.album_id = a.id
+            SELECT a.name FROM user_album_follow uaf
+            JOIN album a ON uaf.album_id = a.id
             WHERE uaf.user_id = ?
         `;
         connection.query(sql, [userId], (err, results) => {
