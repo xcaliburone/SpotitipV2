@@ -18,12 +18,17 @@ app.use(express.static('public'));
 
 const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
 const { getAllMyAlbums, getAllMySongs, getAllMyPlaylists } = require('./utils/callTables2')
-const { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist, getAllMyUserFollowPlaylist, getAllMyUserLikedSong } = require('./utils/UserInfo')
+const {
+    getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist,
+    getAllMyUserFollowPlaylist, getAllMyUserLikedSong
+} = require('./utils/UserInfo')
 const { getAllMyArtists } = require('./utils/ArtistInfo')
 const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
-const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong } = require('./utils/checkCredentials')
+const {
+    checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong
+} = require('./utils/checkDupeEntity')
 const { getAllDatas, formatResults } = require('./utils/searchDatas')
-const { getPlaylistsAndSongs } = require('./utils/playlistServices')
+const { getAllPlaylists2, getSongsForPlaylist, getAllAlbums2, getSongsForAlbum } = require('./utils/songContains')
 
 app.get('/', (req, res) => { res.render('index'); });
 
@@ -111,7 +116,7 @@ app.post('/login', async (req, res) => {
             res.redirect(`/main-user/${userResult.id}`);
             return;
         }
-        res.redirect('login?error=account-not-found');
+        res.redirect('/login/login?error=account-not-found');
     } catch (error) {
         console.error("Error during login:", error);
         res.render('index', { errorMessage });
@@ -137,6 +142,7 @@ app.post('/signup', async (req, res) => {
         }
         const tableName = registerAs === "user" ? "user" : "artist";
         const newId = await generateNewID(tableName, registerAs);
+
         const sql = `INSERT INTO ${tableName} (id, name, email, password) VALUES (?, ?, ?, ?)`;
         connection.query(sql, [newId, name, email, password], (err, result) => {
             if (err) {
@@ -160,7 +166,8 @@ app.post('/signup', async (req, res) => {
 });
 
 app.post('/createSong', async (req, res) => {
-    const { artistId, name, genre, duration } = req.body;
+    const { name, genre, duration } = req.body;
+    const artistId = req.query.artistId;
 
     if (artistId) { console.log("artist id for song is : ", artistId);
     } else { console.log("artist id for song is missing : ", artistId); }
@@ -177,6 +184,7 @@ app.post('/createSong', async (req, res) => {
                 res.redirect('/createSong?error=song');
                 return res.status(500).send("Failed to create song: " + err.message);
             }
+
             const currentArtistId = req.session.artist_id;
             const insertArtistAlbumQuery = 'INSERT INTO song_artist_sing (song_id, artist_id) VALUES (?, ?)';
             connection.query(insertArtistAlbumQuery, [songId, currentArtistId], (err, result) => {
@@ -194,7 +202,8 @@ app.post('/createSong', async (req, res) => {
 });
 
 app.post('/createPlaylist', async (req, res) => {
-    const { userId, name } = req.body;
+    const { name } = req.body;
+    const userId = req.query.userId;
 
     if (userId) { console.log("user id for playlist is : ", userId);
     } else { console.log("user id for playlist is missing : ", userId); }
@@ -229,7 +238,8 @@ app.post('/createPlaylist', async (req, res) => {
 });
 
 app.post('/createAlbum', async (req, res) => {
-    const { artistId, name } = req.body;
+    const { name } = req.body;
+    const artistId = req.query.artistId;
 
     if (artistId) { console.log("artist id for album is : ", artistId);
     } else { console.log("artist id for playlist is missing : ", artistId); }
@@ -277,7 +287,7 @@ app.get('/albums', async (req, res) => {
 
 app.get('/myalbums', async (req, res) => {
     try {
-        const artistId = req.session.artist_id;
+        const artistId = req.query.artistId;
         if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
         const albums = await getAllMyAlbums(artistId);
         res.json({ albums });
@@ -309,7 +319,7 @@ app.get('/songs', async (req, res) => {
 
 app.get('/mysongs', async (req, res) => {
     try {
-        const artistId = req.session.artist_id;
+        const artistId = req.query.artistId;
         if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
         const songs = await getAllMySongs(artistId);
         res.json({ songs });
@@ -546,45 +556,11 @@ app.get('/findPlaylistId', async (req, res) => {
     }
 });
 
-app.get('/findAlbumId', async (req, res) => {
-    try {
-        const { albumNameDua } = req.query;
-        const albumIdQuery = 'SELECT id FROM album WHERE name = ?';
-        connection.query(albumIdQuery, [albumNameDua], (error, results) => {
-            if (error) { throw error; }
-            if (results.length > 0) {
-                const albumId = results[0].id;
-                res.json({ id: albumId });
-            } else { res.status(404).json({ error: 'Album not found' }) }
-        });
-    } catch (error) {
-        console.error('Error adding album ID:', error);
-        res.status(500).json({ error: 'Internal server error' })
-    }
-})
-
 app.get('/findSongId', async (req, res) => {
     try {
         const { songName } = req.query;
         const songIdQuery = 'SELECT id FROM song WHERE name = ?';
         connection.query(songIdQuery, [songName], (error, results) => {
-            if (error) { throw error; }
-            if (results.length > 0) {
-                const songId = results[0].id;
-                res.json({ id: songId });
-            } else { res.status(404).json({ error: 'Song not found' }); }
-        });
-    } catch (error) {
-        console.error('Error finding song ID:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.get('/findDuaSongId', async (req, res) => {
-    try {
-        const { songNameDua } = req.query;
-        const songIdQuery = 'SELECT id FROM song WHERE name = ?';
-        connection.query(songIdQuery, [songNameDua], (error, results) => {
             if (error) { throw error; }
             if (results.length > 0) {
                 const songId = results[0].id;
@@ -607,6 +583,40 @@ app.post('/addSongToPlaylist', async (req, res) => {
         });
     } catch (error) {
         console.error('Error adding song to playlist:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/findAlbumId', async (req, res) => {
+    try {
+        const { albumNameDua } = req.query;
+        const albumIdQuery = 'SELECT id FROM album WHERE name = ?';
+        connection.query(albumIdQuery, [albumNameDua], (error, results) => {
+            if (error) { throw error; }
+            if (results.length > 0) {
+                const albumId = results[0].id;
+                res.json({ id: albumId });
+            } else { res.status(404).json({ error: 'Album not found' }) }
+        });
+    } catch (error) {
+        console.error('Error adding album ID:', error);
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
+
+app.get('/findDuaSongId', async (req, res) => {
+    try {
+        const { songNameDua } = req.query;
+        const songIdQuery = 'SELECT id FROM song WHERE name = ?';
+        connection.query(songIdQuery, [songNameDua], (error, results) => {
+            if (error) { throw error; }
+            if (results.length > 0) {
+                const songId = results[0].id;
+                res.json({ id: songId });
+            } else { res.status(404).json({ error: 'Song not found' }); }
+        });
+    } catch (error) {
+        console.error('Error finding song ID:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -669,60 +679,6 @@ app.get('/songAlbum', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 })
-
-async function getAllPlaylists2(userId) {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT playlist.id, playlist.name, playlist.num_song, playlist.duration, user_playlist_create.date_created FROM playlist INNER JOIN user_playlist_create ON playlist.id = user_playlist_create.playlist_id WHERE user_playlist_create.user_id = ?';
-        connection.query(sql, [userId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-}
-
-async function getSongsForPlaylist(playlistId) {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT song.id, song.name AS title, song.genre, song.duration, song.listeners FROM song INNER JOIN song_playlist_contains ON song.id = song_playlist_contains.song_id WHERE song_playlist_contains.playlist_id = ?';
-        connection.query(sql, [playlistId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-}
-
-async function getAllAlbums2(artistId) {
-    return new Promise((resolve, reject) => {
-        // Lakukan query database untuk mengambil semua album berdasarkan userId
-        const sql = 'SELECT album.id, album.name, album.num_song, album.duration, album_artist_has.date_created FROM album INNER JOIN album_artist_has ON album.id = album_artist_has.album_id WHERE album_artist_has.artist_id = ?';
-        connection.query(sql, [artistId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-}
-
-async function getSongsForAlbum(albumId) {
-    return new Promise((resolve, reject) => {
-        // Lakukan query database untuk mengambil semua lagu untuk album tertentu
-        const sql = 'SELECT song.id, song.name AS title, song.genre, song.duration, song.listeners FROM song INNER JOIN song_album_contains ON song.id = song_album_contains.song_id WHERE song_album_contains.album_id = ?';
-        connection.query(sql, [albumId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-}
 
 app.use('/', (req, res) => { res.status(404).render('./partials/404')});
 app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
