@@ -1,0 +1,22 @@
+<div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
+
+    <div class="header flex justify-between">
+        <%- include('./contentMain/main-buttonleft-user') %>
+        <%- include('./contentMain/main-buttonleft-artist') %>
+    </div>
+
+    <div class="main flex gap-y-9 <%= onlyUserContent %>">
+
+        <%- include('./contentMain/newest-song') %>    
+        
+        <%- include('./contentMain/artist-popular') %>    
+        
+        <%- include('./contentMain/album-popular') %>
+        
+        <%- include('./contentMain/playlist-popular') %>
+        
+        <%- include('./contentMain/newest-user') %>
+
+    </div>
+
+</div>
