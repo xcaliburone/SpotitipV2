@@ -1,19 +1,42 @@
 const mysql = require('mysql');
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 
+// async function getAllPlaylists() {
+//     return new Promise((resolve, reject) => {
+//         const sql = 'SELECT id, name FROM playlist';
+//         connection.query(sql, (err, results) => {
+//             if (err) { reject(err);
+//             } else { resolve(results); }
+//         });
+//     });
+// }
+
 async function getAllPlaylists() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id, name FROM playlist';
+        const sql = `
+            SELECT p.id, p.name, u.name AS creator_name
+            FROM playlist p
+            JOIN user_playlist_create upc ON p.id = upc.playlist_id
+            JOIN user u ON u.id = upc.user_id
+        `;
         connection.query(sql, (err, results) => {
-            if (err) { reject(err);
-            } else { resolve(results); }
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
         });
     });
 }
 
 async function getAllAlbums() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id, name FROM album';
+        const sql = `
+            SELECT a.id, a.name, artist.name AS artistName
+            FROM album_artist_has aa
+            JOIN album a ON aa.album_id = a.id
+            JOIN artist ON aa.artist_id = artist.id
+        `;
         connection.query(sql, (err, results) => {
             if (err) { reject(err);
             } else { resolve(results); }
@@ -33,11 +56,15 @@ async function getAllArtists() {
 
 async function getAllSongs() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id, name FROM song';
+        const sql = `
+            SELECT s.id, s.name, artist.name AS artistName
+            FROM song_artist_sing sa
+            JOIN song s ON sa.song_id = s.id
+            JOIN artist ON sa.artist_id = artist.id
+        `;
         connection.query(sql, (err, results) => {
             if (err) { reject(err);
-            } else { resolve(results);
-            }
+            } else { resolve(results); }
         });
     });
 }
