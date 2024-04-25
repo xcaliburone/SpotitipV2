@@ -1,0 +1,22 @@
+<header class="flex flex-col gap-y-8 mb-1 w-full">
+    <div class="button-container flex justify-between">
+        <div class="button-up md:flex gap-x-2 items-center">
+            <button disabled class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex items-center justify-center hover:cursor-not-allowed">
+                &lt;
+            </button>
+            <button disabled class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[42px] flex justify-center items-center hover:cursor-not-allowed">
+                &gt;
+            </button>
+        </div>
+
+        <div class="button-right md:flex gap-x-2 items-center">
+            <!-- <a href="/main-artist/:artistId/profile-artist"> -->
+            <a href="/main-artist/<%= artistId %>/profileArtist">
+                <button class="rounded-full bg-neutral-950 hover:opacity-70 transition text-neutral-300 h-[42px] w-[100px] flex justify-center items-center hover:cursor-pointer">
+                    <p>Profile</p>
+                </button>
+            </a>
+        </div>                    
+    </div>
+    <h1 class="mainHeadArtistTitle font-bold text-white">Welcome back!</h1>
+</header>
