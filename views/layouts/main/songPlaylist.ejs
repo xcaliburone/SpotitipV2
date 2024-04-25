@@ -18,7 +18,7 @@
 
                 if (playlists.length === 0) {
                     const noPlaylistsMessage = document.createElement('div');
-                    noPlaylistsMessage.innerHTML = `<p>No playlists available</p>`;
+                    noPlaylistsMessage.innerHTML = `<h1>No playlists available</h1>`;
                     playlistContainer.appendChild(noPlaylistsMessage);
                 } else {
                     playlists.forEach((playlist) => {
@@ -48,7 +48,6 @@
                         `;
                         repeaterDiv.appendChild(playlistSection);
 
-                        // Tambahkan song section
                         const songSection = document.createElement('div');
                         songSection.classList.add('songSection');
                         const table = document.createElement('table');
@@ -63,7 +62,6 @@
                         `;
                         table.appendChild(titleRow);
 
-                        // Tambahkan contentRow untuk setiap lagu
                         playlist.songs.forEach((song, index) => {
                             const contentRow = document.createElement('tr');
                             contentRow.classList.add('contentRow');
@@ -82,7 +80,6 @@
                         songSection.appendChild(table);
                         repeaterDiv.appendChild(songSection);
 
-                        // Tambahkan div repeater ke playlistContainer
                         playlistContainer.appendChild(repeaterDiv);
                     });
                 }
