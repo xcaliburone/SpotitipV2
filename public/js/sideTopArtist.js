@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         gotoSearchButton.addEventListener('click', () => {
-            // Lakukan sesuatu saat tombol ditekan
+            // rawrr
         });
 
         albumsButton.addEventListener('click', () => {
