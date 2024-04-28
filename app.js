@@ -359,13 +359,14 @@ app.get('/myplaylists', async (req, res) => {
     }
 });
 
-app.get('/main-user/:userId/profileUser', async (req, res) => {
+app.get('/profileUser/:userId', async (req, res) => {
     const userId = req.params.userId;
-    console.log("user profile id : ", userId);
-    if (userId === req.session.user_id) {
+    console.log("User profile id:", userId);
+
+    if (userId) {
         res.render('profileUser', { userId: userId });
     } else {
-        res.redirect('/main-user/' + req.session.user_id + '/profileUser');
+        res.status(400).send('Invalid userId');
     }
 });
 
@@ -435,13 +436,14 @@ app.get('/myUserSongLikeds', async (req, res) => {
     }
 });
 
-app.get('/main-artist/:artistId/profileArtist', async (req, res) => {
+app.get('/profileArtist/:artistId', async (req, res) => {
     const artistId = req.params.artistId;
-    console.log("artist profile id : ", artistId);
-    if (artistId === req.session.artist_id) {
+    console.log("Artist profile id:", artistId);
+
+    if (artistId) {
         res.render('profileArtist', { artistId: artistId });
     } else {
-        res.redirect('/main-artist/' + req.session.artist_id + '/profileArtist');
+        res.status(400).send('Invalid artistId');
     }
 });
 
