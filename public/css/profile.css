@@ -14,14 +14,14 @@ main::-webkit-scrollbar {
 }
 
 main {
-    height: 850px !important;
+    height: 902px !important;
     overflow-y: scroll;
     overflow-x: hidden;
 }
 
 .main {
     column-gap: 16px !important;
-    row-gap: 25px !important;
+    /* row-gap: 10px !important; */
     flex-wrap: wrap;
 }
 
