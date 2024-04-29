@@ -1,16 +1,6 @@
 const mysql = require('mysql');
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 
-// async function getAllPlaylists() {
-//     return new Promise((resolve, reject) => {
-//         const sql = 'SELECT id, name FROM playlist';
-//         connection.query(sql, (err, results) => {
-//             if (err) { reject(err);
-//             } else { resolve(results); }
-//         });
-//     });
-// }
-
 async function getAllPlaylists() {
     return new Promise((resolve, reject) => {
         const sql = `
