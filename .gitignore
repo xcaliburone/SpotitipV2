@@ -1,6 +1,6 @@
 .vercel
-.backup
-.controllers
-.models
-.routes
-.src
+/backup
+/controllers
+/models
+/routes
+/src
