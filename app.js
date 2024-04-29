@@ -7,8 +7,22 @@ const bodyParser = require('body-parser');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
-connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
+const dotenv = require('dotenv');
+dotenv.config();
+
+const connection = mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+}); connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
+
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'spotitip'
+// }); connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
 
 app.use(session({ secret: 'secret-key', resave: false, saveUninitialized: false }));
 app.set('view engine', 'ejs');
@@ -29,6 +43,8 @@ const {
 } = require('./utils/checkDupeEntity')
 const { getAllDatas, formatResults } = require('./utils/searchDatas')
 const { getAllPlaylists2, getSongsForPlaylist, getAllAlbums2, getSongsForAlbum } = require('./utils/songContains')
+const { countSongsInPlaylist, updateNumSongsInPlaylist, countSongsInAlbum, updateNumSongsInAlbum } = require('./utils/colsUpdate')
+const { checkIfUserAlbumFollow, checkIfUserArtistFollow, checkIfUserPlaylistFollow, checkIfUserLikedSong } = require('./utils/checkDupeRelation')
 
 app.get('/', (req, res) => { res.render('index'); });
 
@@ -68,24 +84,26 @@ app.get('/main-artist/:artistId', (req, res) => {
 
     if (!artistId) { console.error("Artist ID is undefined"); return res.status(400).send("Artist ID is missing"); }
 
-    res.render('mainArtist', {
-        userId: userId,
-        artistId: artistId,
-        modalName: 'album',
-        modalForm: 'createAlbumForm',
-        foridnameTitleModal: 'albumName',
-        modalPlaceholderTitle: 'Album title',
-        foridnameDescModal: 'albumDescription',
-        modalPlaceholderDesc: 'Album description',
-        classModalButton: 'addAlbum',
-        modalButton: 'Add Album',
-        artistHide: 'hidden',
-        userHide: '',
-        artistButtonleft: '',
-        userButtonleft: 'hidden',
-        onlyArtistContent: '',
-        onlyUserContent: 'hidden',
-    });
+    try {
+        res.render('mainArtist', {
+            userId: userId,
+            artistId: artistId,
+            modalName: 'album',
+            modalForm: 'createAlbumForm',
+            foridnameTitleModal: 'albumName',
+            modalPlaceholderTitle: 'Album title',
+            foridnameDescModal: 'albumDescription',
+            modalPlaceholderDesc: 'Album description',
+            classModalButton: 'addAlbum',
+            modalButton: 'Add Album',
+            artistHide: 'hidden',
+            userHide: '',
+            artistButtonleft: '',
+            userButtonleft: 'hidden',
+            onlyArtistContent: '',
+            onlyUserContent: 'hidden',
+        });
+    } catch (error) { console.error("Error rendering data:", error); res.redirect('/main-artist'); }
 });
 
 app.get('/login/:userId?', (req, res) => {
@@ -132,12 +150,12 @@ app.get('/signup', (req, res) => {
     res.render('signup', { errorMessage });
 });
 
-app.post('/signup', async (req, res) => {           
+app.post('/signup', async (req, res) => {
     const { name, email, password, registerAs } = req.body;
     try {
         const emailExists = await checkIfEmailExists(email);
         const usernameExists = await checkIfUsernameExists(name);
-        if (emailExists || usernameExists) {    
+        if (emailExists || usernameExists) {
             res.redirect('/signup?error=duplicate'); return;
         }
         const tableName = registerAs === "user" ? "user" : "artist";
@@ -185,9 +203,9 @@ app.post('/createSong', async (req, res) => {
                 return res.status(500).send("Failed to create song: " + err.message);
             }
 
-            const currentArtistId = req.session.artist_id;
+            // const currentArtistId = req.session.artist_id;
             const insertArtistAlbumQuery = 'INSERT INTO song_artist_sing (song_id, artist_id) VALUES (?, ?)';
-            connection.query(insertArtistAlbumQuery, [songId, currentArtistId], (err, result) => {
+            connection.query(insertArtistAlbumQuery, [songId, artistId], (err, result) => {
                 if (err) {
                     console.error("Error creating artist song entry:", err);
                     return res.status(500).send("Failed to create song.");
@@ -258,10 +276,10 @@ app.post('/createAlbum', async (req, res) => {
                 return res.status(500).send("Failed to create album: " + err.message);
             }
 
-            const currentArtistId = req.session.artist_id;
+            // const currentArtistId = req.session.artist_id;
             const date_created = new Date().toISOString().slice(0, 10);
             const insertArtistAlbumQuery = 'INSERT INTO album_artist_has (artist_id, album_id, date_created) VALUES (?, ?, ?)';
-            connection.query(insertArtistAlbumQuery, [currentArtistId, albumId, date_created], (err, result) => {
+            connection.query(insertArtistAlbumQuery, [artistId, albumId, date_created], (err, result) => {
                 if (err) {
                     console.error("Error creating artist album entry:", err);
                     return res.status(500).send("Failed to create album.");
@@ -281,7 +299,7 @@ app.get('/albums', async (req, res) => {
         res.json({ albums });
     } catch (error) {
         console.error("Error fetching albums:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -293,7 +311,7 @@ app.get('/myalbums', async (req, res) => {
         res.json({ albums });
     } catch (error) {
         console.error("Error fetching my albums:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -303,7 +321,7 @@ app.get('/artists', async (req, res) => {
         res.json({ artists });
     } catch (error) {
         console.error("Error fetching artists:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -313,7 +331,7 @@ app.get('/songs', async (req, res) => {
         res.json({ songs });
     } catch (error) {
         console.error("Error fetching songs:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -325,7 +343,7 @@ app.get('/mysongs', async (req, res) => {
         res.json({ songs });
     } catch (error) {
         console.error("Error fetching my songs:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -335,7 +353,7 @@ app.get('/users', async (req, res) => {
         res.json({ users });
     } catch (error) {
         console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -345,7 +363,7 @@ app.get('/playlists', async (req, res) => {
         res.json({ playlists })
     } catch (error) {
         console.error("Error fetching playlists:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -355,7 +373,7 @@ app.get('/myplaylists', async (req, res) => {
         res.json({ myplaylists })
     } catch (error) {
         console.error("Error fetching my playlists:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -388,7 +406,7 @@ app.get('/myUserArtistFollows', async (req, res) => {
         res.json({ userArtistFollows });
     } catch (error) {
         console.error("Error fetching user artist follow:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -399,7 +417,7 @@ app.get('/myUserAlbumFollows', async (req, res) => {
         res.json({ userAlbumFollows });
     } catch (error) {
         console.error("Error fetching user album follow:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -410,7 +428,7 @@ app.get('/myUserPlaylistCreates', async (req, res) => {
         res.json({ userPlaylistCreates });
     } catch (error) {
         console.error("Error fetching user playlist create:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -421,7 +439,7 @@ app.get('/myUserPlaylistFollows', async (req, res) => {
         res.json({ userPlaylistFollows });
     } catch (error) {
         console.error("Error fetching user playlist follow:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -432,7 +450,7 @@ app.get('/myUserSongLikeds', async (req, res) => {
         res.json({ userSongLikeds });
     } catch (error) {
         console.error("Error fetching user liked songs:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -454,78 +472,135 @@ app.get('/myartists', async (req, res) => {
         res.json({ artists });
     } catch (error) {
         console.error("Error fetching artists:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
 app.post('/userAlbumFollow', async (req, res) => {
     const { albumId } = req.body;
     const userId = req.query.userId;
+    
     try {
+        const isAlreadyFollowing = await checkIfUserAlbumFollow(userId, albumId);
+        if (isAlreadyFollowing) {
+            return res.status(400).json({ error: 'You are already following this album' });
+        }
+
         const sql = 'INSERT INTO user_album_follow (user_id, album_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, albumId], (err, result) => {
-                if (err) reject(err); else resolve(result);
+                if (err) {
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        return reject(new Error('Duplicate entry'));
+                    }
+                    return reject(err);
+                }
+                resolve(result);
             });
         });
-        res.json({ message: 'Follow action processed' });
+        res.status(200).json({ message: 'You are now following this album' });
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error following album:', error);
+        if (error.message === 'Duplicate entry') {
+            return res.status(400).json({ error: 'You are already following this album' });
+        }
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
 app.post('/userArtistFollow', async (req, res) => {
     const { artistId } = req.body;
     const userId = req.query.userId;
+
     try {
+        const isAlreadyFollowing = await checkIfUserArtistFollow(userId, artistId);
+        if (isAlreadyFollowing) {
+            return res.status(400).json({ error: 'You are already following this artist' });
+        }
+
         const sql = 'INSERT INTO user_artist_follow (user_id, artist_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, artistId], (err, result) => {
-                if (err) reject(err);
-                else resolve(result);
+                if (err) {
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        return reject(new Error('Duplicate entry'));
+                    }
+                    return reject(err);
+                }
+                resolve(result);
             });
         });
-        res.json({ message: 'Follow action processed' });
+        return res.status(200).send("You are now following this artist")
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error following artist:', error);
+        if (error.message === 'Duplicate entry') {
+            return res.status(500).send("You are already following this artist");
+        }
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
 app.post('/userPlaylistFollow', async (req, res) => {
     const { playlistId } = req.body;
     const userId = req.query.userId;
+
     try {
+        const isAlreadyFollowing = await checkIfUserPlaylistFollow(userId, playlistId);
+        if (isAlreadyFollowing) {
+            return res.status(400).json({ error: 'You are already following this playlist' });
+        }
+
         const sql = 'INSERT INTO user_playlist_follow (user_id, playlist_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, playlistId], (err, result) => {
-                if (err) reject(err);
-                else resolve(result);
+                if (err) {
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        return reject(new Error('Duplicate entry'));
+                    }
+                    return reject(err);
+                }
+                resolve(result);
             });
         });
-        res.json({ message: 'Follow action processed' });
+        res.status(200).json({ message: 'You are now following this playlist' });
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error following playlist:', error);
+        if (error.message === 'Duplicate entry') {
+            return res.status(400).json({ error: 'You are already following this playlist' });
+        }
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
 app.post('/userSongLiked', async (req, res) => {
     const { songId } = req.body;
     const userId = req.query.userId;
+
     try {
+        const isAlreadyLiked = await checkIfUserLikedSong(userId, songId);
+        if (isAlreadyLiked) {
+            return res.status(400).json({ error: 'You have already liked this song' });
+        }
+
         const sql = 'INSERT INTO user_song_liked (user_id, song_id) VALUES (?, ?)';
         await new Promise((resolve, reject) => {
             connection.query(sql, [userId, songId], (err, result) => {
-                if (err) reject(err);
-                else resolve(result);
+                if (err) {
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        return reject(new Error('Duplicate entry'));
+                    }
+                    return reject(err);
+                }
+                resolve(result);
             });
         });
-        res.json({ message: 'Like action processed' });
+        res.status(200).json({ message: 'You have liked this song' });
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error liking song:', error);
+        if (error.message === 'Duplicate entry') {
+            return res.status(400).json({ error: 'You have already liked this song' });
+        }
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -537,7 +612,7 @@ app.get('/search', async (req, res) => {
         res.json({ results: formattedResults });
     } catch (error) {
         console.error("Error searching:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -554,7 +629,7 @@ app.get('/findPlaylistId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error finding playlist ID:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -571,7 +646,7 @@ app.get('/findSongId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error finding song ID:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -579,13 +654,18 @@ app.post('/addSongToPlaylist', async (req, res) => {
     try {
         const { playlistId, songId } = req.body;
         const insertQuery = 'INSERT INTO song_playlist_contains (playlist_id, song_id) VALUES (?, ?)';
-        connection.query(insertQuery, [playlistId, songId], (error, results) => {
-            if (error) { throw error; }
-            res.sendStatus(200)
-        });
+        await connection.query(insertQuery, [playlistId, songId]);
+
+        const numSongsPlaylist = await countSongsInPlaylist(playlistId);
+        await updateNumSongsInPlaylist(playlistId, numSongsPlaylist);
+        
+        res.sendStatus(200);
     } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ error: 'Song is already in the playlist' });
+        }
         console.error('Error adding song to playlist:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -602,7 +682,7 @@ app.get('/findAlbumId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error adding album ID:', error);
-        res.status(500).json({ error: 'Internal server error' })
+        res.status(500).json({ error: 'Server error' })
     }
 })
 
@@ -619,7 +699,7 @@ app.get('/findDuaSongId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error finding song ID:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -628,27 +708,49 @@ app.post('/addSongToAlbum', async (req, res) => {
         const { albumId, songId, artistId } = req.body;
 
         const artistSongQuery = 'SELECT * FROM song_artist_sing WHERE artist_id = ? AND song_id = ?';
-        connection.query(artistSongQuery, [artistId, songId], (error1, songResults) => {
+        connection.query(artistSongQuery, [artistId, songId], async (error1, songResults) => {
             if (error1) { throw error1; }
 
             const artistAlbumQuery = 'SELECT * FROM album_artist_has WHERE artist_id = ? AND album_id = ?';
-            connection.query(artistAlbumQuery, [artistId, albumId], (error2, albumResults) => {
+            connection.query(artistAlbumQuery, [artistId, albumId], async (error2, albumResults) => {
                 if (error2) { throw error2; }
 
                 if (songResults.length > 0 && albumResults.length > 0) {
-                    const insertQuery = 'INSERT INTO song_album_contains (album_id, song_id) VALUES (?, ?)';
-                    connection.query(insertQuery, [albumId, songId], (error3, results) => {
-                        if (error3) { throw error3; }
+                    try {
+                        const insertQuery = 'INSERT INTO song_album_contains (album_id, song_id) VALUES (?, ?)';
+                        await new Promise((resolve, reject) => {
+                            connection.query(insertQuery, [albumId, songId], async (error3, results) => {
+                                if (error3) {
+                                    if (error3.code === 'ER_DUP_ENTRY') {
+                                        return reject(new Error('Duplicate entry'));
+                                    }
+                                    return reject(error3);
+                                }
+                                resolve(results);
+                            });
+                        });
+
+                        const numSongsAlbum = await countSongsInAlbum(albumId);
+                        await updateNumSongsInAlbum(albumId, numSongsAlbum);
+
                         res.sendStatus(200);
-                    });
-                } else { res.status(403).json({ error: 'Artist is not authorized to add this song to the album' }); }
+                    } catch (error3) {
+                        if (error3.message === 'Duplicate entry') {
+                            return res.status(400).json({ error: 'Song is already in the album' });
+                        }
+                        throw error3;
+                    }
+                } else { 
+                    res.status(403).json({ error: 'Artist is not authorized to add this song to the album' }); 
+                }
             });
         });
     } catch (error) {
         console.error('Error Adding song to albums:', error);
-        res.status(500).json({ error: 'Internal server error' })
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 app.get('/songPlaylist', async (req, res) => {
     try {
@@ -672,7 +774,7 @@ app.get('/songAlbum', async (req, res) => {
         console.log("apasih kamu ini", artistId);
         const albums = await getAllAlbums2(artistId);
         const albumsWithSongs = await Promise.all(albums.map(async (album) => {
-            const songs = await getSongsForAlbum(album.id)
+            const songs = await getSongsForAlbum(album.id, artistId)
             return { ...album, songs };
         }));
         res.json({ albums: albumsWithSongs });
