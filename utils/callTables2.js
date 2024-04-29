@@ -1,21 +1,6 @@
 const mysql = require('mysql');
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 
-// async function getAllMySongs(artistId) {
-//     return new Promise((resolve, reject) => {
-//         const sql = `
-//             SELECT s.id, s.name, s.genre, s.duration
-//             FROM song_artist_sing sa
-//             JOIN song s ON sa.song_id = s.id
-//             WHERE sa.artist_id = ?
-//         `;
-//         connection.query(sql, [artistId], (err, results) => {
-//             if (err) { reject(err);
-//             } else { resolve(results); }
-//         });
-//     });
-// }
-
 async function getAllMySongs(artistId) {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -31,21 +16,6 @@ async function getAllMySongs(artistId) {
         });
     });
 }
-
-// async function getAllMyAlbums(artistId) {
-//     return new Promise((resolve, reject) => {
-//         const sql = `
-//             SELECT a.id, a.name, a.num_song, a.duration
-//             FROM album_artist_has aa
-//             JOIN album a ON aa.album_id = a.id
-//             WHERE aa.artist_id = ?
-//         `;
-//         connection.query(sql, [artistId], (err, results) => {
-//             if (err) { reject(err);
-//             } else { resolve(results); }
-//         });
-//     });
-// }
 
 async function getAllMyAlbums(artistId) {
     return new Promise((resolve, reject) => {
