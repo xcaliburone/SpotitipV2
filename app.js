@@ -4,6 +4,7 @@ const port = 3031;
 const mysql = require('mysql');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
@@ -16,13 +17,6 @@ const connection = mysql.createConnection({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
 }); connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
-
-// const connection = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '',
-//     database: 'spotitip'
-// }); connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
 
 app.use(session({ secret: 'secret-key', resave: false, saveUninitialized: false }));
 app.set('view engine', 'ejs');
@@ -47,64 +41,6 @@ const { countSongsInPlaylist, updateNumSongsInPlaylist, countSongsInAlbum, updat
 const { checkIfUserAlbumFollow, checkIfUserArtistFollow, checkIfUserPlaylistFollow, checkIfUserLikedSong } = require('./utils/checkDupeRelation')
 
 app.get('/', (req, res) => { res.render('index'); });
-
-app.get('/main-user/:userId', (req, res) => {
-    const userId = req.params.userId;
-    const artistId = req.query.artistId;
-    console.log("User ID main :", userId);
-
-    if (!userId) { console.error("User ID is undefined"); return res.status(400).send("User ID is missing"); }
-
-    try {
-        res.render('mainUser', {        
-            userId: userId,
-            artistId: artistId,
-            modalName: 'Playlist',
-            modalForm: 'createPlaylistForm',
-            foridnameTitleModal: 'playlistName',
-            modalPlaceholderTitle: 'Playlist title',
-            foridnameDescModal: 'playlistDescription',
-            modalPlaceholderDesc: 'Playlist description',
-            classModalButton: 'addPlaylist',
-            modalButton: 'Add Playlist',
-            artistHide: '',
-            userHide: 'hidden',
-            artistButtonleft: 'hidden',
-            userButtonleft: '',
-            onlyArtistContent: 'hidden',
-            onlyUserContent: '',
-        });
-    } catch (error) { console.error("Error rendering data:", error); res.redirect('/main-user'); }
-});
-
-app.get('/main-artist/:artistId', (req, res) => {
-    const artistId = req.params.artistId;
-    const userId = req.query.artistId;
-    console.log("Artist ID:", artistId);
-
-    if (!artistId) { console.error("Artist ID is undefined"); return res.status(400).send("Artist ID is missing"); }
-
-    try {
-        res.render('mainArtist', {
-            userId: userId,
-            artistId: artistId,
-            modalName: 'album',
-            modalForm: 'createAlbumForm',
-            foridnameTitleModal: 'albumName',
-            modalPlaceholderTitle: 'Album title',
-            foridnameDescModal: 'albumDescription',
-            modalPlaceholderDesc: 'Album description',
-            classModalButton: 'addAlbum',
-            modalButton: 'Add Album',
-            artistHide: 'hidden',
-            userHide: '',
-            artistButtonleft: '',
-            userButtonleft: 'hidden',
-            onlyArtistContent: '',
-            onlyUserContent: 'hidden',
-        });
-    } catch (error) { console.error("Error rendering data:", error); res.redirect('/main-artist'); }
-});
 
 app.get('/login/:userId?', (req, res) => {
     const userId = req.params.userId;
@@ -180,6 +116,247 @@ app.post('/signup', async (req, res) => {
     } catch (error) { 
         console.error("Error during sign up:", error); 
         res.redirect('/signup'); 
+    }
+});
+
+app.get('/main-user/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const artistId = req.query.artistId;
+    console.log("User ID main :", userId);
+
+    if (!userId) { console.error("User ID is undefined"); return res.status(400).send("User ID is missing"); }
+
+    try {
+        res.render('mainUser', {        
+            userId: userId,
+            artistId: artistId,
+            modalName: 'Playlist',
+            modalForm: 'createPlaylistForm',
+            foridnameTitleModal: 'playlistName',
+            modalPlaceholderTitle: 'Playlist title',
+            foridnameDescModal: 'playlistDescription',
+            modalPlaceholderDesc: 'Playlist description',
+            classModalButton: 'addPlaylist',
+            modalButton: 'Add Playlist',
+            artistHide: '',
+            userHide: 'hidden',
+            artistButtonleft: 'hidden',
+            userButtonleft: '',
+            onlyArtistContent: 'hidden',
+            onlyUserContent: '',
+        });
+    } catch (error) { console.error("Error rendering data:", error); res.redirect('/main-user'); }
+});
+
+app.get('/main-artist/:artistId', (req, res) => {
+    const artistId = req.params.artistId;
+    const userId = req.query.artistId;
+    console.log("Artist ID:", artistId);
+
+    if (!artistId) { console.error("Artist ID is undefined"); return res.status(400).send("Artist ID is missing"); }
+
+    try {
+        res.render('mainArtist', {
+            userId: userId,
+            artistId: artistId,
+            modalName: 'album',
+            modalForm: 'createAlbumForm',
+            foridnameTitleModal: 'albumName',
+            modalPlaceholderTitle: 'Album title',
+            foridnameDescModal: 'albumDescription',
+            modalPlaceholderDesc: 'Album description',
+            classModalButton: 'addAlbum',
+            modalButton: 'Add Album',
+            artistHide: 'hidden',
+            userHide: '',
+            artistButtonleft: '',
+            userButtonleft: 'hidden',
+            onlyArtistContent: '',
+            onlyUserContent: 'hidden',
+        });
+    } catch (error) { console.error("Error rendering data:", error); res.redirect('/main-artist'); }
+});
+
+app.get('/profileUser/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    console.log("User profile id:", userId);
+
+    if (userId) {
+        res.render('profileUser', { userId: userId });
+    } else {
+        res.status(400).send('Invalid userId');
+    }
+});
+
+app.get('/profileArtist/:artistId', async (req, res) => {
+    const artistId = req.params.artistId;
+    console.log("Artist profile id:", artistId);
+
+    if (artistId) {
+        res.render('profileArtist', { artistId: artistId });
+    } else {
+        res.status(400).send('Invalid artistId');
+    }
+});
+
+app.get('/albums', async (req, res) => {
+    try {
+        const albums = await getAllAlbums();
+        res.json({ albums });
+    } catch (error) {
+        console.error("Error fetching albums:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/artists', async (req, res) => {
+    try {
+        const artists = await getAllArtists();
+        res.json({ artists });
+    } catch (error) {
+        console.error("Error fetching artists:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/songs', async (req, res) => {
+    try {
+        const songs = await getAllSongs();
+        res.json({ songs });
+    } catch (error) {
+        console.error("Error fetching songs:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/users', async (req, res) => {
+    try {
+        const users = await getAllUsers();
+        res.json({ users });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/playlists', async (req, res) => {
+    try {
+        const playlists = await getAllPlaylists();
+        res.json({ playlists })
+    } catch (error) {
+        console.error("Error fetching playlists:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myalbums', async (req, res) => {
+    try {
+        const artistId = req.query.artistId;
+        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
+        const albums = await getAllMyAlbums(artistId);
+        res.json({ albums });
+    } catch (error) {
+        console.error("Error fetching my albums:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/mysongs', async (req, res) => {
+    try {
+        const artistId = req.query.artistId;
+        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
+        const songs = await getAllMySongs(artistId);
+        res.json({ songs });
+    } catch (error) {
+        console.error("Error fetching my songs:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myplaylists', async (req, res) => {
+    try {
+        const myplaylists = await getAllMyPlaylists();
+        res.json({ myplaylists })
+    } catch (error) {
+        console.error("Error fetching my playlists:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myusers', async (req, res) => {
+    const userId = req.query.userId;
+    try {
+        const users = await getAllMyUsers(userId);
+        res.json({ users });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/myUserArtistFollows', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userArtistFollows = await getAllMyUserArtistFollow(userId);
+        res.json({ userArtistFollows });
+    } catch (error) {
+        console.error("Error fetching user artist follow:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myUserAlbumFollows', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userAlbumFollows = await getAllMyUserAlbumFollow(userId);
+        res.json({ userAlbumFollows });
+    } catch (error) {
+        console.error("Error fetching user album follow:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myUserPlaylistCreates', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userPlaylistCreates = await getAllMyUserCreatePlaylist(userId);
+        res.json({ userPlaylistCreates });
+    } catch (error) {
+        console.error("Error fetching user playlist create:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myUserPlaylistFollows', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userPlaylistFollows = await getAllMyUserFollowPlaylist(userId);
+        res.json({ userPlaylistFollows });
+    } catch (error) {
+        console.error("Error fetching user playlist follow:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myUserSongLikeds', async (req, res) => {
+    const userId = req.query.userId
+    try {
+        const userSongLikeds = await getAllMyUserLikedSong(userId);
+        res.json({ userSongLikeds });
+    } catch (error) {
+        console.error("Error fetching user liked songs:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get('/myartists', async (req, res) => {
+    const artistId = req.query.artistId;
+    try {
+        const artists = await getAllMyArtists(artistId);
+        res.json({ artists });
+    } catch (error) {
+        console.error("Error fetching artists:", error);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -290,189 +467,6 @@ app.post('/createAlbum', async (req, res) => {
     } catch (error) {
         console.error("Error creating album:", error);
         return res.status(500).send("Failed to create album.");
-    }
-});
-
-app.get('/albums', async (req, res) => {
-    try {
-        const albums = await getAllAlbums();
-        res.json({ albums });
-    } catch (error) {
-        console.error("Error fetching albums:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/myalbums', async (req, res) => {
-    try {
-        const artistId = req.query.artistId;
-        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
-        const albums = await getAllMyAlbums(artistId);
-        res.json({ albums });
-    } catch (error) {
-        console.error("Error fetching my albums:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/artists', async (req, res) => {
-    try {
-        const artists = await getAllArtists();
-        res.json({ artists });
-    } catch (error) {
-        console.error("Error fetching artists:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/songs', async (req, res) => {
-    try {
-        const songs = await getAllSongs();
-        res.json({ songs });
-    } catch (error) {
-        console.error("Error fetching songs:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/mysongs', async (req, res) => {
-    try {
-        const artistId = req.query.artistId;
-        if (!artistId) { return res.status(400).json({ error: "Artist ID is missing" }); }
-        const songs = await getAllMySongs(artistId);
-        res.json({ songs });
-    } catch (error) {
-        console.error("Error fetching my songs:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/users', async (req, res) => {
-    try {
-        const users = await getAllUsers();
-        res.json({ users });
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/playlists', async (req, res) => {
-    try {
-        const playlists = await getAllPlaylists();
-        res.json({ playlists })
-    } catch (error) {
-        console.error("Error fetching playlists:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/myplaylists', async (req, res) => {
-    try {
-        const myplaylists = await getAllMyPlaylists();
-        res.json({ myplaylists })
-    } catch (error) {
-        console.error("Error fetching my playlists:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/profileUser/:userId', async (req, res) => {
-    const userId = req.params.userId;
-    console.log("User profile id:", userId);
-
-    if (userId) {
-        res.render('profileUser', { userId: userId });
-    } else {
-        res.status(400).send('Invalid userId');
-    }
-});
-
-app.get('/myusers', async (req, res) => {
-    const userId = req.query.userId;
-    try {
-        const users = await getAllMyUsers(userId);
-        res.json({ users });
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-
-app.get('/myUserArtistFollows', async (req, res) => {
-    const userId = req.query.userId
-    try {
-        const userArtistFollows = await getAllMyUserArtistFollow(userId);
-        res.json({ userArtistFollows });
-    } catch (error) {
-        console.error("Error fetching user artist follow:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/myUserAlbumFollows', async (req, res) => {
-    const userId = req.query.userId
-    try {
-        const userAlbumFollows = await getAllMyUserAlbumFollow(userId);
-        res.json({ userAlbumFollows });
-    } catch (error) {
-        console.error("Error fetching user album follow:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/myUserPlaylistCreates', async (req, res) => {
-    const userId = req.query.userId
-    try {
-        const userPlaylistCreates = await getAllMyUserCreatePlaylist(userId);
-        res.json({ userPlaylistCreates });
-    } catch (error) {
-        console.error("Error fetching user playlist create:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/myUserPlaylistFollows', async (req, res) => {
-    const userId = req.query.userId
-    try {
-        const userPlaylistFollows = await getAllMyUserFollowPlaylist(userId);
-        res.json({ userPlaylistFollows });
-    } catch (error) {
-        console.error("Error fetching user playlist follow:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/myUserSongLikeds', async (req, res) => {
-    const userId = req.query.userId
-    try {
-        const userSongLikeds = await getAllMyUserLikedSong(userId);
-        res.json({ userSongLikeds });
-    } catch (error) {
-        console.error("Error fetching user liked songs:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-app.get('/profileArtist/:artistId', async (req, res) => {
-    const artistId = req.params.artistId;
-    console.log("Artist profile id:", artistId);
-
-    if (artistId) {
-        res.render('profileArtist', { artistId: artistId });
-    } else {
-        res.status(400).send('Invalid artistId');
-    }
-});
-
-app.get('/myartists', async (req, res) => {
-    const artistId = req.query.artistId;
-    try {
-        const artists = await getAllMyArtists(artistId);
-        res.json({ artists });
-    } catch (error) {
-        console.error("Error fetching artists:", error);
-        res.status(500).json({ error: "Server error" });
     }
 });
 
