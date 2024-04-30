@@ -13,6 +13,8 @@
             <div class="title mb-2 ml-2">
                 <p class="text-lg font-bold text-neutral-300">Hasil Pencarian</p>
             </div>
+            <div id="noInput" class="bg-neutral-800 rounded-md overflow-hidden w-[1320px] h-[320px] flex flex-col gap-y-3 p-4">
+            </div>
             
             <div class="items flex gap-4">
                 <script>
@@ -23,12 +25,14 @@
                             const searchData = await searchResponse.json();
                             const searchs = searchData.results;
                             const searchContainer = document.getElementById('searchResults').querySelector('.items');
+                            const noInput = document.getElementById('noInput')
 
                             searchContainer.innerHTML = '';
 
                             if (searchs.length === 0) {
+                                noInput.style.display = 'none';
                                 const noDataMessage = document.createElement('div');
-                                noDataMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
+                                noDataMessage.classList.add('emptyDatas', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                 noDataMessage.innerHTML = `
                                     <img src="../images/nothing.png" alt="noData" class="w-[225px] rounded-md">
                                     <div class="desc-none flex flex-col justify-center items-center">
@@ -38,6 +42,7 @@
                                 `;
                                 searchContainer.appendChild(noDataMessage);
                             } else {
+                                noInput.style.display = 'none';
                                 searchs.forEach(search => {
                                     if (search.type === 'user') {
                                         const userItem = document.createElement('div');
