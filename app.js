@@ -415,10 +415,10 @@ app.post('/createPlaylist', async (req, res) => {
                 res.redirect('/createPlaylist?error=playlist');
                 return res.status(500).send("Failed to create playlist: " + err.message);
             }
-            const currentUserId = req.session.user_id;
+            // const currentUserId = req.session.user_id;
             const dateCreated = new Date().toISOString().slice(0, 10);
             const insertUserPlaylistQuery = 'INSERT INTO user_playlist_create (user_id, playlist_id, date_created) VALUES (?, ?, ?)';
-            connection.query(insertUserPlaylistQuery, [currentUserId, playlistId, dateCreated], (err, result) => {
+            connection.query(insertUserPlaylistQuery, [userId, playlistId, dateCreated], (err, result) => {
                 if (err) {
                     console.error("Error creating user playlist entry:", err);
                     return res.status(500).send("Failed to create playlist.");
