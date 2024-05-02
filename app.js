@@ -648,18 +648,28 @@ app.post('/addSongToPlaylist', async (req, res) => {
     try {
         const { playlistId, songId } = req.body;
         const insertQuery = 'INSERT INTO song_playlist_contains (playlist_id, song_id) VALUES (?, ?)';
-        await connection.query(insertQuery, [playlistId, songId]);
+        await new Promise((resolve, reject) => {
+            connection.query(insertQuery, [playlistId, songId], (error, results) => {
+                if (error) {
+                    if (error.code === 'ER_DUP_ENTRY') {
+                        return reject(new Error('Duplicate entry'));
+                    }
+                    return reject(error);
+                }
+                resolve(results);
+            });
+        });
 
         const numSongsPlaylist = await countSongsInPlaylist(playlistId);
         await updateNumSongsInPlaylist(playlistId, numSongsPlaylist);
         
         res.sendStatus(200);
     } catch (error) {
-        if (error.code === 'ER_DUP_ENTRY') {
+        if (error.message === 'Duplicate entry') {
             return res.status(400).json({ error: 'Song is already in the playlist' });
         }
         console.error('Error adding song to playlist:', error);
-        res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error' });
     }
 });
 
