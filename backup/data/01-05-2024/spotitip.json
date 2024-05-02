@@ -1,0 +1,272 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"spotitip"},
+{"type":"table","name":"album","database":"spotitip","data":
+[
+{"id":"AL01","name":"Mahagita","num_song":"4","duration":"00:00:00"},
+{"id":"AL02","name":"Banzai","num_song":"4","duration":"00:00:00"},
+{"id":"AL03","name":"Theater No Megami","num_song":"1","duration":"00:00:00"},
+{"id":"AL04","name":"Tadaima Renaichuu","num_song":"1","duration":"00:00:00"},
+{"id":"AL05","name":"Seishun Girls","num_song":"4","duration":"00:00:00"},
+{"id":"AL06","name":"Te Wo Tsunaginagara","num_song":"2","duration":"00:00:00"},
+{"id":"AL07","name":"Joy Kick Tears","num_song":"1","duration":"00:00:00"},
+{"id":"AL08","name":"Boku No Taiyou","num_song":"0","duration":"00:00:00"},
+{"id":"AL09","name":"Dareka No Tame Ni","num_song":"2","duration":"00:00:00"},
+{"id":"AL10","name":"Renai Kinshi Jourei","num_song":"3","duration":"00:00:00"},
+{"id":"AL11","name":"Pajama Drive","num_song":"3","duration":"00:00:00"},
+{"id":"AL12","name":"Aitakatta","num_song":"8","duration":"00:00:00"}
+]
+}
+,{"type":"table","name":"album_artist_has","database":"spotitip","data":
+[
+{"album_id":"AL01","artist_id":"AR01","date_created":"2024-05-01"},
+{"album_id":"AL02","artist_id":"AR01","date_created":"2024-05-01"},
+{"album_id":"AL03","artist_id":"AR01","date_created":"2024-05-01"},
+{"album_id":"AL04","artist_id":"AR01","date_created":"2024-05-01"},
+{"album_id":"AL05","artist_id":"AR03","date_created":"2024-05-01"},
+{"album_id":"AL06","artist_id":"AR03","date_created":"2024-05-01"},
+{"album_id":"AL07","artist_id":"AR03","date_created":"2024-05-01"},
+{"album_id":"AL08","artist_id":"AR03","date_created":"2024-05-01"},
+{"album_id":"AL09","artist_id":"AR02","date_created":"2024-05-01"},
+{"album_id":"AL10","artist_id":"AR02","date_created":"2024-05-01"},
+{"album_id":"AL11","artist_id":"AR02","date_created":"2024-05-01"},
+{"album_id":"AL12","artist_id":"AR02","date_created":"2024-05-01"}
+]
+}
+,{"type":"table","name":"artist","database":"spotitip","data":
+[
+{"id":"AR01","name":"Indira Putri Seruni","email":"indiraputriseruni@gmail.com","password":"seruni2604","followers":"0"},
+{"id":"AR02","name":"Azizi Shafaa Asadel","email":"zeeshafa@gmail.com","password":"zee1605","followers":"0"},
+{"id":"AR03","name":"Shani Indira Natio","email":"shaniindiranatio@gmail.com","password":"shani0510","followers":"0"},
+{"id":"AR04","name":"Mutiara Azzahra","email":"muthe@gmail.com","password":"muthe1234","followers":"0"},
+{"id":"AR05","name":"Marsha Lenathea","email":"maeng@gmail.com","password":"marsha1234","followers":"0"},
+{"id":"AR06","name":"Grace Octaviani","email":"gracie@gmail.com","password":"gracie1234","followers":"0"},
+{"id":"AR07","name":"Gita Sekar A","email":"gita@gmail.com","password":"gita1234","followers":"0"},
+{"id":"AR08","name":"Gabriela Abigail Mewengkang","email":"ellaMewengkang@gmail.com","password":"ella1234","followers":"0"},
+{"id":"AR09","name":"Flora Shafiq","email":"duniaflora@gmail.com","password":"flora1234","followers":"0"},
+{"id":"AR10","name":"Febriola Sinambela","email":"olla@gmail.com","password":"olla1234","followers":"0"},
+{"id":"AR11","name":"Cornelia Vanisa","email":"oniel@gmail.com","password":"oniel1234","followers":"0"},
+{"id":"AR12","name":"Jessica Chandra","email":"jessinessi@gmail.com","password":"jessi1234","followers":"0"},
+{"id":"AR13","name":"Amanda Sukma","email":"amanda@gmail.com","password":"amanda1234","followers":"0"},
+{"id":"AR14","name":"Yessica Tamara Siallagan","email":"chika@gmail.com","password":"chika1234","followers":"0"}
+]
+}
+,{"type":"table","name":"playlist","database":"spotitip","data":
+[
+{"id":"PL01","name":"2lit2quit","num_song":null,"duration":null},
+{"id":"PL02","name":"maybe im the problem","num_song":null,"duration":null},
+{"id":"PL03","name":"all too well","num_song":null,"duration":null},
+{"id":"PL04","name":"what for","num_song":null,"duration":null},
+{"id":"PL05","name":"adrenaline rush","num_song":null,"duration":null},
+{"id":"PL06","name":"the day that i met you","num_song":null,"duration":null},
+{"id":"PL07","name":"i sleep so that we can meet","num_song":null,"duration":null},
+{"id":"PL08","name":"im scared this is all i will be","num_song":null,"duration":null},
+{"id":"PL09","name":"its okay to feel sad","num_song":null,"duration":null},
+{"id":"PL10","name":"its not good enough for me","num_song":null,"duration":null},
+{"id":"PL11","name":"skripsian sambil nangis","num_song":null,"duration":null}
+]
+}
+,{"type":"table","name":"song","database":"spotitip","data":
+[
+{"id":"SO01","name":"Eureka Milik Kita","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO02","name":"Seventeen","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO03","name":"New Ship","genre":"rock","duration":"00:04:00","listeners":"0"},
+{"id":"SO04","name":"Better","genre":"jazz","duration":"00:04:00","listeners":"0"},
+{"id":"SO05","name":"Nagiichi","genre":"rock","duration":"00:04:00","listeners":"0"},
+{"id":"SO06","name":"Musim yang Selanjutnya","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO07","name":"So long","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO08","name":"Pareo adalah Emerald","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO09","name":"Dewi Theater","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO10","name":"Love Chase","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO11","name":"Beach Sandal","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO12","name":"Ame No Doubutsuen","genre":"jazz","duration":"00:04:00","listeners":"0"},
+{"id":"SO13","name":"Yakusoku Yo","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO14","name":"Kinjirareta Futari","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO15","name":"Arah Sang Cinta & Balasannya","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO16","name":"Glory Days","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO17","name":"Seifuku No Me","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO18","name":"Tsukimisou","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO19","name":"Demi Seseorang","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO20","name":"Mawar Natal Musim Panas","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO21","name":"Sneaker Waktu Itu","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO22","name":"JKT Sanjou","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO23","name":"Shonichi","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO24","name":"Jurus Rahasia Teleport","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO25","name":"Bersepeda Berdua","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO26","name":"Namida no Shounan","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO27","name":"Ingin bertemu","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO28","name":"Cherry Tepi Pantai","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO29","name":"Peluklah Aku dari Belakang","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO30","name":"Revolusi Rio","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO31","name":"Dakedo","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO32","name":"Pintu Masa Depan","genre":"pop","duration":"00:04:00","listeners":"0"},
+{"id":"SO33","name":"Jakarta 48","genre":"pop","duration":"00:04:00","listeners":"0"}
+]
+}
+,{"type":"table","name":"song_album_contains","database":"spotitip","data":
+[
+{"song_id":"SO01","album_id":"AL01"},
+{"song_id":"SO02","album_id":"AL01"},
+{"song_id":"SO03","album_id":"AL01"},
+{"song_id":"SO04","album_id":"AL01"},
+{"song_id":"SO05","album_id":"AL02"},
+{"song_id":"SO06","album_id":"AL02"},
+{"song_id":"SO07","album_id":"AL02"},
+{"song_id":"SO08","album_id":"AL02"},
+{"song_id":"SO09","album_id":"AL03"},
+{"song_id":"SO10","album_id":"AL04"},
+{"song_id":"SO11","album_id":"AL05"},
+{"song_id":"SO12","album_id":"AL05"},
+{"song_id":"SO13","album_id":"AL05"},
+{"song_id":"SO14","album_id":"AL05"},
+{"song_id":"SO15","album_id":"AL06"},
+{"song_id":"SO16","album_id":"AL06"},
+{"song_id":"SO17","album_id":"AL07"},
+{"song_id":"SO18","album_id":"AL09"},
+{"song_id":"SO19","album_id":"AL09"},
+{"song_id":"SO20","album_id":"AL10"},
+{"song_id":"SO21","album_id":"AL10"},
+{"song_id":"SO22","album_id":"AL10"},
+{"song_id":"SO23","album_id":"AL11"},
+{"song_id":"SO24","album_id":"AL11"},
+{"song_id":"SO25","album_id":"AL11"},
+{"song_id":"SO26","album_id":"AL12"},
+{"song_id":"SO27","album_id":"AL12"},
+{"song_id":"SO28","album_id":"AL12"},
+{"song_id":"SO29","album_id":"AL12"},
+{"song_id":"SO30","album_id":"AL12"},
+{"song_id":"SO31","album_id":"AL12"},
+{"song_id":"SO32","album_id":"AL12"},
+{"song_id":"SO33","album_id":"AL12"}
+]
+}
+,{"type":"table","name":"song_artist_sing","database":"spotitip","data":
+[
+{"song_id":"SO01","artist_id":"AR01"},
+{"song_id":"SO02","artist_id":"AR01"},
+{"song_id":"SO03","artist_id":"AR01"},
+{"song_id":"SO04","artist_id":"AR01"},
+{"song_id":"SO05","artist_id":"AR01"},
+{"song_id":"SO06","artist_id":"AR01"},
+{"song_id":"SO07","artist_id":"AR01"},
+{"song_id":"SO08","artist_id":"AR01"},
+{"song_id":"SO09","artist_id":"AR01"},
+{"song_id":"SO10","artist_id":"AR01"},
+{"song_id":"SO11","artist_id":"AR03"},
+{"song_id":"SO12","artist_id":"AR03"},
+{"song_id":"SO13","artist_id":"AR03"},
+{"song_id":"SO14","artist_id":"AR03"},
+{"song_id":"SO15","artist_id":"AR03"},
+{"song_id":"SO16","artist_id":"AR03"},
+{"song_id":"SO17","artist_id":"AR03"},
+{"song_id":"SO18","artist_id":"AR02"},
+{"song_id":"SO19","artist_id":"AR02"},
+{"song_id":"SO20","artist_id":"AR02"},
+{"song_id":"SO21","artist_id":"AR02"},
+{"song_id":"SO22","artist_id":"AR02"},
+{"song_id":"SO23","artist_id":"AR02"},
+{"song_id":"SO24","artist_id":"AR02"},
+{"song_id":"SO25","artist_id":"AR02"},
+{"song_id":"SO26","artist_id":"AR02"},
+{"song_id":"SO27","artist_id":"AR02"},
+{"song_id":"SO28","artist_id":"AR02"},
+{"song_id":"SO29","artist_id":"AR02"},
+{"song_id":"SO30","artist_id":"AR02"},
+{"song_id":"SO31","artist_id":"AR02"},
+{"song_id":"SO32","artist_id":"AR02"},
+{"song_id":"SO33","artist_id":"AR02"}
+]
+}
+,{"type":"table","name":"song_playlist_contains","database":"spotitip","data":
+[
+
+]
+}
+,{"type":"table","name":"user","database":"spotitip","data":
+[
+{"id":"US01","name":"adhim rahman","email":"adhimrahaman@gmail.com","password":"xcaliburone24","followers":"0","following":"0"},
+{"id":"US02","name":"mirsa bintang","email":"mirsa@gmail.com","password":"mirsa1234","followers":"0","following":"0"},
+{"id":"US03","name":"zaky haffizany","email":"zaky@gmail.com","password":"zaky1234","followers":"0","following":"0"},
+{"id":"US04","name":"dika arif","email":"dikaarifrahman@gmail.com","password":"dika1234","followers":"0","following":"0"},
+{"id":"US05","name":"dhiva arie","email":"dededhiva@gmail.com","password":"dede1234","followers":"0","following":"0"},
+{"id":"US06","name":"aditya pratama","email":"adityapratama@gmail.com","password":"adit1234","followers":"0","following":"0"},
+{"id":"US07","name":"yasid reza","email":"yasid@gmail.com","password":"yasid1234","followers":"0","following":"0"},
+{"id":"US08","name":"falih knalpot","email":"falih@gmail.com","password":"falih1234","followers":"0","following":"0"},
+{"id":"US09","name":"rifqi sentul","email":"rifqijago@gmail.com","password":"rifqi1234","followers":"0","following":"0"},
+{"id":"US10","name":"reza habibie","email":"jabieb@gmail.com","password":"jabieb1234","followers":"0","following":"0"},
+{"id":"US11","name":"Jasmine Raia Arindra","email":"jasmneraia@gmail.com","password":"neisrha3110","followers":"0","following":"0"}
+]
+}
+,{"type":"table","name":"user_album_follow","database":"spotitip","data":
+[
+{"user_id":"US01","album_id":"AL01"},
+{"user_id":"US01","album_id":"AL02"},
+{"user_id":"US01","album_id":"AL05"},
+{"user_id":"US01","album_id":"AL08"},
+{"user_id":"US01","album_id":"AL11"},
+{"user_id":"US01","album_id":"AL12"},
+{"user_id":"US11","album_id":"AL03"},
+{"user_id":"US11","album_id":"AL04"},
+{"user_id":"US11","album_id":"AL06"},
+{"user_id":"US11","album_id":"AL07"},
+{"user_id":"US11","album_id":"AL09"},
+{"user_id":"US11","album_id":"AL10"}
+]
+}
+,{"type":"table","name":"user_artist_follow","database":"spotitip","data":
+[
+{"user_id":"US01","artist_id":"AR02"},
+{"user_id":"US01","artist_id":"AR07"},
+{"user_id":"US01","artist_id":"AR08"},
+{"user_id":"US01","artist_id":"AR09"},
+{"user_id":"US01","artist_id":"AR10"},
+{"user_id":"US01","artist_id":"AR11"},
+{"user_id":"US01","artist_id":"AR13"},
+{"user_id":"US11","artist_id":"AR01"},
+{"user_id":"US11","artist_id":"AR03"},
+{"user_id":"US11","artist_id":"AR04"},
+{"user_id":"US11","artist_id":"AR05"},
+{"user_id":"US11","artist_id":"AR06"},
+{"user_id":"US11","artist_id":"AR12"},
+{"user_id":"US11","artist_id":"AR14"}
+]
+}
+,{"type":"table","name":"user_playlist_create","database":"spotitip","data":
+[
+{"user_id":"US01","playlist_id":"PL01","date_created":"2024-05-01"},
+{"user_id":"US01","playlist_id":"PL02","date_created":"2024-05-01"},
+{"user_id":"US01","playlist_id":"PL03","date_created":"2024-05-01"},
+{"user_id":"US01","playlist_id":"PL04","date_created":"2024-05-01"},
+{"user_id":"US01","playlist_id":"PL05","date_created":"2024-05-01"},
+{"user_id":"US10","playlist_id":"PL10","date_created":"2024-05-01"},
+{"user_id":"US10","playlist_id":"PL11","date_created":"2024-05-01"},
+{"user_id":"US11","playlist_id":"PL06","date_created":"2024-05-01"},
+{"user_id":"US11","playlist_id":"PL07","date_created":"2024-05-01"},
+{"user_id":"US11","playlist_id":"PL08","date_created":"2024-05-01"},
+{"user_id":"US11","playlist_id":"PL09","date_created":"2024-05-01"}
+]
+}
+,{"type":"table","name":"user_playlist_follow","database":"spotitip","data":
+[
+{"user_id":"US01","playlist_id":"PL06"},
+{"user_id":"US01","playlist_id":"PL07"},
+{"user_id":"US01","playlist_id":"PL08"},
+{"user_id":"US01","playlist_id":"PL09"},
+{"user_id":"US01","playlist_id":"PL10"},
+{"user_id":"US01","playlist_id":"PL11"},
+{"user_id":"US11","playlist_id":"PL01"},
+{"user_id":"US11","playlist_id":"PL02"},
+{"user_id":"US11","playlist_id":"PL03"},
+{"user_id":"US11","playlist_id":"PL04"},
+{"user_id":"US11","playlist_id":"PL05"},
+{"user_id":"US11","playlist_id":"PL07"},
+{"user_id":"US11","playlist_id":"PL10"},
+{"user_id":"US11","playlist_id":"PL11"}
+]
+}
+,{"type":"table","name":"user_song_liked","database":"spotitip","data":
+[
+
+]
+}
+]
