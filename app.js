@@ -290,7 +290,7 @@ app.get('/myusers', async (req, res) => {
         res.json({ users });
     } catch (error) {
         console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -751,7 +751,7 @@ app.post('/addSongToAlbum', async (req, res) => {
         });
     } catch (error) {
         console.error('Error Adding song to albums:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -768,7 +768,7 @@ app.get('/songPlaylist', async (req, res) => {
         res.json({ playlists: playlistsWithSongs });
     } catch (error) {
         console.error("Error fetching playlists:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -784,7 +784,7 @@ app.get('/songAlbum', async (req, res) => {
         res.json({ albums: albumsWithSongs });
     } catch (error) {
         console.error("Error fetching albums:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Server error" });
     }
 })
 
