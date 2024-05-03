@@ -21,5 +21,9 @@
     "mysql": "^2.18.1",
     "nodemon": "^3.1.0",
     "sweetalert2": "^11.10.7"
-  }
+  },
+  "description": "![alt text](backup/db/image/SPOTITIP.png)",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

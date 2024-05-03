@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `song_artist_sing` (
 CREATE TABLE IF NOT EXISTS `album_artist_has` (
   `album_id` varchar(12) NOT NULL,
   `artist_id` varchar(12) NOT NULL,
-  `release` date NOT NULL,
+  `date_created` date NOT NULL,
   UNIQUE KEY `unique_album_artist_has` (`album_id`, `artist_id`),
   KEY `album_id_has` (`album_id`),
   KEY `artist_id_has` (`artist_id`),
