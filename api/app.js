@@ -24,21 +24,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
-const { getAllMyAlbums, getAllMySongs, getAllMyPlaylists } = require('./utils/callTables2')
+const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('../utils/callTables')
+const { getAllMyAlbums, getAllMySongs, getAllMyPlaylists } = require('../utils/callTables2')
 const {
     getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist,
     getAllMyUserFollowPlaylist, getAllMyUserLikedSong
-} = require('./utils/UserInfo')
-const { getAllMyArtists } = require('./utils/ArtistInfo')
-const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
+} = require('../utils/UserInfo')
+const { getAllMyArtists } = require('../utils/ArtistInfo')
+const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('../utils/generateID')
 const {
     checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong
-} = require('./utils/checkDupeEntity')
-const { getAllDatas, formatResults } = require('./utils/searchDatas')
-const { getAllPlaylists2, getSongsForPlaylist, getAllAlbums2, getSongsForAlbum } = require('./utils/songContains')
-const { countSongsInPlaylist, updateNumSongsInPlaylist, countSongsInAlbum, updateNumSongsInAlbum } = require('./utils/colsUpdate')
-const { checkIfUserAlbumFollow, checkIfUserArtistFollow, checkIfUserPlaylistFollow, checkIfUserLikedSong } = require('./utils/checkDupeRelation')
+} = require('../utils/checkDupeEntity')
+const { getAllDatas, formatResults } = require('../utils/searchDatas')
+const { getAllPlaylists2, getSongsForPlaylist, getAllAlbums2, getSongsForAlbum } = require('../utils/songContains')
+const { countSongsInPlaylist, updateNumSongsInPlaylist, countSongsInAlbum, updateNumSongsInAlbum } = require('../utils/colsUpdate')
+const { checkIfUserAlbumFollow, checkIfUserArtistFollow, checkIfUserPlaylistFollow, checkIfUserLikedSong } = require('../utils/checkDupeRelation')
 
 app.get('/', (req, res) => { res.render('index'); });
 
