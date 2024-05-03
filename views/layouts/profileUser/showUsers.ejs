@@ -5,6 +5,22 @@
         <div class="title mb-2"><p class="font-bold text-neutral-300">User Account Info</p></div>
     
         <div class="main flex gap-y-9 flex-col">
+
+            <!-- <div class="user-item bg-neutral-800 rounded-md overflow-hidden p-4 flex">
+                <div class="flex flex-col">
+                    <h1 class="text-white">Username : ${myuser.name}</h1>
+                    <p class="text-white" >Email : ${myuser.email}</p>
+                    <p class="text-white" >Paswword : ${myuser.password}</p>
+                    <p class="text-white" >Followers : ${myuser.followers}</p>
+                    <p class="text-white" >Following : ${myuser.following}</p>
+                </div>
+                <div class="flex flex-col">
+                    <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                    <input type="file" accept="image/*" id="profile-pic-input" style="display: none;">
+                    <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Tambahkan Foto Profil</button>
+                </div>
+            </div> -->
+
             <script>
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
@@ -29,13 +45,20 @@
                         } else {
                             myusers.forEach(myuser => {
                                 const myuserItem = document.createElement('div');
-                                myuserItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex', 'flex-col');
+                                myuserItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex');
                                 myuserItem.innerHTML = `
+                                <div class="flex flex-col">
                                     <h1 class="text-white">Username : ${myuser.name}</h1>
                                     <p class="text-white" >Email : ${myuser.email}</p>
                                     <p class="text-white" >Paswword : ${myuser.password}</p>
                                     <p class="text-white" >Followers : ${myuser.followers}</p>
                                     <p class="text-white" >Following : ${myuser.following}</p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                    <input type="file" accept="image/*" id="profile-pic-input" style="display: none;">
+                                    <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Tambahkan Foto Profil</button>
+                                </div>
                                 `;
                                 myusersContainer.appendChild(myuserItem);
                             });
