@@ -14,7 +14,7 @@ main::-webkit-scrollbar {
 }
 
 main {
-    height: 902px !important;
+    height: 855px !important;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -44,14 +44,21 @@ main {
 .user-item,
 .artist-item {
     margin-bottom: 48px;
-    gap: 10px;
-    padding: 25px !important;
+    /* margin: 0 20px 48px 20px; */
+    /* gap: 30px !important; */
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 55px 25px 35px !important;
 }
 
-#userLogoutBtn,
-#artistLogoutBtn {
-    margin-bottom: 100px;
+#profile-pic-input-btn {
+    background-color: #00A97F !important;
 }
+
+/* #userLogoutBtn,
+#artistLogoutBtn {
+    margin-bottom: 10px;
+} */
 
 #userLogoutBtn:hover,
 #artistLogoutBtn:hover {
