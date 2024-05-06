@@ -115,7 +115,7 @@ app.post('/signup', async (req, res) => {
         });
     } catch (error) { 
         console.error("Error during sign up:", error); 
-        res.redirect('/signup'); 
+        res.redirect('/signup');
     }
 });
 
@@ -754,7 +754,6 @@ app.post('/addSongToAlbum', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
-
 
 app.get('/songPlaylist', async (req, res) => {
     try {
