@@ -49,11 +49,11 @@ main {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    margin-bottom: 45px !important;
+    margin-bottom: -5px !important;
 }
 
 #noInput {
-    margin-bottom: 45px !important;
+    margin-bottom: -6px !important;
     opacity: 0% !important;
 }
 
