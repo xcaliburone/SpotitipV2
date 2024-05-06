@@ -29,12 +29,13 @@
                         } else {
                             userArtistFollows.forEach(userArtistFollow => {
                                 const myUserArtistFollowsItem = document.createElement('div');
-                                myUserArtistFollowsItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[255px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                myUserArtistFollowsItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
                                 myUserArtistFollowsItem.innerHTML = `
-                                    <img src="/images/liked.png" alt="cover" class="w-[225px] rounded-md"> <!-- Perubahan di sini -->
+                                    <img src="/images/profile.png" alt="cover" class="w-[225px] rounded-md"> <!-- Perubahan di sini -->
                                     <div class="desc mt-2">
                                         <h1 class="title-playlist font-medium text-white">${userArtistFollow.name}</h1>
                                     </div>
+                                    <button class="btnFollowed" data-artist-id="${userArtistFollow.id}">Followed</button>
                                 `;
                                 myUserArtistFollowsContainer.appendChild(myUserArtistFollowsItem);
                             });

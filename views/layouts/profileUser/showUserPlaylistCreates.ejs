@@ -29,12 +29,14 @@
                         } else {
                             userPlaylistCreates.forEach(userPlaylistCreate => {
                                 const myUserPlaylistCreatesItem = document.createElement('div');
-                                myUserPlaylistCreatesItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                myUserPlaylistCreatesItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                 myUserPlaylistCreatesItem.innerHTML = `
-                                    <img src="/images/liked.png" alt="cover" class="w-[225px] rounded-md"> <!-- Perubahan di sini -->
+                                    <img src="/images/playlist.png" alt="cover" class="w-[225px] rounded-md"> <!-- Perubahan di sini -->
                                     <div class="desc mt-2">
                                         <h1 class="title-playlist font-medium text-white">${userPlaylistCreate.name}</h1>
+                                        <p class="desc-playlist text-neutral-300">By. ${userPlaylistCreate.creator_name}</p>
                                     </div>
+                                    <button class="btnFollowed" data-playlist-id="${userPlaylistCreate.id}">Followed</button>
                                 `;
                                 myUserPlaylistCreatesContainer.appendChild(myUserPlaylistCreatesItem);
                             });

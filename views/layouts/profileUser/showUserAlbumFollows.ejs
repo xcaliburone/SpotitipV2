@@ -29,12 +29,14 @@
                         } else {
                             userAlbumFollows.forEach(userAlbumFollow => {
                                 const myUserAlbumFollowsItem = document.createElement('div');
-                                myUserAlbumFollowsItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                myUserAlbumFollowsItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                 myUserAlbumFollowsItem.innerHTML = `
-                                    <img src="/images/liked.png" alt="cover" class="w-[225px] rounded-md"> <!-- Perubahan di sini -->
+                                    <img src="/images/album2.png" alt="cover" class="w-[225px] rounded-md">
                                     <div class="desc mt-2">
                                         <h1 class="title-playlist font-medium text-white">${userAlbumFollow.name}</h1>
+                                        <p class="desc-playlist text-neutral-300">By. ${userAlbumFollow.artistName}</p>
                                     </div>
+                                    <button class="btnFollowed" data-album-id="${userAlbumFollow.id}">Followed</button>
                                 `;
                                 myUserAlbumFollowsContainer.appendChild(myUserAlbumFollowsItem);
                             });
