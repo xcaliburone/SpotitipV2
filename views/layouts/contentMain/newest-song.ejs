@@ -29,10 +29,9 @@
                             const songItem = document.createElement('div');
                             songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             songItem.innerHTML = `
-                                <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                <img src="../images/song3.png" alt="Song Cover" class="w-[225px] rounded-md">
                                 <div class="desc mt-2">
                                     <h1 class="title-playlist font-medium text-white">${song.name}</h1>
-                                    <!-- Perbaiki pengambilan nama artis -->
                                     <p class="desc-playlist text-neutral-300">By. ${song.artistName}</p>
                                 </div>
                                 <button class="btnFollow" data-song-id="${song.id}">Like</button>

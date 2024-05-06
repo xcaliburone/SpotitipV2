@@ -46,57 +46,62 @@
                                 searchs.forEach(search => {
                                     if (search.type === 'user') {
                                         const userItem = document.createElement('div');
-                                        userItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
+                                        userItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
                                         userItem.innerHTML = `
-                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <img src="../images/profile.png" alt="cover" class="w-[225px] rounded-md">
                                             <div class="desc mt-2">
                                                 <h1 class="title-playlist font-medium text-white">${search.name}</h1>
                                             </div>
+                                            <button class="btnFollowDelay" data-artist-id="${search.id}">Follow</button>
                                         `;
                                         searchContainer.appendChild(userItem);
+
                                     } else if (search.type === 'artist') {
                                         const artistItem = document.createElement('div');
                                         artistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4', 'justify-center', 'items-center');
                                         artistItem.innerHTML = `
-                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <img src="../images/profile.png" alt="cover" class="w-[225px] rounded-md">
                                             <div class="desc mt-2">
                                                 <h1 class="title-playlist font-medium text-white">${search.name}</h1>
                                             </div>
                                             <button class="btnFollow" data-artist-id="${search.id}">Follow</button>
                                         `;
                                         searchContainer.appendChild(artistItem);
+
                                     } else if (search.type === 'playlist') {
                                         const playlistItem = document.createElement('div');
                                         playlistItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                         playlistItem.innerHTML = `
-                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <img src="../images/playlist.png" alt="cover" class="w-[225px] rounded-md">
                                             <div class="desc mt-2">
                                                 <h1 class="title-playlist font-medium text-white">${search.name}</h1>
-                                                <p class="desc-playlist text-neutral-300">Created by. User Name</p>
+                                                <p class="desc-playlist text-neutral-300">By. ${search.creator_name}</p>
                                             </div>
                                             <button class="btnFollow" data-playlist-id="${search.id}">Follow</button>
                                         `;
                                         searchContainer.appendChild(playlistItem);
+
                                     } else if (search.type === 'album') {
                                         const albumItem = document.createElement('div');
                                         albumItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                         albumItem.innerHTML = `
-                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <img src="../images/album3.png" alt="cover" class="w-[225px] rounded-md">
                                             <div class="desc mt-2">
                                                 <h1 class="title-playlist font-medium text-white">${search.name}</h1>
-                                                <p class="desc-playlist text-neutral-300">By. ${search.artistName}</p>
+                                                <p class="desc-playlist text-neutral-300">By. ${search.creator_name}</p>
                                             </div>
                                             <button class="btnFollow" data-album-id="${search.id}">Follow</button>
                                         `;
                                         searchContainer.appendChild(albumItem);
+
                                     } else if (search.type === 'song') {
                                         const songItem = document.createElement('div');
                                         songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                                         songItem.innerHTML = `
-                                            <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
+                                            <img src="../images/song3.png" alt="cover" class="w-[225px] rounded-md">
                                             <div class="desc mt-2">
                                                 <h1 class="title-playlist font-medium text-white">${search.name}</h1>
-                                                <p class="desc-playlist text-neutral-300">By. ${search.artistName}</p>
+                                                <p class="desc-playlist text-neutral-300">By. ${search.creator_name}</p>
                                             </div>
                                             <button class="btnFollow" data-song-id="${search.id}">Follow</button>
                                         `;
