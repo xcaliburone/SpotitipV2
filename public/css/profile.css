@@ -20,9 +20,10 @@ main {
 }
 
 .main {
-    column-gap: 16px !important;
+    column-gap: 20px !important;
     /* row-gap: 10px !important; */
     flex-wrap: wrap;
+    /* justify-content: last baseline; */
 }
 
 .sideProfileUser > button,
@@ -46,9 +47,31 @@ main {
     margin-bottom: 48px;
     /* margin: 0 20px 48px 20px; */
     /* gap: 30px !important; */
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
-    padding: 25px 55px 25px 35px !important;
+    /* padding: 25px 55px 25px 35px !important; */
+    width: 265px !important;
+}
+
+.userprofile {
+    /* width: 260px !important; */
+    /* padding: 25px 55px 25px 35px !important; */
+    /* align-items: center; */
+    margin-bottom: 48px;
+    /* background-color: aqua; */
+    /* display: flex; */
+    /* justify-content: center; */
+    align-items: center;
+    /* padding: 25px 85px 25px 35px !important; */
+    padding: 20px 50px !important;
+}
+
+.addUserProfile {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* right: -100; */
+    right: -750px;
 }
 
 #profile-pic-input-btn {
