@@ -48,10 +48,31 @@ main {
     /* margin: 0 20px 48px 20px; */
     /* gap: 30px !important; */
     /* justify-content: space-between; */
-    align-items: center;
+    /* align-items: center; */
     /* padding: 25px 55px 25px 35px !important; */
-    width: 265px !important;
+    width: 260px !important;
+    height: 380px;
+    padding-bottom: 21px !important;
 }
+
+.user-item > img:hover,
+.artist-item > img:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.user-item > .desc h1:hover,
+.artist-item > desc h1:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.user-item > .desc p:hover,
+.artist-item > desc p:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
 
 .userprofile {
     /* width: 260px !important; */
@@ -72,6 +93,10 @@ main {
     position: relative;
     /* right: -100; */
     right: -750px;
+}
+
+.addUserProfile img {
+    border: 2px solid #00A97F;
 }
 
 #profile-pic-input-btn {
@@ -175,3 +200,93 @@ main {
 .input:focus {
     box-shadow: 0 0 0 2.5px #2f303d;
 }
+
+/* .desc {
+    display: flex;
+    background-color: #00FF5B;
+} */
+
+.user-item > .desc h1:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.user-item > .desc p:hover {
+    cursor: pointer;
+    opacity: 60%;
+}
+
+.btnFollowed {
+    --color: #00A97F;
+    --color2: rgb(10, 25, 30);
+    padding: 0.8em 1.75em;
+    background-color: transparent;
+    border-radius: 6px;
+    border: .3px solid var(--color);
+    transition: .5s;
+    position: relative;
+    overflow: hidden;
+    cursor: not-allowed;
+    z-index: 1;
+    font-weight: 600;
+    font-size: 12px;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    color: var(--color);
+}
+
+/* .btnFollowedDelay {
+    --color: #00A97F;
+    --color2: rgb(10, 25, 30);
+    padding: 0.8em 1.75em;
+    background-color: transparent;
+    border-radius: 6px;
+    border: .3px solid var(--color);
+    transition: .5s;
+    position: relative;
+    overflow: hidden;
+    cursor: not-allowed;
+    z-index: 1;
+    font-weight: 600;
+    font-size: 12px;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    color: var(--color);
+}
+
+.btnFollowed::after, .btnFollowed::before {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: skew(90deg) translate(-50%, -50%);
+    position: absolute;
+    inset: 50%;
+    left: 25%;
+    z-index: -1;
+    transition: .5s ease-out;
+    background-color: var(--color);
+}
+
+.btnFollowed::before {
+    top: -50%;
+    left: -25%;
+    transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
+}
+
+.btnFollowed:hover::before {
+    transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
+}
+
+.btnFollowed:hover::after {
+    transform: skew(45deg) translate(-50%, -50%);
+}
+
+.btnFollowed:hover {
+    color: var(--color2);
+}
+
+.btnFollowed:active {
+    filter: brightness(.7);
+    transform: scale(.98);
+} */
