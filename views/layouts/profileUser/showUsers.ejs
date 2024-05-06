@@ -45,7 +45,7 @@
                         } else {
                             myusers.forEach(myuser => {
                                 const myuserItem = document.createElement('div');
-                                myuserItem.classList.add('user-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex');
+                                myuserItem.classList.add('userprofile', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex');
                                 myuserItem.innerHTML = `
                                 <div class="flex flex-col">
                                     <h1 class="text-white">Username : ${myuser.name}</h1>
@@ -54,7 +54,7 @@
                                     <p class="text-white" >Followers : ${myuser.followers}</p>
                                     <p class="text-white" >Following : ${myuser.following}</p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="addUserProfile">
                                     <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
                                     <input type="file" accept="image/*" id="profile-pic-input" style="display: none;">
                                     <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Tambahkan Foto Profil</button>
