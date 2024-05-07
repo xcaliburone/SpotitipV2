@@ -4,6 +4,7 @@ const port = 3031;
 const mysql = require('mysql');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
@@ -18,27 +19,33 @@ const connection = mysql.createConnection({
     database: process.env.MYSQL_DATABASE
 }); connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
 
-app.use(session({ secret: 'secret-key', resave: false, saveUninitialized: false }));
+app.use(session({
+    secret: 'secret-key',
+    resave: false,
+    saveUninitialized: false
+}));
+
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(cors());
 
 const { getAllPlaylists, getAllAlbums, getAllArtists, getAllSongs, getAllUsers } = require('./utils/callTables')
 const { getAllMyAlbums, getAllMySongs, getAllMyPlaylists } = require('./utils/callTables2')
-const {
-    getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist,
-    getAllMyUserFollowPlaylist, getAllMyUserLikedSong
+const { getAllMyUsers, getAllMyUserArtistFollow, getAllMyUserAlbumFollow, getAllMyUserCreatePlaylist,
+        getAllMyUserFollowPlaylist, getAllMyUserLikedSong
 } = require('./utils/UserInfo')
 const { getAllMyArtists } = require('./utils/ArtistInfo')
 const { generateNewID, generatePlaylistID, generateAlbumID, generateSongID } = require('./utils/generateID')
-const {
-    checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist, checkDuplicateAlbum, checkDuplicateSong
+const { checkCredentials, checkIfEmailExists, checkIfUsernameExists, checkDuplicatePlaylist,
+        checkDuplicateAlbum, checkDuplicateSong
 } = require('./utils/checkDupeEntity')
 const { getAllDatas, formatResults } = require('./utils/searchDatas')
 const { getAllPlaylists2, getSongsForPlaylist, getAllAlbums2, getSongsForAlbum } = require('./utils/songContains')
 const { countSongsInPlaylist, updateNumSongsInPlaylist, countSongsInAlbum, updateNumSongsInAlbum } = require('./utils/colsUpdate')
 const { checkIfUserAlbumFollow, checkIfUserArtistFollow, checkIfUserPlaylistFollow, checkIfUserLikedSong } = require('./utils/checkDupeRelation')
+const { deleteMyUser, deleteMyArtist } = require('./utils/deleteDatas')
 
 app.get('/', (req, res) => { res.render('index'); });
 
@@ -294,6 +301,18 @@ app.get('/myusers', async (req, res) => {
     }
 });
 
+app.post('/deleteMyUser', async (req, res) => {
+    const userId = req.body.userId;
+    try {
+        await deleteMyUser(userId);
+        res.status(200).send('User has been successfully deleted');
+        // res.redirect('/');
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).send('An error occurred while deleting the user');
+    }
+});
+
 app.get('/myUserArtistFollows', async (req, res) => {
     const userId = req.query.userId
     try {
@@ -357,6 +376,18 @@ app.get('/myartists', async (req, res) => {
     } catch (error) {
         console.error("Error fetching artists:", error);
         res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.post('/deleteMyArtist', async (req, res) => {
+    const artistId = req.body.artistId;
+    try {
+        await deleteMyArtist(artistId);
+        res.status(200).send('Artist has been successfully deleted');
+        // res.redirect('/');
+    } catch (error) {
+        console.error("Error deleting artist:", error);
+        res.status(500).send('An error occurred while deleting the artist');
     }
 });
 
