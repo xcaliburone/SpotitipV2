@@ -30,6 +30,11 @@
                             songItem.classList.add('list-items', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'w-[250px]', 'h-[360px]', 'flex', 'flex-col', 'gap-y-3', 'p-4');
                             songItem.innerHTML = `
                                 <img src="../images/song3.png" alt="Song Cover" class="w-[225px] rounded-md">
+                                <a href="" class="play-song" data-song-url="${song.link}">
+                                    <div class="player">
+                                        <img src="../images/musicPlayer.png">
+                                    </div>
+                                </a>
                                 <div class="desc mt-2">
                                     <h1 class="title-playlist font-medium text-white">${song.name}</h1>
                                     <p class="desc-playlist text-neutral-300">By. ${song.artistName}</p>
@@ -37,6 +42,16 @@
                                 <button class="btnFollow" data-song-id="${song.id}">Like</button>
                             `;
                             songContainer.appendChild(songItem);
+
+                            const playSongLinks = songItem.querySelectorAll('.play-song');
+                            playSongLinks.forEach(playSongLink => {
+                                playSongLink.addEventListener('click', async (event) => {
+                                    event.preventDefault();
+                                    // const songUrl = playSongLink.getAttribute('data-song-url');
+                                    // const audioPlayer = new Audio(songUrl);
+                                    // audioPlayer.play();
+                                });
+                            });
 
                             const btnFollow = songItem.querySelector('.btnFollow');
                             btnFollow.addEventListener('click', async () => {
@@ -56,4 +71,6 @@
             });
         </script>
     </div>
+
+    <%- //include('../../layouts/modals/songPlayer') %>
 </div>
