@@ -17,7 +17,7 @@
 
                         if (myartists.length === 0) {
                             const noArtistsMessage = document.createElement('div');
-                            noArtistsMessage.classList.add('bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
+                            noArtistsMessage.classList.add('profileEmpty', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'h-[320px]', 'flex', 'flex-col', 'gap-y-3', 'p-10', 'justify-center', 'items-center');
                             noArtistsMessage.innerHTML = `
                             <img src="/images/nothing.png" alt="noData" class="w-[225px] rounded-md">
                             <div class="desc-none flex flex-col justify-center items-center">
@@ -29,12 +29,19 @@
                         } else {
                             myartists.forEach(myartist => {
                                 const myartistItem = document.createElement('div');
-                                myartistItem.classList.add('artist-item', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex', 'flex-col');
+                                myartistItem.classList.add('artistProfile', 'bg-neutral-800', 'rounded-md', 'overflow-hidden', 'p-4', 'flex');
                                 myartistItem.innerHTML = `
-                                    <h1 class="text-white">Artist Name : ${myartist.name}</h1>
-                                    <p class="text-white" >Email : ${myartist.email}</p>
-                                    <p class="text-white" >Password : ${myartist.password}</p>
-                                    <p class="text-white" >Followers : ${myartist.followers}</p>
+                                    <div class="flex flex-col">
+                                        <h1 class="text-white">Artist Name : ${myartist.name}</h1>
+                                        <p class="text-white" >Email : ${myartist.email}</p>
+                                        <p class="text-white" >Password : ${myartist.password}</p>
+                                        <p class="text-white" >Followers : ${myartist.followers}</p>
+                                    </div>
+                                    <div class="addArtistProfile">
+                                        <img src="../images/profile.png" alt="cover" class="w-[225px] rounded-md">
+                                        <input type="file" accept="image/*" id="profile-pic-input" style="display: none;">
+                                        <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Tambahkan Foto Profil</button>
+                                    </div>
                                 `;
                                 myartistsContainer.appendChild(myartistItem);
                             });
@@ -50,11 +57,37 @@
             <button disabled>Edit Account</button>
         </div>
         <div id="artistDeleteBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
-            <button disabled>Delete Account</button>
+            <button id="deleteArtistBtn">Delete Account</button>
+            <!-- <button disabled>Delete Account</button> -->
         </div>
         <div id="artistLogoutBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col text-center">
             <a href="/"><button>Logout</button></a>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const deleteArtistBtn = document.getElementById('deleteArtistBtn');
+                deleteArtistBtn.addEventListener('click', async () => {
+                    const confirmDelete = confirm('Are you sure you want to delete your account?');
+                    if (confirmDelete) {
+                        const artistId = '<%= artistId %>';
+                        try {
+                            const response = await fetch('/deleteMyArtist', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ artistId })
+                            });
+                            const data = await response.text();
+                            alert(data);
+                            window.location.href = '/';
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('There was an error deleting the account');
+                        }
+                    }
+                });
+            });
+        </script>
 
     </div>
 </main>
