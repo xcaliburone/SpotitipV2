@@ -74,7 +74,7 @@ main {
 }
 
 
-.userprofile {
+.userprofile, .artistProfile {
     /* width: 260px !important; */
     /* padding: 25px 55px 25px 35px !important; */
     /* align-items: center; */
@@ -87,7 +87,7 @@ main {
     padding: 20px 50px !important;
 }
 
-.addUserProfile {
+.addUserProfile, .addArtistProfile {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -95,7 +95,8 @@ main {
     right: -750px;
 }
 
-.addUserProfile img {
+.addUserProfile img,
+.addArtistProfile img {
     border: 2px solid #00A97F;
 }
 
