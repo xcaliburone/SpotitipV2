@@ -3,24 +3,13 @@
     
     <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
         <div class="title mb-2"><p class="font-bold text-neutral-300">User Account Info</p></div>
-    
+        <!-- <form id="editUserForm">
+            <input type="text" id="editName" name="name" placeholder="Nama">
+            <input type="email" id="editEmail" name="email" placeholder="Email">
+            <input type="password" id="editPassword" name="password" placeholder="Password">
+            <button type="submit">Simpan Perubahan</button>
+        </form> --> 
         <div class="main flex gap-y-9 flex-col">
-
-            <!-- <div class="user-item bg-neutral-800 rounded-md overflow-hidden p-4 flex">
-                <div class="flex flex-col">
-                    <h1 class="text-white">Username : ${myuser.name}</h1>
-                    <p class="text-white" >Email : ${myuser.email}</p>
-                    <p class="text-white" >Paswword : ${myuser.password}</p>
-                    <p class="text-white" >Followers : ${myuser.followers}</p>
-                    <p class="text-white" >Following : ${myuser.following}</p>
-                </div>
-                <div class="flex flex-col">
-                    <img src="../images/liked.png" alt="cover" class="w-[225px] rounded-md">
-                    <input type="file" accept="image/*" id="profile-pic-input" style="display: none;">
-                    <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Tambahkan Foto Profil</button>
-                </div>
-            </div> -->
-
             <script>
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
@@ -74,11 +63,37 @@
             <button>Edit Account</button>
         </div>
         <div id="userDeleteBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
-            <button>Delete Account</button>
+            <button id="deleteUserBtn">Delete Account</button>
+            <!-- <button id="deleteUserBtn">Hapus Akun</button> -->
         </div>
         <div id="userLogoutBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col text-center">
             <a href="/"><button>Logout</button></a>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const deleteUserBtn = document.getElementById('deleteUserBtn');
+                deleteUserBtn.addEventListener('click', async () => {
+                    const confirmDelete = confirm('Are you sure you want to delete your account?');
+                    if (confirmDelete) {
+                        const userId = '<%= userId %>';
+                        try {
+                            const response = await fetch('/deleteMyUser', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ userId })
+                            });
+                            const data = await response.text();
+                            alert(data);
+                            window.location.href = '/';
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('There was an error deleting the account');
+                        }
+                    }
+                });
+            });
+        </script>
 
     </div>
 </main>
