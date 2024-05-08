@@ -36,7 +36,8 @@ async function getAllAlbums() {
 
 async function getAllArtists() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id, name FROM artist';
+        const sql = 'SELECT id, name FROM artist ORDER BY followers DESC';
+        // const sql = 'SELECT id, name FROM artist';
         connection.query(sql, (err, results) => {
             if (err) { reject(err);
             } else { resolve(results); }
@@ -51,6 +52,7 @@ async function getAllSongs() {
             FROM song_artist_sing sa
             JOIN song s ON sa.song_id = s.id
             JOIN artist ON sa.artist_id = artist.id
+            LIMIT 50
         `;
         connection.query(sql, (err, results) => {
             if (err) { reject(err);
@@ -61,7 +63,7 @@ async function getAllSongs() {
 
 async function getAllUsers() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id, name FROM user';
+        const sql = 'SELECT id, name FROM user ORDER BY followers DESC, following DESC';
         connection.query(sql, (err, results) => {
             if (err) { reject(err);
             } else { resolve(results); }
