@@ -185,19 +185,18 @@ section {
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background-color: red;
+    background-color: #51B056;
     position: absolute;
     margin-top: -75px;
     margin-left: 160px;
-    /* margin-right: 0; */
-    /* right: 0; */
-    /* bottom: 0; */
+    /* margin-bottom: -8px; */
+    opacity: 0;
     z-index: 999;
-    /* top: 100%; Atur posisi vertikal ke tengah */
-    /* transform: translateY(-100%); Pusatkan secara vertikal */
-    opacity: 0; /* Sembunyikan secara default */
-    /* transition: opacity cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.8s; Tambahkan transisi untuk efek smooth */
-    transition: opacity 0.5s;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.play-song {
+    margin-bottom: -12.7px;
 }
 
 .player:hover {
@@ -206,6 +205,7 @@ section {
 
 .list-items {
     overflow: hidden !important;
+    cursor: pointer;
 }
 
 .list-items:hover .player {

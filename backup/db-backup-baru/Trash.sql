@@ -76,3 +76,22 @@ CREATE TABLE IF NOT EXISTS `user_artist_follow` (
 );
 
 test trashs
+
+
+SELECT a.name, ar.name as artistName
+FROM album a, album_artist_has aah, artist ar
+WHERE a.id IN (
+    SELECT album_id
+    FROM user_album_follow
+    WHERE user_id = "US01"
+)
+AND a.id = aah.album_id
+AND aah.artist_id = ar.id;
+
+
+SELECT a.name, ar.name as artistName
+    FROM user_album_follow uaf
+    JOIN album a ON uaf.album_id = a.id
+    JOIN album_artist_has aah ON a.id = aah.album_id
+    JOIN artist ar ON aah.artist_id = ar.id
+    WHERE uaf.user_id = "US01"
