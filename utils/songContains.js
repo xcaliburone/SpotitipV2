@@ -12,11 +12,6 @@ async function getAllPlaylists2(userId) {
         WHERE upc.user_id = ?
         GROUP BY p.id, p.name, p.duration, upc.date_created; 
         `;
-        // const sql = `
-        //     SELECT p.id, p.name, p.num_song, p.duration, upc.date_created
-        //     FROM playlist p JOIN user_playlist_create upc ON p.id = upc.playlist_id
-        //     WHERE upc.user_id = ?
-        // `;
         connection.query(sql, [userId], (err, results) => {
             if (err) {
                 reject(err);
