@@ -73,7 +73,6 @@ main {
     opacity: 60%;
 }
 
-
 .userprofile, .artistProfile {
     /* width: 260px !important; */
     /* padding: 25px 55px 25px 35px !important; */
@@ -87,12 +86,19 @@ main {
     padding: 20px 50px !important;
 }
 
-.addUserProfile, .addArtistProfile {
+.addUserProfile {
     display: flex;
     flex-direction: column;
     position: relative;
     /* right: -100; */
-    right: -750px;
+    right: -770px;
+}
+
+.addArtistProfile {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    right: -760px;
 }
 
 .addUserProfile img,
@@ -104,9 +110,61 @@ main {
     background-color: #00A97F !important;
 }
 
+.editUserProfile {
+    position: relative;
+    right: -655px;
+    margin-top: 201px;
+    margin-right: 5px;
+}
+
 /* #userLogoutBtn,
 #artistLogoutBtn {
     margin-bottom: 10px;
+} */
+
+.editUser, .editArtist {
+    /* display: flex; */
+    flex-direction: row;
+    justify-content: space-between !important;
+    align-items: flex-end;
+    padding: 20px 35px 20px 50px !important;
+}
+
+.editUserForm, .editArtistForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    /* align-items: center; */
+}
+
+.editUserForm > p > input,
+.editArtistForm > p > input {
+    margin-left: 12px;
+    background-color: rgb(38, 38, 38);
+    border-radius: 6px;
+    padding: 6px 12px;
+}
+
+.editUserForm > p > input:focus,
+.editArtistForm > p > input:focus {
+    border: none;
+    /* outline: none; */
+    outline: 1px solid #00FF5B;
+}
+
+#profile-edit-input-btn {
+    background-color: #00A97F !important;
+    width: 100px;
+}
+
+#profile-save-input-btn {
+    background-color: #00A97F !important;
+    width: 225px;
+}
+
+/* .saveUserProfile {
+    width: 130px;
 } */
 
 #userLogoutBtn:hover,
