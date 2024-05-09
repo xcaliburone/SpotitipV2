@@ -17,7 +17,12 @@ const connection = mysql.createConnection({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
-}); connection.connect((err) => { if (err) throw err; console.log('Connected to MySQL database'); });
+});
+
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to MySQL Spotitip Database');
+});
 
 app.use(session({
     secret: 'secret-key',
@@ -818,5 +823,52 @@ app.get('/songAlbum', async (req, res) => {
     }
 })
 
-app.use('/', (req, res) => { res.status(404).render('./partials/404')});
-app.listen(port, () => { console.log(`Server is running at http://localhost:${port}`); });
+app.post('/updateUser', async (req, res) => {
+    try {
+        const { userId, newName, newEmail, newPassword } = req.body;
+        console.log("id : ", userId);
+        console.log("newname : ", newName);
+        console.log("newemail : ", newEmail);
+        console.log("newpass : ", newPassword);
+        const sql = `UPDATE user SET name = ?, email = ?, password = ? WHERE id = ?`;
+        connection.query(sql, [newName, newEmail, newPassword, userId], (err, result) => {
+            if (err) {
+                console.error('Error updating user:', err);
+                return res.status(500).json({ error: 'Error updating user data' });
+            }
+            res.json({ success: true, message: 'User data updated successfully' });
+        });
+    } catch (error) {
+        console.error('Error updating user data:', error);
+        res.status(500).json({ error: 'Error updating user data' });
+    }
+});
+
+app.post('/updateArtist', async (req, res) => {
+    try {
+        const { artistId, newName, newEmail, newPassword } = req.body;
+        console.log("id : ", artistId);
+        console.log("newname : ", newName);
+        console.log("newemail : ", newEmail);
+        console.log("newpass : ", newPassword);
+        const sql = `UPDATE artist SET name = ?, email = ?, password = ? WHERE id = ?`;
+        connection.query(sql, [newName, newEmail, newPassword, artistId], (err, result) => {
+            if (err) {
+                console.error('Error updating artist:', err);
+                return res.status(500).json({ error: 'Error updating artist data' });
+            }
+            res.json({ success: true, message: 'Artist data updated successfully' });
+        });
+    } catch (error) {
+        console.error('Error updating artist data:', error);
+        res.status(500).json({ error: 'Error updating artist data' });
+    }
+});
+
+app.use('/', (req, res) => {
+    res.status(404).render('./partials/404')
+});
+
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
