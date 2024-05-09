@@ -203,6 +203,70 @@ section {
     cursor: pointer;
 }
 
+.songPlaying {
+    width: 100%;
+    height: 300px;
+    border-radius: 12px;
+    background-color: rgb(38, 38, 38);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 11px;
+    row-gap: 3px;
+}
+
+.songInfo {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.songInfo img {
+    width: 100px;
+    /* height: 100px; */
+    /* background-color: #007bff; */
+    border-radius: 6px;
+}
+
+.songDetails {
+    display: flex;
+    flex-direction: column;
+    margin-left: -97px;
+    margin-top: 5px;
+}
+
+.progressBar {
+    width: 80%;
+    height: 10px;
+    background-color: #ccc;
+    margin: 20px 0;
+    border-radius: 12px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #00FF5B;
+    width: 20px;
+    border-radius: 12px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.playPause {
+    margin-right: 10px;
+}
+
+.volumeControl {
+    width: 180px;
+}
+
 .list-items {
     overflow: hidden !important;
     cursor: pointer;
@@ -243,19 +307,6 @@ section {
     /* color: white; Warna teks untuk tombol yang aktif */
     
 }
-
-.songPlayer {
-    background-color: #3498db;
-    width: 100%;
-    height: 80px;
-}
-
-/* .box:hover input{
-    width: 250px;
-    background: rgb(38, 38, 38);
-    border-radius: 10px;
-    border: 1px solid #00FF5B;
-} */
 
 .registerAs {
     background-color: rgb(5, 150, 105);
