@@ -3,12 +3,24 @@
     
     <div class="content p-5 flex flex-col gap-y-6 flex-wrap text-wrap">
         <div class="title mb-2"><p class="font-bold text-neutral-300">User Account Info</p></div>
-        <!-- <form id="editUserForm">
-            <input type="text" id="editName" name="name" placeholder="Nama">
-            <input type="email" id="editEmail" name="email" placeholder="Email">
-            <input type="password" id="editPassword" name="password" placeholder="Password">
-            <button type="submit">Simpan Perubahan</button>
-        </form> --> 
+
+        <div class="hidden editUser bg-neutral-800 rounded-md overflow-hidden p-4">
+            <div class="editUserForm flex flex-col">
+                <p class="text-white">Username :
+                    <input type="text" id="editName" name="name" placeholder="New Name ..." required autocomplete="off">
+                </p>
+                <p class="text-white" >Email :
+                    <input type="email" id="editEmail" name="email" placeholder="New Email ..." required autocomplete="off">
+                </p>
+                <p class="text-white" >Paswword :
+                    <input type="password" id="editPassword" name="password" placeholder="New Password ..." required autocomplete="off">
+                </p>
+            </div>
+            <div class="saveUserProfile">
+                <button id="profile-save-input-btn" class="text-white px-4 py-2 rounded-md mt-2">Save</button>
+            </div>
+        </div>
+        
         <div class="main flex gap-y-9 flex-col">
             <script>
                 document.addEventListener('DOMContentLoaded', async () => {
@@ -46,7 +58,7 @@
                                 <div class="addUserProfile">
                                     <img src="../images/profile.png" alt="cover" class="w-[225px] rounded-md">
                                     <input type="file" accept="image/*" id="profile-pic-input" style="display: none;">
-                                    <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Tambahkan Foto Profil</button>
+                                    <button id="profile-pic-input-btn" onclick="document.getElementById('profile-pic-input').click()" class="text-white bg-blue-500 px-4 py-2 rounded-md mt-2">Add Profile Photo</button>
                                 </div>
                                 `;
                                 myusersContainer.appendChild(myuserItem);
@@ -64,7 +76,6 @@
         </div>
         <div id="userDeleteBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col">
             <button id="deleteUserBtn">Delete Account</button>
-            <!-- <button id="deleteUserBtn">Hapus Akun</button> -->
         </div>
         <div id="userLogoutBtn" class="bg-neutral-800 rounded-md overflow-hidden p-4 flex flex-col text-center">
             <a href="/"><button>Logout</button></a>
@@ -95,5 +106,44 @@
             });
         </script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const editProfileBtn = document.getElementById('userEditBtn');
+                editProfileBtn.addEventListener('click', () => {
+                    const editUserSection = document.querySelector('.editUser');
+                    editUserSection.classList.remove('hidden');
+                    editUserSection.classList.add('flex');
+                });
+
+                const saveProfileBtn = document.getElementById('profile-save-input-btn');
+                saveProfileBtn.addEventListener('click', async () => {
+                    const newName = document.getElementById('editName').value;
+                    const newEmail = document.getElementById('editEmail').value;
+                    const newPassword = document.getElementById('editPassword').value;
+
+                    if (!newName || !newEmail || !newPassword) {
+                        alert('Please fill in all fields.');
+                        return;
+                    }
+
+                    const userId = '<%= userId %>';
+
+                    try {
+                        const response = await fetch('/updateUser', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId, newName, newEmail, newPassword })
+                        });
+                        const data = await response.json();
+                        console.log(data);
+                    } catch (error) {
+                        console.error('Error updating user:', error);
+                    }
+
+                    const editUserSection = document.querySelector('.editUser');
+                    editUserSection.classList.add('hidden');
+                });
+            });
+        </script>
     </div>
 </main>
