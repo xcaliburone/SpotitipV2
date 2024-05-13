@@ -142,8 +142,10 @@ main {
 .editArtistForm > p > input {
     margin-left: 12px;
     background-color: rgb(38, 38, 38);
+    /* background-color: #00A97F; */
     border-radius: 6px;
-    padding: 6px 12px;
+    padding: 8px 16px;
+    width: 300px !important;
 }
 
 .editUserForm > p > input:focus,
@@ -348,4 +350,9 @@ main {
 .btnFollowed:active {
     filter: brightness(.7);
     transform: scale(.98);
+} */
+
+/* #editName, #editEmail, #editPassword {
+    width: 300px !important;
+    padding: 3px 5px !important;
 } */
