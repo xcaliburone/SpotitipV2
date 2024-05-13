@@ -17,17 +17,45 @@
     color: #777777 !important;
 }
 
+#signupForm > .mb-4 > input::placeholder {
+    color: #777777 !important;
+}
+
+#loginForm > .mb-4 > label {
+    /* color: white !important; */
+    /* color: #777777 !important; */
+    letter-spacing: .6px;
+}
+
+#signupForm > .mb-4 > label {
+    letter-spacing: .6px;
+}
+
 #remember {
     /* color: white !important; */
     /* color: #777777 !important; */
     letter-spacing: 1px;
 }
 
-#create-account-link, #forget-account-link {
+#create-account-link, #forget-account-link, #have-account-link {
     letter-spacing: 1.5px;
 }
 
+.signinTitle, .signupTitle {
+    letter-spacing: 1.5px;
+}
 
+#signInButton, .signUpButton {
+    letter-spacing: 1.5px;
+}
+
+#registerAsLabel, #registerAs {
+    letter-spacing: 1.5px;
+}
+
+#checkboxAs {
+    padding: 2px !important;
+}
 
 #searchScreen2,
 #albumSong {
@@ -335,6 +363,7 @@ section {
     border: none;
     color: white;
     font-weight: 500;
+    padding: 8px 12px !important;
 }
 
 .registerAs:hover {
