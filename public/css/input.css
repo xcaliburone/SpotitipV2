@@ -8,6 +8,27 @@
     box-sizing: border-box;
 }
 
+/* #loginForm > .mb-4 > input {
+    background-color: #00A97F !important;
+} */
+
+#loginForm > .mb-4 > input::placeholder {
+    /* color: white !important; */
+    color: #777777 !important;
+}
+
+#remember {
+    /* color: white !important; */
+    /* color: #777777 !important; */
+    letter-spacing: 1px;
+}
+
+#create-account-link, #forget-account-link {
+    letter-spacing: 1.5px;
+}
+
+
+
 #searchScreen2,
 #albumSong {
     display: none;
