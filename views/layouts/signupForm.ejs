@@ -15,7 +15,7 @@
     </div>
 
     <div class="mb-2">
-        <label for="language" class="text-neutral-300">Register as : </label>
+        <label for="language" id="registerAsLabel" class="text-neutral-300">Register as : </label>
         <select name="registerAs" id="registerAs" class="registerAs shadow-sm rounded-md w-full px-3 py-2 focus:outline-none mb-2">
             <option value="user" selected class="optUser">User</option>
             <option value="artist" class="optArtist">Artist</option>
@@ -25,8 +25,8 @@
     <div class="flex items-center justify-between mb-5">
         <div class="flex flex-col">
             <div class="flex items-center">
-                <input type="checkbox" id="remember" class="h-4 w-4 rounded border-neutral-300 text-spotitip focus:ring-spotitip focus:outline-none accent-spotitip" checked>
-                <label for="remember" class="ml-2 block text-sm text-neutral-700 dark:text-neutral-300">Remember me</label>
+                <input type="checkbox" class="h-4 w-4 rounded border-neutral-300 text-spotitip focus:ring-spotitip focus:outline-none accent-spotitip" checked>
+                <label for="remember" id="remember" class="ml-2 block text-sm text-neutral-700 dark:text-neutral-300">Remember me</label>
             </div>
         </div>
         <a href="/" id="have-account-link" class="text-xs text-neutral-500 hover:text-spotitip focus:outline-none">Already have an Account</a>
