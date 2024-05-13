@@ -6,6 +6,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    letter-spacing: .5px;
 }
 
 /* #loginForm > .mb-4 > input {
