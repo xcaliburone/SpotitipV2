@@ -4,7 +4,7 @@ const connection = mysql.createConnection({ host: 'localhost', user: 'root', pas
 function generateNewID(table, type) {              
     return new Promise((resolve, reject) => {
         const prefix = type === "user" ? "US" : "AR";
-        const sql = `SELECT MAX(id) AS maxId FROM ${table} WHERE id LIKE '${prefix}%'`;
+        const sql = `SELECT MAX(id)maxId FROM ${table} WHERE id LIKE '${prefix}%'`;
         connection.query(sql, (err, result) => {
             if (err) { reject(err);
             } else {
@@ -23,7 +23,7 @@ function generateNewID(table, type) {
 
 function generatePlaylistID() {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT MAX(id) AS maxId FROM playlist";
+        const sql = "SELECT MAX(id) maxId FROM playlist";
         connection.query(sql, (err, result) => {
             if (err) {
                 reject(err);
@@ -42,7 +42,7 @@ function generatePlaylistID() {
 
 function generateAlbumID() {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT MAX(id) AS maxId FROM album";
+        const sql = "SELECT MAX(id) maxId FROM album";
         connection.query(sql, (err, result) => {
             if (err) {
                 reject(err);
@@ -61,7 +61,7 @@ function generateAlbumID() {
 
 function generateSongID() {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT MAX(id) AS maxId FROM song";
+        const sql = "SELECT MAX(id) maxId FROM song";
         connection.query(sql, (err, result) => {
             if (err) {
                 reject(err);

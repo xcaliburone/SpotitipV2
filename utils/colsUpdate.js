@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'spotitip' });
 
 async function countSongsInPlaylist(playlistId) {
-    const query = `SELECT COUNT(*) AS count FROM song_playlist_contains WHERE playlist_id = ?;`;
+    const query = `SELECT COUNT(*) count FROM song_playlist_contains WHERE playlist_id = ?;`;
     try {
         const result = await new Promise((resolve, reject) => {
             connection.query(query, [playlistId], (error, results) => {
@@ -29,7 +29,7 @@ async function updateNumSongsInPlaylist(playlistId, numSongsPlaylist) {
 }
 
 async function countSongsInAlbum(albumId) {
-    const query = 'SELECT COUNT(*) AS count FROM song_album_contains WHERE album_id = ?';
+    const query = 'SELECT COUNT(*) count FROM song_album_contains WHERE album_id = ?';
     try {
         const result = await new Promise((resolve, reject) => {
             connection.query(query, [albumId], (error, results) => {

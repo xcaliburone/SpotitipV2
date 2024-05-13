@@ -4,10 +4,10 @@ const connection = mysql.createConnection({ host: 'localhost', user: 'root', pas
 async function getAllMySongs(artistId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT s.id, s.name, s.genre, s.duration, artist.name AS artist_name
+            SELECT s.id, s.name, s.genre, s.duration, ar.name artist_name
             FROM song_artist_sing sa
             JOIN song s ON sa.song_id = s.id
-            JOIN artist ON sa.artist_id = artist.id
+            JOIN artist ar ON sa.artist_id = ar.id
             WHERE sa.artist_id = ?
         `;
         connection.query(sql, [artistId], (err, results) => {
@@ -20,10 +20,10 @@ async function getAllMySongs(artistId) {
 async function getAllMyAlbums(artistId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT a.id, a.name, a.num_song, a.duration, artist.name AS artist_name
+            SELECT a.id, a.name, a.num_song, a.duration, ar.name artist_name
             FROM album_artist_has aa
             JOIN album a ON aa.album_id = a.id
-            JOIN artist ON aa.artist_id = artist.id
+            JOIN artist ar ON aa.artist_id = ar.id
             WHERE aa.artist_id = ?
         `;
         connection.query(sql, [artistId], (err, results) => {

@@ -27,9 +27,9 @@ async function getAllDatas(keyword) {
             SELECT name, 'user' AS type, NULL AS creator_name
                 FROM user
                 WHERE name LIKE ?
-            UNION 
+            UNION
             SELECT name, 'artist' AS type, NULL AS creator_name
-                FROM artist 
+                FROM artist
                 WHERE name LIKE ?
             UNION 
             SELECT p.name AS name, 'playlist' AS type, u.name AS creator_name 

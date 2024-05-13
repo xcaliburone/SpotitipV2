@@ -15,21 +15,21 @@ function checkCredentials(table, email, password) {
 
 function checkIfEmailExists(email) {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT COUNT(*) AS count FROM user WHERE email = ?";
+        const sql = "SELECT COUNT(id) count FROM user WHERE email = ?";
         connection.query(sql, [email], (err, result) => { if (err) { reject(err); } else { resolve(result[0].count > 0); } });
     });
 }
 
 function checkIfUsernameExists(username) {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT COUNT(*) AS count FROM user WHERE name = ?";
+        const sql = "SELECT COUNT(id) count FROM user WHERE name = ?";
         connection.query(sql, [username], (err, result) => { if (err) { reject(err); } else { resolve(result[0].count > 0); } });
     });
 }
 
 async function checkDuplicatePlaylist(name) {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT COUNT(*) AS count FROM playlist WHERE name = ?';
+        const sql = 'SELECT COUNT(id) count FROM playlist WHERE name = ?';
         connection.query(sql, [name], (err, result) => {
             if (err) { reject(err);
             } else { resolve(result[0].count > 0); }
@@ -39,7 +39,7 @@ async function checkDuplicatePlaylist(name) {
 
 async function checkDuplicateAlbum(name) {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT COUNT(*) AS count FROM album WHERE name = ?';
+        const sql = 'SELECT COUNT(id) count FROM album WHERE name = ?';
         connection.query(sql, [name], (err, result) => {
             if (err) { reject(err);
             } else { resolve(result[0].count > 0); }
@@ -49,7 +49,7 @@ async function checkDuplicateAlbum(name) {
 
 async function checkDuplicateSong(name) {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT COUNT(*) AS count FROM song WHERE name = ?';
+        const sql = 'SELECT COUNT(id) count FROM song WHERE name = ?';
         connection.query(sql, [name], (err, result) => {
             if (err) { reject(err);
             } else { resolve(result[0].count > 0); }
